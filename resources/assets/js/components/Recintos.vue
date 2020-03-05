@@ -156,7 +156,7 @@
                     'to' : 0,
                 },
                 offset : 3,
-                criterio : 'nombre',
+                criterio : 'nombre_recinto',
                 buscar : '',
                 arrayColegios :[]
             }

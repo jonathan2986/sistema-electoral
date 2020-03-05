@@ -12,9 +12,12 @@ class ColegioElectoral extends Model
     ];
 
     public function recinto(){
-        return $this->belongsTo('App\Recinto');//pertenece a un colegio
+        return $this->belongsTo('App\Recinto');//pertenece a un recinto
     }
     public function colegios_electorales(){
         return $this->hasMany('App\ColegioElectoral');//tiene varios colegios electorales
+    }
+    public function personas(){
+        return $this->hasMany('App\Persona');//tiene varias personas
     }
 }

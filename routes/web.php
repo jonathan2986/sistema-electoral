@@ -30,8 +30,17 @@ Route::get('/recintos/selectRecinto','RecintoController@selectRecinto');
 Route::get('/colegios-electorales','ColegioElectoralController@index');
 Route::post('/colegios-electorales/registrar','ColegioElectoralController@store');
 Route::put('/colegios-electorales/actualizar','ColegioElectoralController@update');
+Route::get('/colegios-electorales/selectColegio','ColegioElectoralController@selectColegiosElectorales');
 
 //Persona
 Route::get('/usuarios', 'PersonaController@index');
 Route::post('/usuarios/registrar', 'PersonaController@store');
 Route::put('/usuarios/actualizar', 'PersonaController@update');
+Route::put('/usuarios/agregarVoto','PersonaController@agregarVoto');
+Route::put('/usuarios/quitarVoto','PersonaController@quitarVoto');
+//Simpatizantes
+//Route::get('/simpatizantes', 'SimpatizanteController@index');
+//Route::post('/simpatizantes/registrar', 'SimpatizanteController@store');
+//Route::put('/simpatizantes/actualizar', 'SimpatizanteController@update');
+//Route::put('/simpatizantes/agregarVoto','SimpatizanteController@agregarVoto');
+//Route::put('/simpatizantes/quitarVoto','SimpatizanteController@quitarVoto');

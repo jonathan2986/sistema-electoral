@@ -38,6 +38,13 @@ class ColegioElectoralController extends Controller
         ];
     }
 
+    public function selectColegiosElectorales(Request $request){
+//        if (!$request->ajax()) return redirect('/');
+        $colegio_electoral = ColegioElectoral::select('id','numero_colegio')
+            ->orderBy('numero_colegio', 'asc')->get();
+        return ['colegio_electoral' => $colegio_electoral];
+    }
+
     public function store(Request $request)
     {
         if (!$request->ajax()) return redirect('/');

@@ -8,7 +8,7 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Personas
+                    <i class="fa fa-align-justify"></i> Simpatizantes
                     <button type="button" @click="abrirModal('personas','registrar')" class="btn btn-secondary">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
@@ -35,10 +35,9 @@
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Cedula</th>
-                            <th>Direccion</th>
                             <th>Telefono</th>
-                            <th>Numero de Colegio</th>
-                            <th>Voto</th>
+                            <th>Colegio Electoral</th>
+                            <th>Mesa Electoral</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -46,33 +45,17 @@
                             <td>
                                 <button type="button" @click="abrirModal('personas','actualizar', usuario)" class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
+                                </button> &nbsp;
+                                <button type="button"  class="btn btn-danger btn-sm">
+                                    <i class="icon-trash"></i>
                                 </button>
-                                <template v-if="usuario.voto">
-                                    <button type="button" class="btn btn-danger btn-sm" @click="cancelarVoto(usuario.id)">
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </template>
-                                <template v-else>
-                                    <button type="button" class="btn btn-info btn-sm" @click="agregarVoto(usuario.id)">
-                                        <i class="icon-check"></i>
-                                    </button>
-                                </template>
                             </td>
                             <td v-text="usuario.nombre"></td>
                             <td v-text="usuario.apellido"></td>
                             <td v-text="usuario.cedula"></td>
-                            <td v-text="usuario.direccion"></td>
                             <td v-text="usuario.telefono"></td>
                             <td v-text="usuario.numero_colegio"></td>
-                            <td>
-                                <div v-if="usuario.voto">
-                                    <span class="badge badge-success">voto</span>
-                                </div>
-                                <div v-else>
-                                    <span class="badge badge-danger">Sin voto</span>
-                                </div>
-
-                            </td>
+                            <td v-text="usuario.mesa_electoral"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -106,18 +89,12 @@
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Seleccionar Colegio</label>
-                                <div class="col-md-9">
-                                    <select class="form-control" v-model="idcolegio_electoral">
-                                        <option value="0" disabled>Seleccione</option>
-                                        <option v-for="colegio in arrayColegiosE" :key="colegio.id" :value="colegio.id" v-text="colegio.numero_colegio"></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                 <div class="col-md-9">
-                                    <input type="text" v-model="nombre"  class="form-control" placeholder="Nombre">
+                                    <select class="form-control" v-model="usuario_id">
+                                        <option value="0" disabled>Seleccione</option>
+                                        <option v-for="usuario in arrayUsuarios" :key="usuario.id" :value="usuario.id" v-text="usuario.nombre"></option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -129,19 +106,31 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Cedula</label>
                                 <div class="col-md-9">
-                                    <input type="text" v-model="cedula" class="form-control" placeholder="Cedula">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Direccion</label>
-                                <div class="col-md-9">
-                                    <input type="text" v-model="direccion"  class="form-control" placeholder="Direccion">
+                                    <select class="form-control" v-model="usuario_id">
+                                        <option value="0" disabled>Seleccione</option>
+                                        <option v-for="usuario in arrayUsuarios" :key="usuario.id" :value="usuario.id" v-text="usuario.cedula"></option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Telefono</label>
                                 <div class="col-md-9">
                                     <input type="text" v-model="telefono"  class="form-control" placeholder="Telefono">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Colegios Electorales</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" v-model="idcolegio_electoral">
+                                        <option value="0" disabled>Seleccione</option>
+                                        <option v-for="colegio in arrayUsuarios" :key="colegio.id" :value="colegio.id" v-text="colegio.numero_colegio"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Mesa Electoral</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="mesa_electoral"  class="form-control" placeholder="Mesa Electoral">
                                 </div>
                             </div>
                             <div v-show="errorUsuario" class="form-group row div-error">
@@ -196,15 +185,14 @@
         data() {
             return {
                 usuario_id: 0,
+                simpatizante_id:0,
                 idcolegio_electoral: 0,
                 nombre: '',
                 apellido: '',
                 cedula: '',
-                direccion: '',
                 telefono: '',
-                voto: 0,
+                mesa_electoral: '',
                 arrayUsuarios: [],
-                arrayColegiosE: [],
                 modal : 0,
                 tituloModal : '',
                 tipoAccion : 0,
@@ -252,10 +240,10 @@
         methods: {
             listarUsuarios(page, buscar, criterio){
                 let me = this;
-                var url= '/usuarios?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+                var url= '/simpatizantes?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
                 axios.get(url).then(function (response) {
                     var respuesta = response.data;
-                    me.arrayUsuarios = respuesta.personas.data;
+                    me.arrayUsuarios = respuesta.simpatizantes.data;
                     me.pagination = respuesta.pagination;
                     //console.log(response);
                 })
@@ -263,18 +251,6 @@
                         // handle error
                         console.log(error);
                     })
-            },
-            selectColegio(){
-                let me=this;
-                var url= '/colegios-electorales/selectColegio';
-                axios.get(url).then(function (response) {
-                    // console.log(response);
-                    var respuesta= response.data;
-                    me.arrayColegiosE = respuesta.colegio_electoral;
-                })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
             },
             cambiarPagina(page, buscar, criterio){
                 let me = this;
@@ -290,14 +266,13 @@
 
                 let me = this;
 
-                axios.post('/usuarios/registrar',{
+                axios.post('/simpatizantes/registrar',{
                     'idcolegio_electoral':this.idcolegio_electoral,
                     'nombre': this.nombre,
                     'apellido': this.apellido,
                     'cedula': this.cedula,
-                    'direccion': this.direccion,
                     'telefono': this.telefono,
-                    'voto':this.voto
+                    'mesa_electoral':this.mesa_electoral
                 }).then(function (response) {
                     me.cerrarModal();
                     me.listarUsuarios(1, '','nombre');
@@ -312,14 +287,12 @@
 
                 let me = this;
 
-                axios.put('/usuarios/actualizar',{
+                axios.put('/simpatizantes/actualizar',{
                     'idcolegio_electoral':this.idcolegio_electoral,
                     'nombre': this.nombre,
                     'apellido': this.apellido,
                     'cedula': this.cedula,
-                    'direccion': this.direccion,
-                    'telefono': this.telefono,
-                    'voto':this.voto,
+                    'mesa_electoral':this.mesa_electoral,
                     'id': this.usuario_id
                 }).then(function (response) {
                     me.cerrarModal();
@@ -334,90 +307,11 @@
 
                 if (!this.nombre) this.errorMostrarMsjUsuario.push("El campo nombre no puede estar vacio.");
                 if (!this.apellido) this.errorMostrarMsjUsuario.push("El campo apellido no puede estar vacio.");
-                if (!this.cedula) this.errorMostrarMsjUsuario.push("Debe registrar una cedula de identidad.");
-                if (!this.direccion) this.errorMostrarMsjUsuario.push("El campo direccion no puede estar vacio.");
-
+                if (!this.cedula) this.errorMostrarMsjUsuario.push("Debe seleccionar una cedula de identidad.");
+                if (!this.mesa_electoral) this.errorMostrarMsjUsuario.push("Debes ingresar la mesa electoral.");
                 if (this.errorMostrarMsjUsuario.length) this.errorUsuario = 1;
 
                 return this.errorUsuario;
-            },
-            cancelarVoto(id){
-                swal({
-                    title: 'Esta seguro que quiere cancelar el voto de esta simpatizante?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Aceptar!',
-                    cancelButtonText: 'Cancelar',
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.value) {
-                        let me = this;
-
-                        axios.put('/usuarios/quitarVoto',{
-                            'id': id
-                        }).then(function (response) {
-                            me.listarUsuarios(1,'','nombre');
-                            swal(
-                                'Desactivado!',
-                                'El voto se ha cancelado con éxito.',
-                                'success'
-                            )
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
-
-
-                    } else if (
-                        // Read more about handling dismissals
-                        result.dismiss === swal.DismissReason.cancel
-                    ) {
-
-                    }
-                })
-            },
-            agregarVoto(id){
-                swal({
-                    title: 'Esta de agregar el voto de esta persona?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Aceptar!',
-                    cancelButtonText: 'Cancelar',
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.value) {
-                        let me = this;
-
-                        axios.put('/usuarios/agregarVoto',{
-                            'id': id
-                        }).then(function (response) {
-                            me.listarUsuarios(1,'','nombre');
-                            swal(
-                                'Activado!',
-                                'El voto se a registrado con exito!.',
-                                'success'
-                            )
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
-
-
-                    } else if (
-                        // Read more about handling dismissals
-                        result.dismiss === swal.DismissReason.cancel
-                    ) {
-
-                    }
-                })
             },
             cerrarModal(){
                 this.modal=0;
@@ -425,8 +319,8 @@
                 this.nombre = '';
                 this.apellido = '';
                 this.cedula = '';
-                this.direccion = '';
                 this.telefono = '';
+                this.mesa_electoral = '';
             },
             abrirModal(modelo, accion, data = []) {
                 switch(modelo){
@@ -437,11 +331,12 @@
                             {
                                 this.modal = 1;
                                 this.tituloModal = 'Registrar Persona';
+                                this.idcolegio_electoral = 0;
                                 this.nombre = '';
                                 this.apellido = '';
                                 this.cedula = '';
-                                this.direccion = '';
                                 this.telefono = '';
+                                this.mesa_electoral = '';
                                 this.tipoAccion = 1;
                                 break;
                             }
@@ -456,14 +351,13 @@
                                 this.nombre = data['nombre'];
                                 this.apellido= data['apellido'];
                                 this.cedula = data['cedula'];
-                                this.direccion = data['direccion'];
                                 this.telefono = data['telefono'];
+                                this.mesa_electoral=data['mesa_electoral'];
                                 break;
                             }
                         }
                     }
                 }
-                this.selectColegio();
             }
         },
         mounted() {

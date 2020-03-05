@@ -19,6 +19,7 @@ Vue.component('colegios', require('./components/Colegios.vue'));
 Vue.component('recintos', require('./components/Recintos.vue'));
 Vue.component('colegios-electorales', require('./components/ColegiosElectorales'));
 Vue.component('usuarios', require('./components/Usuarios'));
+Vue.component('simpatizantes', require('./components/Simpatizantes'));
 
 const app = new Vue({
     el: '#app',

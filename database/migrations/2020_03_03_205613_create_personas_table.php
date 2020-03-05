@@ -15,12 +15,15 @@ class CreatePersonasTable extends Migration
     {
         Schema::create('personas', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('idcolegio_electoral')->unsigned();
             $table->string('nombre', 70);
             $table->string('apellido', 70);
             $table->string('cedula', 100)->unique();
             $table->string('direccion', 100);
-            $table->string('email', 60)->unique()->nullable();
             $table->string('telefono',50)->nullable();
+            $table->boolean('voto')->default('0');
+
+            $table->foreign('idcolegio_electoral')->references('id')->on('colegios_electorales');
             $table->timestamps();
         });
     }

@@ -21,9 +21,7 @@
                                     <option value="provincia">Provincia</option>
                                     <option value="municipio">Municipio</option>
                                     <option value="distrito_municipal">Distrito Municipal</option>
-                                    <option value="recinto">Recinto</option>
-                                    <option value="mesa_electoral">Mesa Electoral</option>
-                                    <option value="colegio_electoral">Colegio Electoral</option>
+                                    <option value="Circuscripcion">Circuscripcion</option>
                                 </select>
                                 <input type="text" v-model="buscar" @keyup.enter="listarColegios(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
                                 <button type="submit" @click="listarColegios(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
@@ -322,10 +320,6 @@
                                 this.provincia = data['provincia'];
                                 this.municipio= data['municipio'];
                                 this.distrito_municipal = data['distrito_municipal'];
-                                this.recinto = data['recinto'];
-                                this.direccion = data['direccion'];
-                                this.mesa_electoral = data['mesa_electoral'];
-                                this.colegio_electoral = data['colegio_electoral'];
                                 this.circuscripcion = data['circuscripcion'];
                                 break;
                             }

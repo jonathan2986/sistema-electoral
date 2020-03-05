@@ -22,7 +22,7 @@
     </template>
 
     <template v-if="menu==5">
-        <h1>Contenido del menú 5</h1>
+        <simpatizantes></simpatizantes>
     </template>
 
     <template v-if="menu==6">

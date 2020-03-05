@@ -14,9 +14,16 @@ class PersonaController extends Controller
         $criterio = $request->criterio;
 
         if ($buscar == ''){
-            $personas = Persona::orderBy('id','desc')->paginate(4);
+            $personas = Persona::join('colegios_electorales','personas.idcolegio_electoral', '=','colegios_electorales.id')
+                ->select('personas.id','personas.idcolegio_electoral','colegios_electorales.numero_colegio','personas.nombre','personas.apellido','personas.cedula',
+                        'personas.direccion','personas.telefono','personas.voto')
+                ->orderBy('personas.id', 'desc')->paginate(4);
         }else{
-            $personas = Persona::where($criterio, 'like', '%'. $buscar .'%')->orderBy('id', 'desc')->paginate(4);
+            $personas =  Persona::join('colegios_electorales','personas.idcolegio_electoral', '=','colegios_electorales.id')
+                ->select('personas.id','personas.idcolegio_electoral','colegios_electorales.numero_colegio','personas.nombre','personas.apellido','personas.cedula',
+                    'personas.direccion','personas.telefono','personas.voto')
+                ->where('recinto_electoral.'.$criterio, 'like', '%'. $buscar .'%')
+                ->orderBy('personas.id', 'desc')->paginate(4);
         }
 
 
@@ -37,13 +44,13 @@ class PersonaController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
         $persona = new Persona();
+        $persona->idcolegio_electoral = $request->idcolegio_electoral;
         $persona->nombre = $request->nombre;
         $persona->apellido = $request->apellido;
         $persona->cedula = $request->cedula;
         $persona->direccion = $request->direccion;
-        $persona->email = $request->email;
         $persona->telefono = $request->telefono;
-
+        $persona->voto = $request->voto;
         $persona->save();
     }
 
@@ -51,12 +58,29 @@ class PersonaController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
         $persona = Persona::findOrFail($request->id);
+        $persona->idcolegio_electoral = $request->idcolegio_electoral;
         $persona->nombre = $request->nombre;
         $persona->apellido = $request->apellido;
         $persona->cedula = $request->cedula;
         $persona->direccion = $request->direccion;
-        $persona->email = $request->email;
         $persona->telefono = $request->telefono;
+        $persona->voto = '0';
+        $persona->save();
+    }
+
+    public function agregarVoto(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+        $persona = Persona::findOrFail($request->id);
+        $persona->voto = '1';
+        $persona->save();
+    }
+
+    public function quitarVoto(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+        $persona = Persona::findOrFail($request->id);
+        $persona->voto = '0';
         $persona->save();
     }
 }
