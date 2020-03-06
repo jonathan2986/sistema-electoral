@@ -61,7 +61,7 @@
                                 <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1,buscar,criterio)">Ant</a>
                             </li>
                             <li class="page-item" v-for="page in pagesNumber" :key="page" :class="[page == isActived ? 'active' : '']">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(page)" v-text="page">1</a>
+                                <a class="page-link" href="#" @click.prevent="cambiarPagina(page,buscar,criterio)" v-text="page"></a>
                             </li>
                             <li class="page-item" v-if="pagination.current_page < pagination.last_page">
                                 <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1,buscar,criterio)">Sig</a>
@@ -189,10 +189,12 @@
             isActived: function(){
                 return this.pagination.current_page;
             },
-            pagesNumber: function(){
+            //Calcula los elementos de la paginación
+            pagesNumber: function() {
                 if(!this.pagination.to) {
                     return [];
                 }
+
                 var from = this.pagination.current_page - this.offset;
                 if(from < 1) {
                     from = 1;
@@ -209,6 +211,7 @@
                     from++;
                 }
                 return pagesArray;
+
             }
         },
         methods: {

@@ -22,7 +22,7 @@ class PersonaController extends Controller
             $personas =  Persona::join('colegios_electorales','personas.idcolegio_electoral', '=','colegios_electorales.id')
                 ->select('personas.id','personas.idcolegio_electoral','colegios_electorales.numero_colegio','personas.nombre','personas.apellido','personas.cedula',
                     'personas.direccion','personas.telefono','personas.voto')
-                ->where('recinto_electoral.'.$criterio, 'like', '%'. $buscar .'%')
+                ->where('personas.'.$criterio, 'like', '%'. $buscar .'%')
                 ->orderBy('personas.id', 'desc')->paginate(4);
         }
 

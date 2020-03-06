@@ -187,7 +187,6 @@
                     from++;
                 }
                 return pagesArray;
-
             }
         },
         methods : {
@@ -221,7 +220,7 @@
                 //Actualiza la página actual
                 me.pagination.current_page = page;
                 //Envia la petición para visualizar la data de esa página
-                me.listarColegios(page,buscar,criterio);
+                me.listarRecinto(page,buscar,criterio);
             },
             registrarRecinto(){
                 if (this.validarRecinto()){

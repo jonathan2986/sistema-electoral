@@ -49837,10 +49837,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         isActived: function isActived() {
             return this.pagination.current_page;
         },
+        //Calcula los elementos de la paginación
         pagesNumber: function pagesNumber() {
             if (!this.pagination.to) {
                 return [];
             }
+
             var from = this.pagination.current_page - this.offset;
             if (from < 1) {
                 from = 1;
@@ -50208,21 +50210,21 @@ var render = function() {
                       class: [page == _vm.isActived ? "active" : ""]
                     },
                     [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "page-link",
-                          attrs: { href: "#" },
-                          domProps: { textContent: _vm._s(page) },
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.cambiarPagina(page)
-                            }
+                      _c("a", {
+                        staticClass: "page-link",
+                        attrs: { href: "#" },
+                        domProps: { textContent: _vm._s(page) },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.cambiarPagina(
+                              page,
+                              _vm.buscar,
+                              _vm.criterio
+                            )
                           }
-                        },
-                        [_vm._v("1")]
-                      )
+                        }
+                      })
                     ]
                   )
                 }),
@@ -51006,7 +51008,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //Actualiza la página actual
             me.pagination.current_page = page;
             //Envia la petición para visualizar la data de esa página
-            me.listarColegios(page, buscar, criterio);
+            me.listarRecinto(page, buscar, criterio);
         },
         registrarRecinto: function registrarRecinto() {
             if (this.validarRecinto()) {
@@ -52091,7 +52093,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //Actualiza la página actual
             me.pagination.current_page = page;
             //Envia la petición para visualizar la data de esa página
-            me.listarColegios(page, buscar, criterio);
+            me.listarColegiosE(page, buscar, criterio);
         },
         registrarColegiosE: function registrarColegiosE() {
             if (this.validarColegioE()) {
@@ -53188,10 +53190,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         isActived: function isActived() {
             return this.pagination.current_page;
         },
+        //Calcula los elementos de la paginación
         pagesNumber: function pagesNumber() {
             if (!this.pagination.to) {
                 return [];
             }
+
             var from = this.pagination.current_page - this.offset;
             if (from < 1) {
                 from = 1;
@@ -53240,7 +53244,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //Actualiza la página actual
             me.pagination.current_page = page;
             //Envia la petición para visualizar la data de esa página
-            me.listarColegios(page, buscar, criterio);
+            me.listarUsuarios(page, buscar, criterio);
         },
         registrarUsuario: function registrarUsuario() {
             if (this.validarUsuario()) {
@@ -53698,21 +53702,21 @@ var render = function() {
                       class: [page == _vm.isActived ? "active" : ""]
                     },
                     [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "page-link",
-                          attrs: { href: "#" },
-                          domProps: { textContent: _vm._s(page) },
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.cambiarPagina(page)
-                            }
+                      _c("a", {
+                        staticClass: "page-link",
+                        attrs: { href: "#" },
+                        domProps: { textContent: _vm._s(page) },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.cambiarPagina(
+                              page,
+                              _vm.buscar,
+                              _vm.criterio
+                            )
                           }
-                        },
-                        [_vm._v("1")]
-                      )
+                        }
+                      })
                     ]
                   )
                 }),
