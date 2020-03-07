@@ -15,4 +15,8 @@ class Persona extends Model
     public function colegioElectoral(){
         return $this->belongsTo('App\ColegioElectoral');//pertenece a un colegio electoral
     }
+
+    public function user(){
+        return $this->hasOne('App\User');//esta relacionada de manera directa o tiene un usuario
+    }
 }
