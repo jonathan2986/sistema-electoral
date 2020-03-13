@@ -20,4 +20,7 @@ class ColegioElectoral extends Model
     public function personas(){
         return $this->hasMany('App\Persona');//tiene varias personas
     }
+    public function electores(){
+        return $this->hasMany('App\Elector');//tiene varios electores
+    }
 }

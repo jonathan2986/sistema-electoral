@@ -40,7 +40,7 @@
             </template>
 
             <template v-if="menu==9">
-                <h1>Ayuda</h1>
+                <electores></electores>
             </template>
 
             <template v-if="menu==10">
@@ -83,7 +83,7 @@
             </template>
 
             <template v-if="menu==9">
-                <h1>Ayuda</h1>
+                <electores></electores>
             </template>
 
             <template v-if="menu==10">

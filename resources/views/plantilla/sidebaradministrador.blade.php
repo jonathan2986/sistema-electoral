@@ -51,7 +51,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li @click="menu=11" class="nav-item">
+                    <li @click="menu=9" class="nav-item">
                         <a class="nav-link" href="#"><i class="icon-book-open"></i> Ayuda <span class="badge badge-danger">PDF</span></a>
                     </li>
                     <li @click="menu=12" class="nav-item">

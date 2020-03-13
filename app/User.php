@@ -35,4 +35,7 @@ class User extends Authenticatable
     public function persona(){
         return $this->belongsTo('App\Persona');//un usuario pertenece a una pertenece
     }
+    public function electores(){
+        return $this->hasMany('App\Elector');//tiene varios electores
+    }
 }

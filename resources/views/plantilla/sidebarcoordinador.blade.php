@@ -46,15 +46,15 @@
                             <li @click="menu=7" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-chart"></i> Reporte Ingresos</a>
                             </li>
-                            <li @click="menu=10" class="nav-item">
+                            <li @click="menu=8" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-chart"></i> Reporte Ventas</a>
                             </li>
                         </ul>
                     </li>
-                    <li @click="menu=11" class="nav-item">
+                    <li @click="menu=9" class="nav-item">
                         <a class="nav-link" href="#"><i class="icon-book-open"></i> Ayuda <span class="badge badge-danger">PDF</span></a>
                     </li>
-                    <li @click="menu=12" class="nav-item">
+                    <li @click="menu=10" class="nav-item">
                         <a class="nav-link" href="#"><i class="icon-info"></i> Acerca de...<span class="badge badge-info">IT</span></a>
                     </li>
                 </ul>

@@ -51,6 +51,28 @@ class UserController extends Controller
         ];
     }
 
+    public function selectUsuario(Request $request){
+//        if (!$request->ajax()) return redirect('/');
+
+        $usuarios = User::select('id','usuario')
+            ->where('condicion', '=', '1')
+            ->orderBy('usuario', 'asc')->get();
+        return ['usuarios' => $usuarios];
+    }
+    public function selectUsuarioFiltro(Request $request){
+     //   if (!$request->ajax()) return redirect('/');
+        $filtro = $request->filtro;
+
+        $usuarios = User::join('personas','users.id','=','personas.id')
+                        ->join('roles','users.idrol','=','roles.id')
+            ->where('personas.nombre','like', '%'. $filtro . '%')
+            ->orWhere('personas.cedula','like','%' .$filtro . '%')
+            ->select('personas.id','personas.nombre','personas.apellido','personas.cedula','users.usuario','users.idrol','roles.nombre as rol')
+            ->orderBy('personas.nombre','asc')->get();
+
+        return ['usuarios' => $usuarios];
+    }
+
     public function store(Request $request)
     {
         if (!$request->ajax()) return redirect('/');

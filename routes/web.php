@@ -48,6 +48,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/usuarios/agregarVoto','PersonaController@agregarVoto');
         Route::put('/usuarios/quitarVoto','PersonaController@quitarVoto');
 
+        Route::get('/electores', 'ElectoreController@index');
+        Route::post('/electores/registrar', 'ElectoreController@store');
+        Route::put('/electores/actualizar', 'PersonaController@update');
+        Route::put('/electores/agregarVoto','ElectorrController@agregarVoto');
+        Route::put('/electores/quitarVoto','ElectorController@quitarVoto');
+
     });
 
     Route::group(['middleware' => 'Administrador'], function () {
@@ -76,6 +82,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/usuarios/agregarVoto','PersonaController@agregarVoto');
         Route::put('/usuarios/quitarVoto','PersonaController@quitarVoto');
 
+        //Electores
+        Route::get('/electores', 'ElectoreController@index');
+        Route::post('/electores/registrar', 'ElectoreController@store');
+//        Route::put('/usuarios/actualizar', 'PersonaController@update');
+        Route::put('/electores/agregarVoto','ElectorrController@agregarVoto');
+        Route::put('/electores/quitarVoto','ElectorController@quitarVoto');
+
         //Partidos
         Route::get('/partidos','PartidoController@index');
         Route::get('/partidos/selectPartido','PartidoController@selectPartido');
@@ -94,6 +107,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/users/actualizar', 'UserController@update');
         Route::put('/users/activar','UserController@activar');
         Route::put('/users/desactivar','UserController@desactivar');
+        Route::get('/users/selectUsuario', 'UserController@selectUsuario');
+        Route::get('/users/selectUsuarioFiltro', 'UserController@selectUsuarioFiltro');
 
 //Roles
         Route::get('/roles', 'RolController@index');
