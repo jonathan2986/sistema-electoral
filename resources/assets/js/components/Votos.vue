@@ -48,11 +48,6 @@
                                     <i class="icon-pencil"></i>
                                 </button>
                                 <template>
-                                    <button type="button" class="btn btn-danger btn-sm">
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </template>
-                                <template>
                                     <button type="button" class="btn btn-info btn-sm">
                                         <i class="icon-check"></i>
                                     </button>
