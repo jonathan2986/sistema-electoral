@@ -41,6 +41,12 @@ class PartidoController extends Controller
         return ['partido' => $partido];
     }
 
+    public function getTotalPartidos(){
+        $partidos = Partido::get()->count();
+
+        return ['partidos' => $partidos ];
+    }
+
     public function store(Request $request)
     {
         if (!$request->ajax()) return redirect('/');

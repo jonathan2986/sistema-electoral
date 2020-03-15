@@ -12,7 +12,7 @@ class Partido extends Model
 
     public $timestamps = false;
 
-    public function candidatos(){
+    public function candidato(){
         return $this->hasMany('App\Candidato');//tiene varios candidatos
     }
 }

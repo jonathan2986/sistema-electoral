@@ -87,8 +87,8 @@
 
 
 <footer class="app-footer">
-    <span><a href="http://www.incanatoit.com/">IncanatoIT</a> &copy; 2017</span>
-    <span class="ml-auto">Desarrollado por <a href="http://www.incanatoit.com/">IncanatoIT</a></span>
+    <span><a href="https://github.com/jonathan2986">Jhonathan Adames</a> &copy; 2020</span>
+    <span class="ml-auto">Desarrollado por Jhonathan Adames</span>
 </footer>
 
 <!-- Bootstrap and necessary plugins -->

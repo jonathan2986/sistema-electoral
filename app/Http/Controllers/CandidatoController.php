@@ -16,11 +16,11 @@ class CandidatoController extends Controller
 
         if ($buscar == ''){
             $candidatos = Candidato::join('partidos','candidatos.idpartido', '=','partidos.id')
-                ->select('candidatos.id','candidatos.idpartido','candidatos.nombre_candidato','candidatos.apellido_candidato','candidatos.tipo_candidatura','partidos.siglas')
+                ->select('candidatos.id','candidatos.idpartido','candidatos.nombre_candidato','candidatos.tipo_candidatura','partidos.siglas')
                 ->orderBy('candidatos.id', 'desc')->paginate(4);
         }else{
             $candidatos = Candidato::join('partidos','candidatos.idpartido', '=','partidos.id')
-                ->select('candidatos.id','candidatos.idpartido','candidatos.nombre_candidato','candidatos.apellido_candidato','candidatos.tipo_candidatura','partidos.siglas')
+                ->select('candidatos.id','candidatos.idpartido','candidatos.nombre_candidato','candidatos.tipo_candidatura','partidos.siglas')
                 ->where('candidatos.'.$criterio, 'like', '%'. $buscar .'%')
                 ->orderBy('candidatos.id', 'desc')->paginate(4);
         }
@@ -51,9 +51,16 @@ class CandidatoController extends Controller
         $candidato = new Candidato();
         $candidato->idpartido = $request->idpartido;
         $candidato->nombre_candidato = $request->nombre_candidato;
-        $candidato->apellido_candidato = $request->apellido_candidato;
         $candidato->tipo_candidatura= $request->tipo_candidatura;
         $candidato->save();
+    }
+
+    public function selectCandidato(Request $request){
+//        if (!$request->ajax()) return redirect('/');
+
+        $candidatos = Candidato::select('id','nombre_candidato', 'tipo_candidatura')
+            ->orderBy('nombre_candidato', 'asc')->get();
+        return ['candidatos' => $candidatos];
     }
 
 //    public function selectRecinto(Request $request){
@@ -76,7 +83,6 @@ class CandidatoController extends Controller
         $candidato = Candidato::findOrFail($request->id);
         $candidato->idpartido = $request->idpartido;
         $candidato->nombre_candidato = $request->nombre_candidato;
-        $candidato->apellido_candidato = $request->apellido_candidato;
         $candidato->tipo_candidatura= $request->tipo_candidatura;
         $candidato->save();
     }

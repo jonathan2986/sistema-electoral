@@ -17,7 +17,6 @@ class CreateCandidatosTable extends Migration
             $table->increments('id');
             $table->integer('idpartido')->unsigned();
             $table->string('nombre_candidato', 60);
-            $table->string('apellido_candidato',60);
             $table->string('tipo_candidatura', 50);
 
             $table->foreign('idpartido')->references('id')->on('partidos');

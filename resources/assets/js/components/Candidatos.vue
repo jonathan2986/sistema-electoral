@@ -33,7 +33,6 @@
                         <tr>
                             <th>Opciones</th>
                             <th>NOMBRE CANDIDATO</th>
-                            <th>APELLIDO</th>
                             <th>CANDIDATURA</th>
                             <th>PARTIDO</th>
                         </tr>
@@ -56,7 +55,6 @@
                                 </template>
                             </td>
                             <td v-text="candidato.nombre_candidato"></td>
-                            <td v-text="candidato.apellido_candidato"></td>
                             <td v-text="candidato.tipo_candidatura"></td>
                             <td v-text="candidato.siglas"></td>
                         </tr>
@@ -95,12 +93,6 @@
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre del Candidato</label>
                                 <div class="col-md-9">
                                     <input type="text" v-model="nombre_candidato" class="form-control" placeholder="Nombre del Candidato">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Apellido</label>
-                                <div class="col-md-9">
-                                    <input type="text" v-model="apellido_candidato" class="form-control" placeholder="Apellido">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -149,7 +141,6 @@
                 candidato_id: 0,
                 idpartido : 0,
                 nombre_candidato : '',
-                apellido_candidato : '',
                 tipo_candidatura : '',
                 siglas: '',
                 arrayCandidato : [],
@@ -244,7 +235,6 @@
                 axios.post('/candidatos/registrar',{
                     'idpartido':this.idpartido,
                     'nombre_candidato': this.nombre_candidato,
-                    'apellido_candidato': this.apellido_candidato,
                     'tipo_candidatura': this.tipo_candidatura
                 }).then(function (response) {
                     me.cerrarModal();
@@ -263,7 +253,6 @@
                 axios.put('/candidatos/actualizar',{
                     'idpartido':this.idpartido,
                     'nombre_candidato': this.nombre_candidato,
-                    'apellido_candidato': this.apellido_candidato,
                     'tipo_candidatura': this.tipo_candidatura,
                     'id': this.candidato_id
                 }).then(function (response) {
@@ -357,7 +346,6 @@
 
                 if (this.idpartido == 0) this.errorMostrarMsjCandidato.push("Seleccione el partido de candidato.");
                 if (!this.nombre_candidato) this.errorMostrarMsjCandidato.push("El nombre del candidato no puede estar vacío.");
-                if (!this.apellido_candidato) this.errorMostrarMsjCandidato.push("El apellido del candidato no puede estar vacía.");
                 if (!this.tipo_candidatura) this.errorMostrarMsjCandidato.push("Ingrese un tipo de candidatura.");
                 if (this.errorMostrarMsjCandidato.length) this.errorCandidato = 1;
 
@@ -367,7 +355,6 @@
                 this.modal=0;
                 this.tituloModal='';
                 this.nombre_candidato = '';
-                this.apellido_candidato='';
                 this.tipo_candidatura = '';
                 this.errorCandidato = 0;
             },
@@ -382,7 +369,6 @@
                                 this.tituloModal = 'Registrar Candidato';
                                 this.idpartido = 0;
                                 this.nombre_candidato = '';
-                                this.apellido_candidato='';
                                 this.tipo_candidatura = '';
                                 this.tipoAccion = 1;
                                 break;
@@ -396,7 +382,6 @@
                                 this.candidato_id=data['id'];
                                 this.idpartido=data['idpartido'];
                                 this.nombre_candidato = data['nombre_candidato'];
-                                this.apellido_candidato= data['apellido_candidato'];
                                 this.tipo_candidatura = data['tipo_candidatura'];
                                 break;
                             }

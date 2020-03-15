@@ -22,6 +22,7 @@ Vue.component('usuarios', require('./components/Usuarios'));
 Vue.component('electores', require('./components/Electores'));
 Vue.component('partidos', require('./components/Partidos'));
 Vue.component('candidatos', require('./components/Candidatos'));
+Vue.component('votos', require('./components/Votos'));
 Vue.component('roles', require('./components/Roles'));
 Vue.component('users', require('./components/Users'));
 Vue.component('simpatizantes', require('./components/Simpatizantes'));

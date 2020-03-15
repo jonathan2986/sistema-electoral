@@ -92,15 +92,24 @@ Route::group(['middleware' => ['auth']], function () {
         //Partidos
         Route::get('/partidos','PartidoController@index');
         Route::get('/partidos/selectPartido','PartidoController@selectPartido');
+        Route::get('/partidos/totalPartidos', 'PartidoController@getTotalPartidos');
         Route::post('/partidos/registrar','PartidoController@store');
         Route::put('/partidos/actualizar','PartidoController@update');
 
         //Candidatos
         Route::get('/candidatos','CandidatoController@index');
-//        Route::get('/candidatos/selectPartido','CandidatoController@selectPartido');
+        Route::get('/candidatos/selectCandidato','CandidatoController@selectCandidato');
+        Route::get('/candidatos/selectCandidatura','CandidatoController@selectCandidatura');
         Route::post('/candidatos/registrar','CandidatoController@store');
         Route::put('/candidatos/actualizar','CandidatoController@update');
 
+        //Votos
+        Route::get('/votos','VotosController@index');
+        Route::post('/votos/registrar','VotosController@store');
+        Route::put('/votos/actualizar','VotosController@update');
+        Route::get('/votos/totalVoto','VotosController@calcularVotosCandidato');
+        Route::get('/votos/totalNulo','VotosController@calcularVotosNulo');
+        Route::get('/votos/selectTotalVotos', 'VotosController@selectTotalVotos');
         //users
         Route::get('/users', 'UserController@index');
         Route::post('/users/registrar', 'UserController@store');

@@ -40,11 +40,11 @@
             </template>
 
             <template v-if="menu==9">
-                <electores></electores>
+                <votos></votos>
             </template>
 
             <template v-if="menu==10">
-                <h1>Acerca de</h1>
+                <electores></electores>
             </template>
 
             <template v-if="menu==11">
