@@ -19,14 +19,14 @@ class VotosController extends Controller
                 ->join('partidos','votos.idpartido', '=','partidos.id')
                 ->select('votos.id','votos.idcandidato','votos.voto_candidato','votos.voto_nulo','votos.votos_valido','votos.boletas_observada','votos.total_voto',
                     'candidatos.nombre_candidato','candidatos.tipo_candidatura','partidos.siglas')
-                ->orderBy('votos.id', 'desc')->paginate(13);
+                ->orderBy('votos.id', 'desc')->paginate(30);
         }else{
             $votos = Voto::join('candidatos','votos.idcandidato', '=','candidatos.id')
                 ->join('partidos','votos.idpartido', '=','partidos.id')
                 ->select('votos.id','votos.idcandidato','votos.voto_candidato','votos.voto_nulo','votos.votos_valido','votos.boletas_observada','votos.total_voto',
                     'candidatos.nombre_candidato','candidatos.tipo_candidatura','partidos.siglas')
                 ->where('votos.'.$criterio, 'like', '%'. $buscar .'%')
-                ->orderBy('votos.id', 'desc')->paginate(13);
+                ->orderBy('votos.id', 'desc')->paginate(30);
         }
 
 

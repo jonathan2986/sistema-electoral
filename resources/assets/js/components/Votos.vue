@@ -61,7 +61,7 @@
 <!--                            <td v-text="voto.votos_valido"></td>-->
 <!--                            <td v-text="voto.boletas_observada"></td>-->
 <!--                            <td v-text="voto.total_voto"></td>-->
-                            <td v-if="voto.voto_candidato > 0">{{(voto.voto_candidato*100)/voto.total_voto}}%</td>
+                            <td v-if="voto.voto_candidato > 0">{{((voto.voto_candidato*100)/voto.total_voto).toFixed(2)}}%</td>
                             <td v-else>No tienen porcentaje</td>
                         </tr>
                         </tbody>
