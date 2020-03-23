@@ -5,7 +5,7 @@
         </template>
 
         <template v-if="menu==1">
-            <h1>Contenido del menú 1</h1>
+            <provincia></provincia>
         </template>
 
         <template v-if="menu==2">
