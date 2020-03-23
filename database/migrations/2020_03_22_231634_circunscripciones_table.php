@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePartidosTable extends Migration
+class CircunscripcionesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreatePartidosTable extends Migration
      */
     public function up()
     {
-        Schema::create('partidos', function (Blueprint $table) {
+        Schema::create('circunscripciones', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre_partido', 100);
-            $table->string('siglas', 20);
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -27,6 +27,6 @@ class CreatePartidosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('partidos');
+        Schema::dropIfExists('circunscripciones');
     }
 }
