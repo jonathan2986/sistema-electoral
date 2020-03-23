@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateColegiosElectoralesTable extends Migration
+class DistritosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateColegiosElectoralesTable extends Migration
      */
     public function up()
     {
-        Schema::create('colegios_electorales', function (Blueprint $table) {
+        Schema::create('distritos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('idrecinto')->unsigned();
-            $table->string('numero_colegio',50);
-            $table->integer('cantidad_electores');
+            $table->integer('circunscripciones_id')->nullable();
+            $table->integer('provincias_id')->nullable();
+            $table->string('name');
             $table->timestamps();
-
-            $table->foreign('idrecinto')->references('id')->on('recinto_electoral');
         });
     }
 
@@ -31,6 +29,6 @@ class CreateColegiosElectoralesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('colegios_electorales');
+        Schema::dropIfExists('distritos');
     }
 }
