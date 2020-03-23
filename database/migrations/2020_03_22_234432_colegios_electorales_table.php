@@ -19,6 +19,7 @@ class ColegiosElectoralesTable extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->foreign('recintos_id')->references('id')->on('recintos');
+            $table->softDeletes('deleted_at', 0);
             $table->timestamps();
         });
     }
