@@ -18,6 +18,7 @@ class MunicipiosTable extends Migration
             $table->integer('circunscripciones_id')->nullable();
             $table->integer('provincias_id')->nullable();
             $table->string('name');
+            $table->softDeletes('deleted_at', 0);	
             $table->timestamps();
         });
     }

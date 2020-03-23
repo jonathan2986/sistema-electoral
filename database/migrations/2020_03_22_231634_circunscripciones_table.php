@@ -16,6 +16,7 @@ class CircunscripcionesTable extends Migration
         Schema::create('circunscripciones', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->softDeletes('deleted_at', 0);	
             $table->timestamps();
         });
     }

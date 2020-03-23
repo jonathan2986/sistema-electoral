@@ -19,4 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group([], function () {
     Route::resource('/provincias', 'ProvinciasController');
+    Route::resource('/circunscripciones', 'CircunscripcionesController');
+    Route::resource('/municipios', 'MunicipiosController');
+    Route::resource('/distritos', 'DistritosController');
 });

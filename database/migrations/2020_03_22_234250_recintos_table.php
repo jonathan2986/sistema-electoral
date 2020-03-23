@@ -18,6 +18,7 @@ class RecintosTable extends Migration
             $table->integer('municipios_id')->nullable();
             $table->integer('distritos_id')->nullable();
             $table->string('name');
+            $table->softDeletes('deleted_at', 0);
             $table->timestamps();
         });
     }

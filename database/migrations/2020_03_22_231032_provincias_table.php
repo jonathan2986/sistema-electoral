@@ -16,6 +16,7 @@ class ProvinciasTable extends Migration
         Schema::create('provincias', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->softDeletes('deleted_at', 0);	
             $table->timestamps();
         });
     }
