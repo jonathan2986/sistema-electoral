@@ -22,4 +22,6 @@ Route::group([], function () {
     Route::resource('/circunscripciones', 'CircunscripcionesController');
     Route::resource('/municipios', 'MunicipiosController');
     Route::resource('/distritos', 'DistritosController');
+    Route::resource('/recintos', 'RecintosController');
+    Route::resource('/colegios_electorales', 'ColegiosElectoralesController');
 });
