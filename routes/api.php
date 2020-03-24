@@ -24,4 +24,6 @@ Route::group([], function () {
     Route::resource('/distritos', 'DistritosController');
     Route::resource('/recintos', 'RecintosController');
     Route::resource('/colegios_electorales', 'ColegiosElectoralesController');
+    Route::resource('/people', 'PeopleController');
+    Route::resource('/users', 'UsersController');
 });
