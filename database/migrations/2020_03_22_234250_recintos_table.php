@@ -15,8 +15,8 @@ class RecintosTable extends Migration
     {
         Schema::create('recintos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('municipios_id')->nullable();
-            $table->integer('distritos_id')->nullable();
+            $table->integer('municipios_id')->unsigned();
+            $table->integer('distritos_id')->unsigned();
             $table->string('name');
             $table->softDeletes('deleted_at', 0);
             $table->timestamps();

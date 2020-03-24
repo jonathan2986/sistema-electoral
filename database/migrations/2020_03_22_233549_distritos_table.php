@@ -15,8 +15,8 @@ class DistritosTable extends Migration
     {
         Schema::create('distritos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('circunscripciones_id')->nullable();
-            $table->integer('municipios_id')->nullable();
+            $table->integer('circunscripciones_id')->unsigned();
+            $table->integer('municipios_id')->unsigned();
             $table->string('name');
             $table->softDeletes('deleted_at', 0);
             $table->timestamps();
