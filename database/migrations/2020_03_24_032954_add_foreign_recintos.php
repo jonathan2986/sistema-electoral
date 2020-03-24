@@ -16,7 +16,7 @@ class AddForeignRecintos extends Migration
         Schema::table('recintos', function (Blueprint $table) {
             //
             $table->foreign('municipios_id')->references('id')->on('municipios');
-            $table->foreign('recintos_id')->references('id')->on('recintos');
+            $table->foreign('distritos_id')->references('id')->on('distritos');
 
         });
     }
