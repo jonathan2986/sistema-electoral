@@ -10,53 +10,53 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::group(['middleware' => ['guest']], function () {
-    Route::get('/', 'Auth\LoginController@showLoginForm');
-    Route::post('/login', 'Auth\LoginController@login')->name('login');
-});
-Route::group(['middleware' => ['auth']], function () {
+//Route::group(['middleware' => ['guest']], function () {
+//    Route::get('/', 'Auth\LoginController@showLoginForm');
+//    Route::post('/login', 'Auth\LoginController@login')->name('login');
+//});
+//Route::group(['middleware' => ['auth']], function () {
 
-    Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+//    Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
     Route::get('/main', function () {
         return view('contenido/contenido');
     })->name('main');
 
-    Route::group(['middleware' => 'Coordinador'], function () {
+//    Route::group(['middleware' => 'Coordinador'], function () {
+//
+//        Route::get('/colegios','ColegioController@index');
+//        Route::post('/colegios/registrar','ColegioController@store');
+//        Route::put('/colegios/actualizar','ColegioController@update');
+//        Route::get('/colegios/selectColegio','ColegioController@selectColegio');
+//
+//        //Recinto
+//        Route::get('/recintos','RecintoController@index');
+//        Route::post('/recintos/registrar','RecintoController@store');
+//        Route::put('/recintos/actualizar','RecintoController@update');
+//        Route::get('/recintos/selectRecinto','RecintoController@selectRecinto');
+//
+//        //colegios electorales
+//        Route::get('/colegios-electorales','ColegioElectoralController@index');
+//        Route::post('/colegios-electorales/registrar','ColegioElectoralController@store');
+//        Route::put('/colegios-electorales/actualizar','ColegioElectoralController@update');
+//        Route::get('/colegios-electorales/selectColegio','ColegioElectoralController@selectColegiosElectorales');
+//
+//        //Persona
+//        Route::get('/usuarios', 'PersonaController@index');
+//        Route::post('/usuarios/registrar', 'PersonaController@store');
+//        Route::put('/usuarios/actualizar', 'PersonaController@update');
+//        Route::put('/usuarios/agregarVoto','PersonaController@agregarVoto');
+//        Route::put('/usuarios/quitarVoto','PersonaController@quitarVoto');
+//
+//        Route::get('/electores', 'ElectoreController@index');
+//        Route::post('/electores/registrar', 'ElectoreController@store');
+//        Route::put('/electores/actualizar', 'PersonaController@update');
+//        Route::put('/electores/agregarVoto','ElectorrController@agregarVoto');
+//        Route::put('/electores/quitarVoto','ElectorController@quitarVoto');
+//
+//    });
 
-        Route::get('/colegios','ColegioController@index');
-        Route::post('/colegios/registrar','ColegioController@store');
-        Route::put('/colegios/actualizar','ColegioController@update');
-        Route::get('/colegios/selectColegio','ColegioController@selectColegio');
-
-        //Recinto
-        Route::get('/recintos','RecintoController@index');
-        Route::post('/recintos/registrar','RecintoController@store');
-        Route::put('/recintos/actualizar','RecintoController@update');
-        Route::get('/recintos/selectRecinto','RecintoController@selectRecinto');
-
-        //colegios electorales
-        Route::get('/colegios-electorales','ColegioElectoralController@index');
-        Route::post('/colegios-electorales/registrar','ColegioElectoralController@store');
-        Route::put('/colegios-electorales/actualizar','ColegioElectoralController@update');
-        Route::get('/colegios-electorales/selectColegio','ColegioElectoralController@selectColegiosElectorales');
-
-        //Persona
-        Route::get('/usuarios', 'PersonaController@index');
-        Route::post('/usuarios/registrar', 'PersonaController@store');
-        Route::put('/usuarios/actualizar', 'PersonaController@update');
-        Route::put('/usuarios/agregarVoto','PersonaController@agregarVoto');
-        Route::put('/usuarios/quitarVoto','PersonaController@quitarVoto');
-
-        Route::get('/electores', 'ElectoreController@index');
-        Route::post('/electores/registrar', 'ElectoreController@store');
-        Route::put('/electores/actualizar', 'PersonaController@update');
-        Route::put('/electores/agregarVoto','ElectorrController@agregarVoto');
-        Route::put('/electores/quitarVoto','ElectorController@quitarVoto');
-
-    });
-
-    Route::group(['middleware' => 'Administrador'], function () {
+//    Route::group(['middleware' => 'Administrador'], function () {
 
         Route::get('/colegios','ColegioController@index');
         Route::post('/colegios/registrar','ColegioController@store');
@@ -122,10 +122,10 @@ Route::group(['middleware' => ['auth']], function () {
 //Roles
         Route::get('/roles', 'RolController@index');
         Route::get('/roles/selectRol', 'RolController@selectRol');
-    });
+//    });
 
 
-});
+//});
 
 
 

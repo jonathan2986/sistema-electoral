@@ -56,29 +56,25 @@
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 <img src="img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                <span class="d-md-down-none">{{Auth::user()->usuario}} </span>
+                <span class="d-md-down-none"></span>
             </a>
-            <a class="nav-item" href="{{ route('logout') }}"
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit()">
-                <i class="fa fa-lock"></i> Cerrar sesión</a>
+{{--            <a class="nav-item" href="{{ route('logout') }}"--}}
+{{--               onclick="event.preventDefault(); document.getElementById('logout-form').submit()">--}}
+{{--                <i class="fa fa-lock"></i> Cerrar sesión</a>--}}
 
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                {{ csrf_field() }}
-            </form>
+{{--            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">--}}
+{{--                {{ csrf_field() }}--}}
+{{--            </form>--}}
         </li>
     </ul>
 </header>
 
 <div class="app-body">
-   @if (Auth::check())
-       @if (Auth::user()->idrol == 1)
+{{--   @if (Auth::check())--}}
+{{--       @if (Auth::user()->idrol == 1)--}}
            @include('plantilla.sidebaradministrador')
-       @elseif (Auth::user()->idrol == 2)
-           @include('plantilla.sidebarcoordinador')
 
-           @else
-       @endif
-   @endif
+{{--           @include('plantilla.sidebarcoordinador')--}}
     <!-- Contenido Principal -->
     @yield('contenido')
 </div>

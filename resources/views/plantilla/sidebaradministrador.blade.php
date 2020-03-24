@@ -17,7 +17,7 @@
                                 <a class="nav-link" href="#"><i class="icon-bag"></i>Circunscripcion</a>
                             </li>
                             <li @click="menu=3" class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Municipios</a>
                             </li>
                         </ul>
                     </li>

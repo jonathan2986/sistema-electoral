@@ -8,8 +8,8 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Circunscripcion
-                    <button type="button" @click="abrirModal('circunscripcion','registrar')" class="btn btn-secondary">
+                    <i class="fa fa-align-justify"></i> Municipios
+                    <button type="button" @click="abrirModal('municipio','registrar')" class="btn btn-secondary">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
                 </div>
@@ -18,10 +18,10 @@
                         <div class="col-md-6">
                             <div class="input-group">
                                 <select class="form-control col-md-3" v-model="criterio">
-                                    <option value="circunscripcion">Circunscripcion</option>
+                                    <option value="municipio">Municipio</option>
                                 </select>
-                                <input type="text" v-model="buscar" @keyup.enter="listarCircunscripcion(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
-                                <button type="submit" @click="listarCircunscripcion(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                <input type="text" v-model="buscar" @keyup.enter="listarMunicipios(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
+                                <button type="submit" @click="listarMunicipios(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -29,34 +29,37 @@
                         <thead>
                         <tr>
                             <th>Opciones</th>
-                            <th>Circunscripciones</th>
+                            <th>Provincia</th>
+                            <th>Municipio</th>
+                            <th>Circunscripcion</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="circunscripcion in arrayCircunscripcion" :key="circunscripcion.id">
+                        <tr v-for="municipio in arrayMunicipios" :key="municipio.id">
                             <td>
-                                <button type="button" @click="abrirModal('circunscripcion','actualizar', circunscripcion)" class="btn btn-warning btn-sm">
+                                <button type="button" @click="abrirModal('municipio','actualizar', municipio)" class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
                                 </button> &nbsp;
                                 <button type="button"  class="btn btn-danger btn-sm">
                                     <i class="icon-trash"></i>
                                 </button>
                             </td>
-                            <td v-text="circunscripcion.name"></td>
-<!--                            <td v-text="provincia.number_municipios"></td>-->
+                            <td v-text="municipio.name"></td>
+                            <td v-text="municipio.provincia_id"></td>
+                            <td v-text="municipio.circunscripcion_id"></td>
                         </tr>
                         </tbody>
                     </table>
                     <nav>
                         <ul class="pagination">
                             <li class="page-item" v-if="pagination.current_page > 1">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1,buscar,criterio)">Ant</a>
+                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1)">Ant</a>
                             </li>
                             <li class="page-item" v-for="page in pagesNumber" :key="page" :class="[page == isActived ? 'active' : '']">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(page,buscar,criterio)" v-text="page"></a>
+                                <a class="page-link" href="#" @click.prevent="cambiarPagina(page)" v-text="page"></a>
                             </li>
                             <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1,buscar,criterio)">Sig</a>
+                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1)">Sig</a>
                             </li>
                         </ul>
                     </nav>
@@ -77,10 +80,10 @@
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Circunscripcion</label>
+                                <label class="col-md-3 form-control-label" for="text-input">Provincia</label>
                                 <div class="col-md-9">
-                                    <input type="text" v-model="circunscripcion"  class="form-control" placeholder="Circunscripcion">
-                                    <span class="help-block">(*) Ingrese el nombre de la circunscripcion</span>
+                                    <input type="text" v-model="provincia"  class="form-control" placeholder="Provincia">
+                                    <span class="help-block">(*) Ingrese el nombre de la provincia</span>
                                 </div>
                             </div>
                             <div v-show="errorProvincia" class="form-group row div-error">
@@ -95,8 +98,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarCircunscripcion()">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarCircunscripcion()">Actualizar</button>
+                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarProvincia()">Guardar</button>
+                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarProvincia()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -134,12 +137,12 @@
     export default {
         data() {
             return {
-                circunscripcion_id: 0,
-                circunscripcion: '',
+                municipio_id: 0,
+                municipio: '',
                 cantidadMunicipio: 0,
                 // distrito_municipal: '',
                 // circuscripcion: '',
-                arrayCircunscripcion: [],
+                arrayMunicipios: [],
                 modal : 0,
                 tituloModal : '',
                 tipoAccion : 0,
@@ -147,14 +150,14 @@
                 errorMostrarMsjProvincia: [],
                 pagination: {
                     total: 0,
-                    current_page: 0,
+                    current_page: 1,
                     per_page: 0,
                     last_page: 0,
                     from: 0,
                     to: 0
                 },
                 offset: 3,
-                criterio : 'circunscripcion',
+                criterio : 'municipio',
                 buscar : ''
             }
         },
@@ -188,13 +191,14 @@
             }
         },
         methods: {
-            listarCircunscripcion(page){
+            listarMunicipios(page){
                 let me = this;
-                axios.get('/api/circunscripciones/?page=' + page).then((response)=>{
+                axios.get('/api/municipios/?page=' + page).then((response)=>{
+                    console.log(response.data);
                     var respuesta = response.data;
-                    me.arrayCircunscripcion  = respuesta.data;
+                    me.arrayMunicipios = respuesta.data;
                     me.pagination = respuesta.current_page;
-                    console.log(me.arrayCircunscripcion);
+                    console.log(this.arrayMunicipios);
                 }).catch(function (error) {
                     console.log(error)
                 })
@@ -204,66 +208,66 @@
                 //Actualiza la página actual
                 me.pagination.current_page = page;
                 //Envia la petición para visualizar la data de esa página
-                me.listarColegios(page,buscar,criterio);
+                me.listarProvincias(page,buscar,criterio);
             },
-            registrarCircunscripcion(){
-                if (this.validarCircunscripcion()){
+            registrarProvincia(){
+                if (this.validarProvincia()){
                     return;
                 }
 
                 let me = this;
 
-                axios.post('/api/circunscripciones',{
-                    'name': this.circunscripcion
+                axios.post('/api/provincias',{
+                    'name': this.provincia
 
                 }).then(function (response) {
                     me.cerrarModal();
-                    me.listarCircunscripcion(1);
+                    me.listarProvincias(1);
                 }).catch(function (error) {
                     console.log(error);
                 });
             },
-            actualizarCircunscripcion(){
-                if (this.validarCircunscripcion()){
+            actualizarProvincia(){
+                if (this.validarProvincia()){
                     return;
                 }
 
                 let me = this;
 
-                axios.put(`/api/circunscripciones/${this.circunscripcion_id}`,{
-                    'name': this.circunscripcion,
+                axios.put(`/api/provincias/${this.provincia_id}`,{
+                    'name': this.provincia,
                 }).then(function (response) {
                     me.cerrarModal();
-                    me.listarCircunscripcion(1);
+                    me.listarProvincias(1);
                 }).catch(function (error) {
                     console.log(error);
                 });
             },
-            validarCircunscripcion(){
-                this.errorCircunscripcion=0;
-                this.errorMostrarMsjCircunscripcion =[];
+            validarProvincia(){
+                this.errorProvincia=0;
+                this.errorMostrarMsjProvincia =[];
 
-                if (!this.circunscripcion) this.errorMostrarMsjCircunscripcion.push("La circunscripcion no puede estar vacía.");
+                if (!this.provincia) this.errorMostrarMsjProvincia.push("La provincia no puede estar vacía.");
 
-                if (this.errorMostrarMsjCircunscripcion.length) this.errorCircunscripcion = 1;
+                if (this.errorMostrarMsjProvincia.length) this.errorProvincia = 1;
 
-                return this.errorCircunscripcion;
+                return this.errorProvincia;
             },
             cerrarModal(){
                 this.modal=0;
                 this.tituloModal='';
-                this.circunscripcion = '';
+                this.provincia = '';
             },
             abrirModal(modelo, accion, data = []) {
                 switch(modelo){
-                    case "circunscripcion":
+                    case "provincia":
                     {
                         switch (accion) {
                             case "registrar":
                             {
                                 this.modal = 1;
-                                this.tituloModal = 'Registrar Circunscripcion';
-                                this.circunscripcion = '';
+                                this.tituloModal = 'Registrar Provincia';
+                                this.provincia = '';
                                 this.tipoAccion = 1;
                                 break;
                             }
@@ -271,10 +275,10 @@
                             {
                                 //console.log(data);
                                 this.modal=1;
-                                this.tituloModal='Actualizar Circunscripcion';
+                                this.tituloModal='Actualizar Provincia';
                                 this.tipoAccion=2;
-                                this.circunscripcion_id=data['id'];
-                                this.circunscripcion = data['name'];
+                                this.provincia_id=data['id'];
+                                this.provincia = data['name'];
                                 break;
                             }
                         }
@@ -283,7 +287,7 @@
             }
         },
         mounted() {
-            this.listarCircunscripcion(1);
+            this.listarMunicipios(1);
         }
     }
 </script>
