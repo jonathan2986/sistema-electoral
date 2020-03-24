@@ -11,9 +11,12 @@
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i>Municipio</a>
                         <ul class="nav-dropdown-items">
                             <li @click="menu=1" class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-bag"></i>Distrito Municipal</a>
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Provincias</a>
                             </li>
                             <li @click="menu=2" class="nav-item">
+                                <a class="nav-link" href="#"><i class="icon-bag"></i>Circunscripcion</a>
+                            </li>
+                            <li @click="menu=3" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
                             </li>
                         </ul>
@@ -21,9 +24,9 @@
                     <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wallet"></i> Colegios Electorales</a>
                         <ul class="nav-dropdown-items">
-                            <li @click="menu=3" class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-wallet"></i>Colegios</a>
-                            </li>
+{{--                            <li @click="menu=3" class="nav-item">--}}
+{{--                                <a class="nav-link" href="#"><i class="icon-wallet"></i>Colegios</a>--}}
+{{--                            </li>--}}
                             <li @click="menu=4" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-notebook"></i>Usuarios</a>
                             </li>

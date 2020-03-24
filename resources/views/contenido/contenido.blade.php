@@ -8,15 +8,16 @@
             </template>
 
             <template v-if="menu==1">
-                <colegios></colegios>
+                <provincias></provincias>
             </template>
 
             <template v-if="menu==2">
-                <recintos></recintos>
+                <circunscripcion></circunscripcion>
             </template>
 
             <template v-if="menu==3">
-                <colegios-electorales></colegios-electorales>
+                <recintos></recintos>
+{{--                <colegios-electorales></colegios-electorales>--}}
             </template>
 
             <template v-if="menu==4">

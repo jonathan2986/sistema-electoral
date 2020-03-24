@@ -26,7 +26,8 @@ Vue.component('votos', require('./components/Votos'));
 Vue.component('roles', require('./components/Roles'));
 Vue.component('users', require('./components/Users'));
 Vue.component('simpatizantes', require('./components/Simpatizantes'));
-
+Vue.component('provincias', require('./components/Provincia'));
+Vue.component('circunscripcion', require('./components/Circunscripcion'));
 
 const app = new Vue({
     el: '#app',
