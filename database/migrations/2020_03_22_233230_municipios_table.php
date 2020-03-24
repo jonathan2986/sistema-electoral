@@ -15,8 +15,8 @@ class MunicipiosTable extends Migration
     {
         Schema::create('municipios', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('circunscripciones_id')->nullable();
-            $table->integer('provincias_id')->nullable();
+            $table->integer('circunscripciones_id')->unsigned();
+            $table->integer('provincias_id')->unsigned();
             $table->string('name');
             $table->softDeletes('deleted_at', 0);
             $table->timestamps();
