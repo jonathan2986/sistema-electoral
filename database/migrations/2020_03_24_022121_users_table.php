@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class MunicipiosTable extends Migration
+class UsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class MunicipiosTable extends Migration
      */
     public function up()
     {
-        Schema::create('municipios', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('circunscripciones_id')->nullable();
-            $table->integer('provincias_id')->nullable();
+            $table->integer('roles_id')->unsigned();
+            $table->integer('people_id')->unsigned()->nullable();
             $table->string('name');
-            $table->softDeletes('deleted_at', 0);
+            $table->string('email');
+            $table->string('password');
+            $table->softDeletes();
+            $table->foreign('roles_id')->references('id')->on('roles');
             $table->timestamps();
         });
     }
@@ -30,6 +33,6 @@ class MunicipiosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('municipios');
+        Schema::dropIfExists('users');
     }
 }

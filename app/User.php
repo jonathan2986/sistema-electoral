@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'usuario', 'password','condicion','idrol'
+        'id', 'name', 'email', 'password', 'people_id', 'roles_id',
     ];
 
     public $timestamps = false;
@@ -28,14 +28,17 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function rol(){
-        return $this->belongsTo('App\Rol');//un usuario pertenece a un rol
+    public function rol()
+    {
+        return $this->belongsTo('App\Rol'); //un usuario pertenece a un rol
     }
 
-    public function persona(){
-        return $this->belongsTo('App\Persona');//un usuario pertenece a una pertenece
+    public function persona()
+    {
+        return $this->belongsTo('App\Persona'); //un usuario pertenece a una pertenece
     }
-    public function electores(){
-        return $this->hasMany('App\Elector');//tiene varios electores
+    public function electores()
+    {
+        return $this->hasMany('App\Elector'); //tiene varios electores
     }
 }
