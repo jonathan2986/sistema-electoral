@@ -254,6 +254,14 @@
                     'method': method,
                     'data': this.entity
                 }).then(e => {
+                    alert('Hola Mundo');
+                    this.entity = {
+                        circunscripciones_id: 0,
+                        provincias_id: 0,
+                        name: '',
+                        id: 0,
+                    };
+                    console.log(this.entity);
                     this.listarMunicipios(1)
                     this.cerrarModal()
                 }).catch(err => {
