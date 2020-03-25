@@ -22,7 +22,7 @@ class Recintos extends Model
      */
     public function distritos()
     {
-        return $tis->belongsTo('App\Distritos');
+        return $this->belongsTo('App\Distritos');
     }
     
     /**

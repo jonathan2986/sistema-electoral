@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Recintos
-                    <button type="button" @click="abrirModal('recintos','registrar')" class="btn btn-secondary">
+                    <button type="button" @click="abrirModal('Distritos','registrar')" class="btn btn-secondary">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
                 </div>
@@ -18,56 +18,48 @@
                         <div class="col-md-6">
                             <div class="input-group">
                                 <select class="form-control col-md-3" v-model="criterio">
-                                    <option value="nombre_recinto">Nombre del recinto</option>
-                                    <option value="direccion">Direccion</option>
+                                    <option value="municipio">Recintos</option>
                                 </select>
-                                <input type="text" v-model="buscar" @keyup.enter="listarRecinto(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
-                                <button type="submit" @click="listarRecinto(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                <input type="text" v-model="buscar" @keyup.enter="listarData(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
+                                <button type="submit" @click="listarData(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
                     </div>
-                    <table class="table table-bordered table-striped table-sm">
+                    <table class="table table-responsive table-bordered table-striped table-sm">
                         <thead>
                         <tr>
                             <th>Opciones</th>
-                            <th>Distrito Municipal</th>
-                            <th>Nombre del Recinto</th>
-                            <th>Direccion</th>
+                            <th>Recintos</th>
+                            <th>Municipio</th>
+                            <th>Distrito</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="recinto in arrayRecinto" :key="recinto.id">
+                        <tr v-for="model in data" :key="model.id">
                             <td>
-                                <button type="button" @click="abrirModal('recintos','actualizar',recinto)" class="btn btn-warning btn-sm">
+                                <button type="button" @click="abrirModal('Distritos','actualizar', model)" class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
                                 </button> &nbsp;
-                                <template>
-                                    <button type="button" class="btn btn-danger btn-sm">
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </template>
-                                <template>
-                                    <button type="button" class="btn btn-info btn-sm">
-                                        <i class="icon-check"></i>
-                                    </button>
-                                </template>
+                                <button type="button"  class="btn btn-danger btn-sm">
+                                    <i class="icon-trash"></i>
+                                </button>
                             </td>
-                            <td v-text="recinto.distrito_municipal"></td>
-                            <td v-text="recinto.nombre_recinto"></td>
-                            <td v-text="recinto.direccion"></td>
+                            <td v-text="model.name"></td>
+                            <td v-text="model.municipios.name"></td>
+                            <td v-text="model.distritos.name"></td>
                         </tr>
                         </tbody>
                     </table>
                     <nav>
                         <ul class="pagination">
                             <li class="page-item" v-if="pagination.current_page > 1">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1,buscar,criterio)">Ant</a>
+                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1)">Ant</a>
                             </li>
                             <li class="page-item" v-for="page in pagesNumber" :key="page" :class="[page == isActived ? 'active' : '']">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(page,buscar,criterio)" v-text="page"></a>
+                                <a class="page-link" href="#" @click.prevent="cambiarPagina(page)" v-text="page"></a>
                             </li>
                             <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1,buscar,criterio)">Sig</a>
+                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1)">Sig</a>
                             </li>
                         </ul>
                     </nav>
@@ -81,47 +73,49 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" v-text="tituloModal"></h4>
-                        <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" @click="cerrarModal()">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Distrito Municipal</label>
+                                <label class="col-md-3 form-control-label" for="text-input">Recinto</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" v-model="idcolegio">
-                                        <option value="0" disabled>Seleccione</option>
-                                        <option v-for="colegio in arrayColegios" :key="colegio.id" :value="colegio.id" v-text="colegio.distrito_municipal"></option>
+                                    <input type="text"  v-model="entity.name" class="form-control" placeholder="Recinto">
+                                    <span class="help-block">(*) Ingrese el nombre del Recinto</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Municipios</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" name="" id="" v-model="entity.municipios_id">
+                                        <option :value="municipio.id" v-for="municipio in municipios" :key="municipio.id">{{municipio.name}}</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Nombre del Recinto</label>
+                                <label class="col-md-3 form-control-label" for="text-input">Distritos</label>
                                 <div class="col-md-9">
-                                    <input type="text" v-model="nombre_recinto" class="form-control" placeholder="Nombre del Recinto">
+                                    <select class="form-control" name="" id="" v-model="entity.distritos_id">
+                                        <option :value="distrito.id" v-for="distrito in distritos" :key="distrito.id">{{distrito.name}}</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Direccion</label>
-                                <div class="col-md-9">
-                                    <input type="text" v-model="direccion" class="form-control" placeholder="Direccion">
-                                </div>
-                            </div>
-                            <div v-show="errorRecinto" class="form-group row div-error">
+                            <!-- <div v-show="errorProvincia" class="form-group row div-error">
                                 <div class="text-center text-error">
-                                    <div v-for="error in errorMostrarMsjRecinto" :key="error" v-text="error">
+                                    <div v-for="error in errorMostrarMsjProvincia" :key="error" v-text="error">
 
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarRecinto()">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarRecinto()">Actualizar</button>
+                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="save('POST')">Guardar</button>
+                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="save('PUT')">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -129,37 +123,71 @@
             <!-- /.modal-dialog -->
         </div>
         <!--Fin del modal-->
+        <!-- Inicio del modal Eliminar -->
+        <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-danger" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Eliminar Categoría</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Estas seguro de eliminar la categoría?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-danger">Eliminar</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- Fin del modal Eliminar -->
     </main>
 </template>
 
 <script>
     export default {
-        data (){
+        data() {
             return {
-                recinto_id: 0,
-                idcolegio : 0,
-                distrito_municipal : '',
-                nombre_recinto : '',
-                direccion : '',
-                arrayRecinto : [],
+                municipio_id: 0,
+                municipio: '',
+                cantidadMunicipio: 0,
+                data:[],
+                // distrito_municipal: '',
+                // circuscripcion: '',
+                circunscripciones: [],
+                distritos: [],
                 modal : 0,
                 tituloModal : '',
                 tipoAccion : 0,
-                errorRecinto : 0,
-                errorMostrarMsjRecinto : [],
-                pagination : {
-                    'total' : 0,
-                    'current_page' : 0,
-                    'per_page' : 0,
-                    'last_page' : 0,
-                    'from' : 0,
-                    'to' : 0,
+                errorProvincia: 0,
+                errorMostrarMsjProvincia: [],
+                pagination: {
+                    total: 0,
+                    current_page: 1,
+                    per_page: 0,
+                    last_page: 0,
+                    from: 0,
+                    to: 0
                 },
-                offset : 3,
-                criterio : 'nombre_recinto',
-                buscar : '',
-                arrayColegios :[]
+                entity: {
+                    municipios_id: 0,
+                    distritos_id: 0,
+                    name: '',
+                    id: 0,
+                },
+
+                offset: 3,
+                criterio : 'recintos',
+                buscar : ''
             }
+        },
+        created() {
+            this.searchDependeciesTables()
         },
         computed:{
             isActived: function(){
@@ -187,211 +215,91 @@
                     from++;
                 }
                 return pagesArray;
+
             }
         },
-        methods : {
-            listarRecinto (page,buscar,criterio){
-                let me=this;
-                var url= '/recintos?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
-                axios.get(url).then(function (response) {
-                    var respuesta= response.data;
-                    me.arrayRecinto = respuesta.recintos.data;
-                    me.pagination= respuesta.pagination;
+        methods: {
+            listarData(page){
+                let me = this;
+                axios.get('/api/recintos',
+                {
+                    params :{
+                        eager: ['municipios', 'distritos'],
+                        page: page
+                    }
+                }
+                ).then((response)=>{
+                    var respuesta = response.data;
+                    me.data = respuesta.data;
+                    me.pagination = respuesta.current_page;
+                }).catch(function (error) {
+                    console.log(error)
                 })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
             },
-
-            selectColegio(){
-                let me=this;
-                var url= '/colegios/selectColegio';
-                axios.get(url).then(function (response) {
-                    // console.log(response);
-                    var respuesta= response.data;
-                    me.arrayColegios = respuesta.colegios;
-                })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            cambiarPagina(page,buscar,criterio){
+            cambiarPagina(page, buscar, criterio){
                 let me = this;
                 //Actualiza la página actual
                 me.pagination.current_page = page;
                 //Envia la petición para visualizar la data de esa página
-                me.listarRecinto(page,buscar,criterio);
+                me.listarData(page,buscar,criterio);
             },
-            registrarRecinto(){
-                if (this.validarRecinto()){
-                    return;
-                }
-
-                let me = this;
-
-                axios.post('/recintos/registrar',{
-                    'idcolegio':this.idcolegio,
-                    'nombre_recinto': this.nombre_recinto,
-                    'direccion': this.direccion
-                }).then(function (response) {
-                    me.cerrarModal();
-                    me.listarRecinto(1,'','nombre_recinto');
-                }).catch(function (error) {
-                    console.log(error);
-                });
-            },
-            actualizarRecinto(){
-                if (this.validarRecinto()){
-                    return;
-                }
-
-                let me = this;
-
-                axios.put('/recintos/actualizar',{
-                    'idcolegio':this.idcolegio,
-                    'nombre_recinto': this.nombre_recinto,
-                    'direccion': this.direccion,
-                    'id': this.recinto_id
-                }).then(function (response) {
-                    me.cerrarModal();
-                    me.listarRecinto(1,'','nombre_recinto');
-                }).catch(function (error) {
-                    console.log(error);
-                });
-            },
-            desactivarCategoria(id){
-                swal({
-                    title: 'Esta seguro de desactivar esta categoría?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Aceptar!',
-                    cancelButtonText: 'Cancelar',
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.value) {
-                        let me = this;
-
-                        axios.put('/categoria/desactivar',{
-                            'id': id
-                        }).then(function (response) {
-                            me.listarCategoria(1,'','nombre');
-                            swal(
-                                'Desactivado!',
-                                'El registro ha sido desactivado con éxito.',
-                                'success'
-                            )
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
-
-
-                    } else if (
-                        // Read more about handling dismissals
-                        result.dismiss === swal.DismissReason.cancel
-                    ) {
-
-                    }
+            save(method){
+                // if(!this.validarForm()){
+                // }
+                let url  = method == 'POST' ? `/api/recintos` : `/api/recintos/${this.entity.id}` 
+                axios({
+                    'url' : url,
+                    'method': method,
+                    'data': this.entity
+                }).then(e => {
+                  this.entity= {
+                      distritos_id: 0,
+                      municipios_id: 0,
+                      name: '',
+                      id: 0,
+                  }
+                    this.listarData(1)
+                    this.cerrarModal()
+                }).catch(err => {
+                    console.log(err);
                 })
-            },
-            activarCategoria(id){
-                swal({
-                    title: 'Esta seguro de activar esta categoría?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Aceptar!',
-                    cancelButtonText: 'Cancelar',
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false,
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.value) {
-                        let me = this;
-
-                        axios.put('/categoria/activar',{
-                            'id': id
-                        }).then(function (response) {
-                            me.listarCategoria(1,'','nombre');
-                            swal(
-                                'Activado!',
-                                'El registro ha sido activado con éxito.',
-                                'success'
-                            )
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
-
-
-                    } else if (
-                        // Read more about handling dismissals
-                        result.dismiss === swal.DismissReason.cancel
-                    ) {
-
-                    }
-                })
-            },
-            validarRecinto(){
-                this.errorRecinto=0;
-                this.errorMostrarMsjRecinto =[];
-
-                if (this.idcolegio == 0) this.errorMostrarMsjRecinto.push("Seleccione el distrito municipal.");
-                if (!this.nombre_recinto) this.errorMostrarMsjRecinto.push("El nombre del recinto no puede estar vacío.");
-                if (!this.direccion) this.errorMostrarMsjRecinto.push("La direccion del recinto no puede estar vacío.");
-                if (this.errorMostrarMsjRecinto.length) this.errorRecinto = 1;
-
-                return this.errorCategoria;
             },
             cerrarModal(){
                 this.modal=0;
                 this.tituloModal='';
-                this.nombre_recinto='';
-                this.direccion='';
-                this.errorRecinto = 0;
+                this.provincia = '';
             },
-            abrirModal(modelo, accion, data = []){
-                switch(modelo){
-                    case "recintos":
+            abrirModal(modelo, accion, data = []) {
+                switch (accion) {
+                    case "registrar":
                     {
-                        switch(accion){
-                            case 'registrar':
-                            {
-                                this.modal = 1;
-                                this.tituloModal = 'Registrar Recinto';
-                                this.idcolegio = 0;
-                                this.distrito_municipal = '';
-                                this.nombre_recinto= '';
-                                this.direccion = '';
-                                this.tipoAccion = 1;
-                                break;
-                            }
-                            case 'actualizar':
-                            {
-                                //console.log(data);
-                                this.modal=1;
-                                this.tituloModal='Actualizar Recinto';
-                                this.tipoAccion=2;
-                                this.recinto_id=data['id'];
-                                this.idcolegio=data['idcolegio'];
-                                this.nombre_recinto = data['nombre_recinto'];
-                                this.direccion= data['direccion'];
-                                break;
-                            }
-                        }
+                        this.modal = 1;
+                        this.tituloModal = `Registrar ${modelo}`;
+                        this.provincia = '';
+                        this.tipoAccion = 1;
+                        break;
+                    }
+                    case "actualizar":
+                    {
+                        //console.log(data);
+                        this.modal=1;
+                        this.tituloModal = `Actualizar ${modelo}`;
+                        this.tipoAccion=2;
+                        this.entity.id = data.id;
+                        this.entity.name = data.name;
+                        this.entity.municipios_id = data.municipios_id;
+                        this.entity.distritos_id = data.distritos_id;
+                        break;
                     }
                 }
-                this.selectColegio();
+            },
+            searchDependeciesTables(){
+                axios('/api/municipios').then(e=>{this.municipios = e.data.data})
+                axios('/api/distritos').then(e=>{this.distritos = e.data.data})
             }
-
         },
         mounted() {
-            this.listarRecinto(1,this.buscar,this.criterio);
+            this.listarData(1);
         }
     }
 </script>
