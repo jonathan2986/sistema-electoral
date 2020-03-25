@@ -29,8 +29,8 @@
                         <thead>
                         <tr>
                             <th>Opciones</th>
-                            <th>Provincia</th>
                             <th>Municipio</th>
+                            <th>Provincia</th>
                             <th>Circunscripcion</th>
                         </tr>
                         </thead>
@@ -45,8 +45,8 @@
                                 </button>
                             </td>
                             <td v-text="municipio.name"></td>
-                            <td v-text="municipio.provincia_id"></td>
-                            <td v-text="municipio.circunscripcion_id"></td>
+                            <td v-text="municipio.provincias.name"></td>
+                            <td v-text="municipio.circunscripciones.name"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -80,26 +80,42 @@
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Provincia</label>
+                                <label class="col-md-3 form-control-label" for="text-input">Municipio</label>
                                 <div class="col-md-9">
-                                    <input type="text" v-model="provincia"  class="form-control" placeholder="Provincia">
-                                    <span class="help-block">(*) Ingrese el nombre de la provincia</span>
+                                    <input type="text"  v-model="entity.name" class="form-control" placeholder="Municipio">
+                                    <span class="help-block">(*) Ingrese el nombre del Municipio</span>
                                 </div>
                             </div>
-                            <div v-show="errorProvincia" class="form-group row div-error">
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Provincia</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" name="" id="" v-model="entity.provincias_id">
+                                        <option :value="provincia.id" v-for="provincia in provincias" :key="provincia.id">{{provincia.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Circunscripcion</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" name="" id="" v-model="entity.circunscripciones_id">
+                                        <option :value="circunscripcion.id" v-for="circunscripcion in circunscripciones" :key="circunscripcion.id">{{circunscripcion.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- <div v-show="errorProvincia" class="form-group row div-error">
                                 <div class="text-center text-error">
                                     <div v-for="error in errorMostrarMsjProvincia" :key="error" v-text="error">
 
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarProvincia()">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarProvincia()">Actualizar</button>
+                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="save('POST')">Guardar</button>
+                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="save('PUT')">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -142,6 +158,8 @@
                 cantidadMunicipio: 0,
                 // distrito_municipal: '',
                 // circuscripcion: '',
+                circunscripciones: [],
+                provincias: [],
                 arrayMunicipios: [],
                 modal : 0,
                 tituloModal : '',
@@ -156,10 +174,20 @@
                     from: 0,
                     to: 0
                 },
+                entity: {
+                    circunscripciones_id: 0,
+                    provincias_id: 0,
+                    name: '',
+                    id: 0,
+                },
+
                 offset: 3,
                 criterio : 'municipio',
                 buscar : ''
             }
+        },
+        created() {
+            this.searchDependeciesTables()
         },
         computed:{
             isActived: function(){
@@ -193,7 +221,13 @@
         methods: {
             listarMunicipios(page){
                 let me = this;
-                axios.get('/api/municipios/?page=' + page).then((response)=>{
+                axios.get('/api/municipios/?page=' + page,
+                {
+                    params :{
+                        eager: ['provincias', 'circunscripciones']
+                    }
+                }
+                ).then((response)=>{
                     console.log(response.data);
                     var respuesta = response.data;
                     me.arrayMunicipios = respuesta.data;
@@ -210,48 +244,21 @@
                 //Envia la petición para visualizar la data de esa página
                 me.listarProvincias(page,buscar,criterio);
             },
-            registrarProvincia(){
-                if (this.validarProvincia()){
-                    return;
-                }
-
-                let me = this;
-
-                axios.post('/api/provincias',{
-                    'name': this.provincia
-
-                }).then(function (response) {
-                    me.cerrarModal();
-                    me.listarProvincias(1);
-                }).catch(function (error) {
-                    console.log(error);
-                });
-            },
-            actualizarProvincia(){
-                if (this.validarProvincia()){
-                    return;
-                }
-
-                let me = this;
-
-                axios.put(`/api/provincias/${this.provincia_id}`,{
-                    'name': this.provincia,
-                }).then(function (response) {
-                    me.cerrarModal();
-                    me.listarProvincias(1);
-                }).catch(function (error) {
-                    console.log(error);
-                });
-            },
-            validarProvincia(){
-                this.errorProvincia=0;
-                this.errorMostrarMsjProvincia =[];
-
-                if (!this.provincia) this.errorMostrarMsjProvincia.push("La provincia no puede estar vacía.");
-
-                if (this.errorMostrarMsjProvincia.length) this.errorProvincia = 1;
-
-                return this.errorProvincia;
+            save(method){
+                // if(!this.validarForm()){
+// 
+                // }
+                let url  = method == 'POST' ? `/api/municipios` : `/api/municipios/${this.entity.id}` 
+                axios({
+                    'url' : url,
+                    'method': method,
+                    'data': this.entity
+                }).then(e => {
+                    this.listarMunicipios(1)
+                    this.cerrarModal()
+                }).catch(err => {
+                    console.log(err);
+                })
             },
             cerrarModal(){
                 this.modal=0;
@@ -260,7 +267,7 @@
             },
             abrirModal(modelo, accion, data = []) {
                 switch(modelo){
-                    case "provincia":
+                    case "municipio":
                     {
                         switch (accion) {
                             case "registrar":
@@ -277,13 +284,19 @@
                                 this.modal=1;
                                 this.tituloModal='Actualizar Provincia';
                                 this.tipoAccion=2;
-                                this.provincia_id=data['id'];
-                                this.provincia = data['name'];
+                                this.entity.id = data.id;
+                                this.entity.name = data.name;
+                                this.entity.provincias_id = data.provincias_id;
+                                this.entity.circunscripciones_id = data.circunscripciones_id;
                                 break;
                             }
                         }
                     }
                 }
+            },
+            searchDependeciesTables(){
+                axios('/api/provincias').then(e=>{this.provincias = e.data.data})
+                axios('/api/circunscripciones').then(e=>{this.circunscripciones = e.data.data})
             }
         },
         mounted() {
