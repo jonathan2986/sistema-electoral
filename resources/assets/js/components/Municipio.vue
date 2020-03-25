@@ -302,8 +302,8 @@
                 }
             },
             searchDependeciesTables(){
-                axios('/api/provincias').then(e=>{this.provincias = e.data.data})
-                axios('/api/circunscripciones').then(e=>{this.circunscripciones = e.data.data})
+                axios('/api/provincias').then(e=>{this.provincias = e.data.data});
+                axios('/api/circunscripciones').then(e=>{this.circunscripciones = e.data.data});
             }
         },
         mounted() {
