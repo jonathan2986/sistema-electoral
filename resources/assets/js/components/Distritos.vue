@@ -8,8 +8,8 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Municipios
-                    <button type="button" @click="abrirModal('municipio','registrar')" class="btn btn-secondary">
+                    <i class="fa fa-align-justify"></i> Distritos
+                    <button type="button" @click="abrirModal('','registrar')" class="btn btn-secondary">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
                 </div>
@@ -247,7 +247,6 @@
             },
             save(method){
                 // if(!this.validarForm()){
-// 
                 // }
                 let url  = method == 'POST' ? `/api/municipios` : `/api/municipios/${this.entity.id}` 
                 axios({
@@ -267,31 +266,26 @@
                 this.provincia = '';
             },
             abrirModal(modelo, accion, data = []) {
-                switch(modelo){
-                    case "municipio":
+                switch (accion) {
+                    case "registrar":
                     {
-                        switch (accion) {
-                            case "registrar":
-                            {
-                                this.modal = 1;
-                                this.tituloModal = 'Registrar Provincia';
-                                this.provincia = '';
-                                this.tipoAccion = 1;
-                                break;
-                            }
-                            case "actualizar":
-                            {
-                                //console.log(data);
-                                this.modal=1;
-                                this.tituloModal='Actualizar Provincia';
-                                this.tipoAccion=2;
-                                this.entity.id = data.id;
-                                this.entity.name = data.name;
-                                this.entity.provincias_id = data.provincias_id;
-                                this.entity.circunscripciones_id = data.circunscripciones_id;
-                                break;
-                            }
-                        }
+                        this.modal = 1;
+                        this.tituloModal = `Registrar ${modelo}`;
+                        this.provincia = '';
+                        this.tipoAccion = 1;
+                        break;
+                    }
+                    case "actualizar":
+                    {
+                        //console.log(data);
+                        this.modal=1;
+                        this.tituloModal = `Actualizar ${modelo}`;
+                        this.tipoAccion=2;
+                        this.entity.id = data.id;
+                        this.entity.name = data.name;
+                        this.entity.provincias_id = data.provincias_id;
+                        this.entity.circunscripciones_id = data.circunscripciones_id;
+                        break;
                     }
                 }
             },

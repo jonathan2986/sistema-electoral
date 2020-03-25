@@ -65090,6 +65090,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             municipio_id: 0,
             municipio: '',
             cantidadMunicipio: 0,
+            data: [],
             // distrito_municipal: '',
             // circuscripcion: '',
             circunscripciones: [],
@@ -65153,7 +65154,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     methods: {
-        listarMunicipios: function listarMunicipios(page) {
+        listarData: function listarData(page) {
             var _this = this;
 
             var me = this;
@@ -65164,7 +65165,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 console.log(response.data);
                 var respuesta = response.data;
-                me.arrayMunicipios = respuesta.data;
+                me.data = respuesta.data;
                 me.pagination = respuesta.current_page;
                 console.log(_this.arrayMunicipios);
             }).catch(function (error) {
@@ -65176,7 +65177,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //Actualiza la página actual
             me.pagination.current_page = page;
             //Envia la petición para visualizar la data de esa página
-            me.listarProvincias(page, buscar, criterio);
+            me.listarData(page, buscar, criterio);
         },
         save: function save(method) {
             var _this2 = this;
@@ -65190,7 +65191,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 'method': method,
                 'data': this.entity
             }).then(function (e) {
-                _this2.listarMunicipios(1);
+                _this2.listarData(1);
                 _this2.cerrarModal();
             }).catch(function (err) {
                 console.log(err);
@@ -65244,7 +65245,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
-        this.listarMunicipios(1);
+        this.listarData(1);
     }
 });
 
@@ -65341,7 +65342,7 @@ var render = function() {
                       ) {
                         return null
                       }
-                      return _vm.listarMunicipios(1, _vm.buscar, _vm.criterio)
+                      return _vm.listarData(1, _vm.buscar, _vm.criterio)
                     },
                     input: function($event) {
                       if ($event.target.composing) {
@@ -65359,7 +65360,7 @@ var render = function() {
                     attrs: { type: "submit" },
                     on: {
                       click: function($event) {
-                        return _vm.listarMunicipios(1, _vm.buscar, _vm.criterio)
+                        return _vm.listarData(1, _vm.buscar, _vm.criterio)
                       }
                     }
                   },
@@ -65380,8 +65381,8 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.arrayMunicipios, function(municipio) {
-                  return _c("tr", { key: municipio.id }, [
+                _vm._l(_vm.data, function(model) {
+                  return _c("tr", { key: model.id }, [
                     _c("td", [
                       _c(
                         "button",
@@ -65393,7 +65394,7 @@ var render = function() {
                               return _vm.abrirModal(
                                 "municipio",
                                 "actualizar",
-                                municipio
+                                model
                               )
                             }
                           }
@@ -65404,19 +65405,15 @@ var render = function() {
                       _vm._m(2, true)
                     ]),
                     _vm._v(" "),
+                    _c("td", { domProps: { textContent: _vm._s(model.name) } }),
+                    _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(municipio.name) }
+                      domProps: { textContent: _vm._s(model.provincias.name) }
                     }),
                     _vm._v(" "),
                     _c("td", {
                       domProps: {
-                        textContent: _vm._s(municipio.provincias.name)
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: {
-                        textContent: _vm._s(municipio.circunscripciones.name)
+                        textContent: _vm._s(model.circunscripciones.name)
                       }
                     })
                   ])
