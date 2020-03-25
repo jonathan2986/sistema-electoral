@@ -19,6 +19,12 @@
                             <li @click="menu=3" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Municipios</a>
                             </li>
+                            <li @click="menu='distritos'" class="nav-item">
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Distritos</a>
+                            </li>
+                            <li @click="menu='recintos'" class="nav-item">
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item nav-dropdown">

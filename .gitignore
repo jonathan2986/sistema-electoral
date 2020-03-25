@@ -12,5 +12,6 @@ npm-debug.log
 yarn-error.log
 .env
 composer.lock
+package.lock.json
 public/js/app.js
 public/js/plantilla.js
