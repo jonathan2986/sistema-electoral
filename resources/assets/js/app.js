@@ -29,6 +29,7 @@ Vue.component('simpatizantes', require('./components/Simpatizantes'));
 Vue.component('provincias', require('./components/Provincia'));
 Vue.component('circunscripcion', require('./components/Circunscripcion'));
 Vue.component('municipio', require('./components/Municipio'));
+Vue.component('distritos', require('./components/Distritos'));
 
 const app = new Vue({
     el: '#app',

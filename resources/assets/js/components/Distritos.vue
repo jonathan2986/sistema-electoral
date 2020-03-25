@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Distritos
-                    <button type="button" @click="abrirModal('','registrar')" class="btn btn-secondary">
+                    <button type="button" @click="abrirModal('Distritos','registrar')" class="btn btn-secondary">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
                 </div>
@@ -18,7 +18,7 @@
                         <div class="col-md-6">
                             <div class="input-group">
                                 <select class="form-control col-md-3" v-model="criterio">
-                                    <option value="municipio">Municipio</option>
+                                    <option value="municipio">Distritos</option>
                                 </select>
                                 <input type="text" v-model="buscar" @keyup.enter="listarData(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
                                 <button type="submit" @click="listarData(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
@@ -29,15 +29,15 @@
                         <thead>
                         <tr>
                             <th>Opciones</th>
+                            <th>Distrito</th>
                             <th>Municipio</th>
-                            <th>Provincia</th>
                             <th>Circunscripcion</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr v-for="model in data" :key="model.id">
                             <td>
-                                <button type="button" @click="abrirModal('municipio','actualizar', model)" class="btn btn-warning btn-sm">
+                                <button type="button" @click="abrirModal('Distritos','actualizar', model)" class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
                                 </button> &nbsp;
                                 <button type="button"  class="btn btn-danger btn-sm">
@@ -45,7 +45,7 @@
                                 </button>
                             </td>
                             <td v-text="model.name"></td>
-                            <td v-text="model.provincias.name"></td>
+                            <td v-text="model.municipios.name"></td>
                             <td v-text="model.circunscripciones.name"></td>
                         </tr>
                         </tbody>
@@ -80,17 +80,17 @@
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Municipio</label>
+                                <label class="col-md-3 form-control-label" for="text-input">Distrito</label>
                                 <div class="col-md-9">
-                                    <input type="text"  v-model="entity.name" class="form-control" placeholder="Municipio">
-                                    <span class="help-block">(*) Ingrese el nombre del Municipio</span>
+                                    <input type="text"  v-model="entity.name" class="form-control" placeholder="Distrito">
+                                    <span class="help-block">(*) Ingrese el nombre del Distrito</span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Provincia</label>
+                                <label class="col-md-3 form-control-label" for="text-input">Municipios</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" name="" id="" v-model="entity.provincias_id">
-                                        <option :value="provincia.id" v-for="provincia in provincias" :key="provincia.id">{{provincia.name}}</option>
+                                    <select class="form-control" name="" id="" v-model="entity.municipios_id">
+                                        <option :value="municipio.id" v-for="municipio in municipios" :key="municipio.id">{{municipio.name}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -160,8 +160,7 @@
                 // distrito_municipal: '',
                 // circuscripcion: '',
                 circunscripciones: [],
-                provincias: [],
-                arrayMunicipios: [],
+                municipios: [],
                 modal : 0,
                 tituloModal : '',
                 tipoAccion : 0,
@@ -177,13 +176,13 @@
                 },
                 entity: {
                     circunscripciones_id: 0,
-                    provincias_id: 0,
+                    municipios_id: 0,
                     name: '',
                     id: 0,
                 },
 
                 offset: 3,
-                criterio : 'municipio',
+                criterio : 'distrito',
                 buscar : ''
             }
         },
@@ -222,18 +221,17 @@
         methods: {
             listarData(page){
                 let me = this;
-                axios.get('/api/municipios/?page=' + page,
+                axios.get('/api/distritos',
                 {
                     params :{
-                        eager: ['provincias', 'circunscripciones']
+                        eager: ['municipios', 'circunscripciones'],
+                        page: page
                     }
                 }
                 ).then((response)=>{
-                    console.log(response.data);
                     var respuesta = response.data;
                     me.data = respuesta.data;
                     me.pagination = respuesta.current_page;
-                    console.log(this.arrayMunicipios);
                 }).catch(function (error) {
                     console.log(error)
                 })
@@ -248,12 +246,18 @@
             save(method){
                 // if(!this.validarForm()){
                 // }
-                let url  = method == 'POST' ? `/api/municipios` : `/api/municipios/${this.entity.id}` 
+                let url  = method == 'POST' ? `/api/distritos` : `/api/distritos/${this.entity.id}` 
                 axios({
                     'url' : url,
                     'method': method,
                     'data': this.entity
                 }).then(e => {
+                  this.entity= {
+                      circunscripciones_id: 0,
+                      municipios_id: 0,
+                      name: '',
+                      id: 0,
+                  }
                     this.listarData(1)
                     this.cerrarModal()
                 }).catch(err => {
@@ -283,14 +287,14 @@
                         this.tipoAccion=2;
                         this.entity.id = data.id;
                         this.entity.name = data.name;
-                        this.entity.provincias_id = data.provincias_id;
+                        this.entity.municipios_id = data.municipios_id;
                         this.entity.circunscripciones_id = data.circunscripciones_id;
                         break;
                     }
                 }
             },
             searchDependeciesTables(){
-                axios('/api/provincias').then(e=>{this.provincias = e.data.data})
+                axios('/api/municipios').then(e=>{this.municipios = e.data.data})
                 axios('/api/circunscripciones').then(e=>{this.circunscripciones = e.data.data})
             }
         },

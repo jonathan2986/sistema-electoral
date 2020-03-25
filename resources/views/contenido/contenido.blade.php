@@ -19,7 +19,9 @@
 {{--                <recintos></recintos>--}}
 {{--                <colegios-electorales></colegios-electorales>--}}
             </template>
-
+            <template v-if="menu='distritos'">
+                <distritos></distritos>
+            </template>
             <template v-if="menu==4">
                 <usuarios></usuarios>
             </template>
