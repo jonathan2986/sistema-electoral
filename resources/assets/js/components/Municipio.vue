@@ -255,7 +255,13 @@
                     'method': method,
                     'data': this.entity
                 }).then(e => {
-                    this.listarData(1)
+                    this.entity = {
+                        circunscripciones_id: 0,
+                        provincias_id: 0,
+                        name: '',
+                        id: 0,
+                    };
+                    this.listarMunicipios(1)
                     this.cerrarModal()
                 }).catch(err => {
                     console.log(err);
