@@ -97,9 +97,7 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Distritos</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" name="" id="" v-model="entity.distritos_id">
-                                        <option :value="distrito.id" v-for="distrito in distritos" :key="distrito.id">{{distrito.name}}</option>
-                                    </select>
+                                        <v-select v-model="entity.distritos_id" :options="distritosOptions"></v-select>
                                 </div>
                             </div>
                             <!-- <div v-show="errorProvincia" class="form-group row div-error">
@@ -216,6 +214,15 @@
                 }
                 return pagesArray;
 
+            },
+            distritosOptions: function(){ 
+                let option = [];
+                let distritos = this.distritos;
+                    console.log(distritos);
+                for(let i = 0; i < distritos.length; i++){
+                    option.push({label: distritos[i].name, id: distritos[i].name})
+                }
+                return option;
             }
         },
         methods: {

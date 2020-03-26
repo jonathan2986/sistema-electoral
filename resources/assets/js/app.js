@@ -8,6 +8,8 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -31,6 +33,7 @@ Vue.component('circunscripcion', require('./components/Circunscripcion'));
 Vue.component('municipio', require('./components/Municipio'));
 Vue.component('distritos', require('./components/Distritos'));
 Vue.component('recintos', require('./components/Recintos'));
+Vue.component('v-select', vSelect)
 
 const app = new Vue({
     el: '#app',
