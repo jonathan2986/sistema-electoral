@@ -102,13 +102,13 @@
                                     </select>
                                 </div>
                             </div>
-                            <!-- <div v-show="errorProvincia" class="form-group row div-error">
+                             <div v-show="errorMunicipio" class="form-group row div-error">
                                 <div class="text-center text-error">
-                                    <div v-for="error in errorMostrarMsjProvincia" :key="error" v-text="error">
+                                    <div v-for="error in errorMostrarMsjMunicipio" :key="error" v-text="error">
 
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
 
                         </form>
                     </div>
@@ -165,8 +165,8 @@
                 modal : 0,
                 tituloModal : '',
                 tipoAccion : 0,
-                errorProvincia: 0,
-                errorMostrarMsjProvincia: [],
+                errorMunicipio: 0,
+                errorMostrarMsjMunicipio: [],
                 pagination: {
                     total: 0,
                     current_page: 1,
@@ -246,9 +246,9 @@
                 me.listarData(page,buscar,criterio);
             },
             save(method){
-                // if(!this.validarForm()){
-// 
-                // }
+                if(this.validarMunicipio()){
+                    return;
+                }
                 let url  = method == 'POST' ? `/api/municipios` : `/api/municipios/${this.entity.id}` 
                 axios({
                     'url' : url,
@@ -261,11 +261,23 @@
                         name: '',
                         id: 0,
                     };
-                    this.listarMunicipios(1)
+                    this.listarData(1);
                     this.cerrarModal()
                 }).catch(err => {
                     console.log(err);
                 })
+            },
+            validarMunicipio(){
+                this.errorMunicipio=0;
+                this.errorMostrarMsjMunicipio =[];
+
+                if (!this.entity.name) this.errorMostrarMsjMunicipio.push("El municipio no puede ir vacio.");
+                if (this.entity.provincias_id === 0) this.errorMostrarMsjMunicipio.push("Seleccione una provincia.");
+                if (this.entity.circunscripciones_id === 0) this.errorMostrarMsjMunicipio.push("Seleccione una circunscripcion.");
+
+                if (this.errorMostrarMsjMunicipio.length) this.errorMunicipio = 1;
+
+                return this.errorMunicipio;
             },
             cerrarModal(){
                 this.modal=0;
@@ -302,8 +314,8 @@
                 }
             },
             searchDependeciesTables(){
-                axios('/api/provincias').then(e=>{this.provincias = e.data.data})
-                axios('/api/circunscripciones').then(e=>{this.circunscripciones = e.data.data})
+                axios('/api/provincias').then(e=>{this.provincias = e.data.data});
+                axios('/api/circunscripciones').then(e=>{this.circunscripciones = e.data.data});
             }
         },
         mounted() {

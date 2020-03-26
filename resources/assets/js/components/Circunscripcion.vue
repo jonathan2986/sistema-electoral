@@ -80,12 +80,11 @@
                                 <label class="col-md-3 form-control-label" for="text-input">Circunscripcion</label>
                                 <div class="col-md-9">
                                     <input type="text" v-model="circunscripcion"  class="form-control" placeholder="Circunscripcion">
-                                    <span class="help-block">(*) Ingrese el nombre de la circunscripcion</span>
                                 </div>
                             </div>
-                            <div v-show="errorProvincia" class="form-group row div-error">
+                            <div v-show="errorCircunscripcion" class="form-group row div-error">
                                 <div class="text-center text-error">
-                                    <div v-for="error in errorMostrarMsjProvincia" :key="error" v-text="error">
+                                    <div v-for="error in errorMostrarMsjCircunscripcion" :key="error" v-text="error">
 
                                     </div>
                                 </div>
@@ -143,8 +142,8 @@
                 modal : 0,
                 tituloModal : '',
                 tipoAccion : 0,
-                errorProvincia: 0,
-                errorMostrarMsjProvincia: [],
+                errorCircunscripcion: 0,
+                errorMostrarMsjCircunscripcion: [],
                 pagination: {
                     total: 0,
                     current_page: 0,
@@ -204,7 +203,7 @@
                 //Actualiza la página actual
                 me.pagination.current_page = page;
                 //Envia la petición para visualizar la data de esa página
-                me.listarColegios(page,buscar,criterio);
+                me.listarCircunscripcion(page,buscar,criterio);
             },
             registrarCircunscripcion(){
                 if (this.validarCircunscripcion()){
