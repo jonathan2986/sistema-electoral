@@ -12,7 +12,6 @@ class ColegiosElectorales extends Model
     protected $fillable = [
         'recintos_id',
         'name',
-        'code',
     ];
 
     /**
@@ -24,5 +23,16 @@ class ColegiosElectorales extends Model
     {
         return $this->belongsTo('App\Recintos');
     }
+
+    /**
+     * people function
+     *
+     * @return Model
+     */
+    public function people()
+    {
+        return $this->hasMany('App\People', 'colegio_electoral', 'name');
+    }
+
 
 }

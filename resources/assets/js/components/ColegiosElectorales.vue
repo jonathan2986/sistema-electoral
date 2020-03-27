@@ -31,7 +31,6 @@
                             <th>Opciones</th>
                             <th>Recintos</th>
                             <th>Colegio</th>
-                            <th>Codigo del Colegio</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -46,7 +45,6 @@
                             </td>
                             <td v-text="model.name"></td>
                             <td v-text="model.recintos.name"></td>
-                            <td v-text="model.code"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -90,12 +88,6 @@
                                 <label class="col-md-3 form-control-label" for="text-input">Recintos</label>
                                 <div class="col-md-9">
                                         <v-select v-model="entity.recintos_id" :options="recintosOptions" :reduce="recinto => recinto.id"></v-select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Codigo</label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" v-model="entity.code">
                                 </div>
                             </div>
                             <!-- <div v-show="errorProvincia" class="form-group row div-error">
@@ -171,7 +163,6 @@
                     to: 0
                 },
                 entity: {
-                    code: 0,
                     recintos_id: 0,
                     name: '',
                     id: 0,
@@ -258,7 +249,6 @@
                 }).then(e => {
                   this.entity= {
                       recintos_id: 0,
-                      code: 0,
                       name: '',
                       id: 0,
                   }
@@ -274,6 +264,7 @@
                 this.provincia = '';
             },
             abrirModal(modelo, accion, data = []) {
+                console.log(data);
                 switch (accion) {
                     case "registrar":
                     {
@@ -291,8 +282,7 @@
                         this.tipoAccion=2;
                         this.entity.id = data.id;
                         this.entity.name = data.name;
-                        this.entity.code = data.code;
-                        this.entity.recintos = data.recintos;
+                        this.entity.recintos_id = data.recintos_id;
                         break;
                     }
                 }
