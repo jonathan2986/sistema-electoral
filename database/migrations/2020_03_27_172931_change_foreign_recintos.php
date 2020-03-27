@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DropForeignOnRecintos extends Migration
+class ChangeForeignRecintos extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class DropForeignOnRecintos extends Migration
      */
     public function up()
     {
-        Schema::table('recintos', function (Blueprint $table) {
-            //
-            $table->dropForeign(['distritos_id']);
-        });
+        //
+        $table->integer('distritos_id')->nullable()->change();
     }
 
     /**
@@ -26,8 +24,6 @@ class DropForeignOnRecintos extends Migration
      */
     public function down()
     {
-        Schema::table('recintos', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }
