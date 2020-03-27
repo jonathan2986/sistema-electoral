@@ -50,7 +50,7 @@
                             <td v-text="model.number_colegios"></td>
                             <td v-text="model.address"></td>
                             <td v-text="model.municipios.name"></td>
-                            <td v-text="model.distritos.name ? model.distritos.name : ''"></td>
+                            <td v-text="model.distritos ? model.distritos.name : ''"></td>
                         </tr>
                         </tbody>
                     </table>
