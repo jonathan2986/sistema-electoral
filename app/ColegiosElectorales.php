@@ -20,9 +20,9 @@ class ColegiosElectorales extends Model
      *
      * @return Model
      */
-    public function municipios()
+    public function recintos()
     {
-        $this->belongsTo('App\Recintos');
+        return $this->belongsTo('App\Recintos');
     }
 
 }

@@ -13,6 +13,7 @@ class Recintos extends Model
         'municipios_id',
         'distritos_id',
         'name',
+        'address'
     ];
     
     /**

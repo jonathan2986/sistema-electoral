@@ -25,6 +25,9 @@
                             <li @click="menu='recintos'" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
                             </li>
+                            <li @click="menu='colegios-electorales'" class="nav-item">
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Colegios Electorales</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item nav-dropdown">

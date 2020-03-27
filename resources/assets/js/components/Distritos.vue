@@ -89,17 +89,13 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Municipios</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" name="" id="" v-model="entity.municipios_id">
-                                        <option :value="municipio.id" v-for="municipio in municipios" :key="municipio.id">{{municipio.name}}</option>
-                                    </select>
+                                    <v-select v-model="entity.municipios_id" :reduce="municipios => municipios.id" :options="municipiosOptions"></v-select>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Circunscripcion</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" name="" id="" v-model="entity.circunscripciones_id">
-                                        <option :value="circunscripcion.id" v-for="circunscripcion in circunscripciones" :key="circunscripcion.id">{{circunscripcion.name}}</option>
-                                    </select>
+                                    <v-select v-model="entity.circunscripciones_id" :reduce="circunscripcion => circunscripcion.id" :options="circunscripcionesOption"></v-select>
                                 </div>
                             </div>
                             <!-- <div v-show="errorProvincia" class="form-group row div-error">
@@ -216,6 +212,22 @@
                 }
                 return pagesArray;
 
+            },
+            circunscripcionesOption: function(){
+                let options = [];
+                let circunscripciones = this.circunscripciones;
+                circunscripciones.forEach(function(circunscripcion){
+                    options.push({id: circunscripcion.id , label: circunscripcion.name})
+                });
+                return options;
+            },
+            municipiosOptions: function(){
+                let options = [];
+                let municipios = this.municipios;
+                municipios.forEach(function(municipio){
+                    options.push({id: municipio.id, label: municipio.name});
+                })
+                return options;
             }
         },
         methods: {

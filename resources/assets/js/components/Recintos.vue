@@ -30,6 +30,7 @@
                         <tr>
                             <th>Opciones</th>
                             <th>Recintos</th>
+                            <th>Direccion</th>
                             <th>Municipio</th>
                             <th>Distrito</th>
                         </tr>
@@ -45,8 +46,9 @@
                                 </button>
                             </td>
                             <td v-text="model.name"></td>
+                            <td v-text="model.address"></td>
                             <td v-text="model.municipios.name"></td>
-                            <td v-text="model.distritos.name"></td>
+                            <td v-text="model.distritos.name ? model.distritos.name : ''"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -89,15 +91,19 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Municipios</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" name="" id="" v-model="entity.municipios_id">
-                                        <option :value="municipio.id" v-for="municipio in municipios" :key="municipio.id">{{municipio.name}}</option>
-                                    </select>
+                                    <v-select v-model="entity.municipios_id" :reduce="municipio => municipio.id" :options="municipiosOptions"></v-select>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Distritos</label>
                                 <div class="col-md-9">
-                                        <v-select v-model="entity.distritos_id" :options="distritosOptions"></v-select>
+                                  <v-select v-model="entity.distritos_id" :reduce="distrito => distrito.id" :options="distritosOptions"></v-select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="">Direccion</label>
+                                <div class="col-md-9">
+                                    <textarea v-model="entity.address" name="" class="form-control" id="" cols="10" rows="5"></textarea>
                                 </div>
                             </div>
                             <!-- <div v-show="errorProvincia" class="form-group row div-error">
@@ -176,6 +182,7 @@
                     municipios_id: 0,
                     distritos_id: 0,
                     name: '',
+                    address: '',
                     id: 0,
                 },
 
@@ -220,9 +227,17 @@
                 let distritos = this.distritos;
                     console.log(distritos);
                 for(let i = 0; i < distritos.length; i++){
-                    option.push({label: distritos[i].name, id: distritos[i].name})
+                    option.push({label: distritos[i].name, id: distritos[i].id})
                 }
                 return option;
+            },
+            municipiosOptions: function(){
+                let options = [];
+                let municipios = this.municipios;
+                for(let i = 0; i < municipios.length; i++){
+                    options.push({label: municipios[i].name, id: municipios[i].id})
+                }
+                return options
             }
         },
         methods: {
@@ -262,6 +277,7 @@
                   this.entity= {
                       distritos_id: 0,
                       municipios_id: 0,
+                      address: '',
                       name: '',
                       id: 0,
                   }
