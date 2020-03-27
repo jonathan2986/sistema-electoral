@@ -246,6 +246,7 @@
                 me.listarData(page,buscar,criterio);
             },
             save(method){
+
                 if(this.validarMunicipio()){
                     return;
                 }
