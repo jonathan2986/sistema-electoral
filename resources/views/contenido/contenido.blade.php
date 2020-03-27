@@ -25,6 +25,9 @@
             <template v-if="menu=='recintos'">
                 <recintos></recintos>
             </template>
+            <template v-if="menu=='colegios-electorales'">
+                <colegios-electorales></colegios-electorales>
+            </template>
             <template v-if="menu==4">
                 <usuarios></usuarios>
             </template>

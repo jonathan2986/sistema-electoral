@@ -13,8 +13,11 @@ class Recintos extends Model
         'municipios_id',
         'distritos_id',
         'name',
+        'address'
     ];
-    
+
+    protected $appends = ['number_colegios'];
+
     /**
      * distritos function
      *
@@ -33,5 +36,15 @@ class Recintos extends Model
     public function municipios()
     {
         return $this->belongsTo('App\Municipios');
+    }
+
+    public function colegios_electorales()
+    {
+        return $this->hasMany('App\ColegiosElectorales');
+    }
+
+    public function getNumberColegiosAttribute()
+    {
+        return $this->municipios->count();
     }
 }
