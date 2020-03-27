@@ -283,7 +283,7 @@
                       name: '',
                       id: 0,
                   }
-                    this.listarData(1)
+                    this.listarData(1);
                     this.cerrarModal()
                 }).catch(err => {
                     console.log(err);

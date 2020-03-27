@@ -14,7 +14,10 @@ class ChangeForeignRecintos extends Migration
     public function up()
     {
         //
-        $table->integer('distritos_id')->nullable()->change();
+        Schema::table('recintos', function (Blueprint $table) {
+            //
+            $table->integer('distritos_id')->nullable()->change();
+        });
     }
 
     /**
