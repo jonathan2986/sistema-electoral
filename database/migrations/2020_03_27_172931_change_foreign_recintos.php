@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class ChangeForeignRecintos extends Migration
 {
@@ -14,7 +14,10 @@ class ChangeForeignRecintos extends Migration
     public function up()
     {
         //
-        $table->integer('distritos_id')->nullable()->change();
+        Schema::table('recintos', function (Blueprint $table) {
+            //
+            $table->integer('distritos_id')->nullable()->change();
+        });
     }
 
     /**

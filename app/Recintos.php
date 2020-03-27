@@ -45,6 +45,6 @@ class Recintos extends Model
 
     public function getNumberColegiosAttribute()
     {
-        return $this->municipios->count();
+        return $this->colegios_electorales->count();
     }
 }
