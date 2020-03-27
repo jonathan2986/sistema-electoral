@@ -89,17 +89,13 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Provincia</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" name="" id="" v-model="entity.provincias_id">
-                                        <option :value="provincia.id" v-for="provincia in provincias" :key="provincia.id">{{provincia.name}}</option>
-                                    </select>
+                                    <v-select v-model="entity.provincias_id" :reduce="provincia => provincia.id" :options="provinciasOption"></v-select>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Circunscripcion</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" name="" id="" v-model="entity.circunscripciones_id">
-                                        <option :value="circunscripcion.id" v-for="circunscripcion in circunscripciones" :key="circunscripcion.id">{{circunscripcion.name}}</option>
-                                    </select>
+                                    <v-select v-model="entity.circunscripciones_id" :reduce="circunscripcion => circunscripcion.id" :options="circunscripcionesOption"></v-select>
                                 </div>
                             </div>
                              <div v-show="errorMunicipio" class="form-group row div-error">
@@ -217,7 +213,23 @@
                 }
                 return pagesArray;
 
-            }
+            },
+            provinciasOption: function(){
+                let options = [];
+                let provincias = this.provincias;
+                provincias.forEach(function(provincia){
+                    options.push({id: provincia.id, label: provincia.name})
+                })
+                return options
+            },
+            circunscripcionesOption: function(){
+                let options = [];
+                let circunscripciones = this.circunscripciones;
+                circunscripciones.forEach(function(circunscripcion){
+                    options.push({id: circunscripcion.id , label: circunscripcion.name})
+                });
+                return options;
+            },
         },
         methods: {
             listarData(page){
