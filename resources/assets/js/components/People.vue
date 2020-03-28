@@ -128,6 +128,13 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Celular</label>
+                                <div class="col-md-9">
+                                    <input type="text"  v-model="entity.celphone" class="form-control" placeholder="Celular">
+                                    <span class="help-block">(*) Ingrese el Celular</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Email</label>
                                 <div class="col-md-9">
                                     <input type="text"  v-model="entity.email" class="form-control" placeholder="Email">
