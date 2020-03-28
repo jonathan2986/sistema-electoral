@@ -172,7 +172,7 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Sexo</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" id="">
+                                    <select v-model="entity.sexo" class="form-control" id="">
                                         <option value="Masculino">Masculino</option>
                                         <option value="Femenino">Femenino</option>
                                     </select>
