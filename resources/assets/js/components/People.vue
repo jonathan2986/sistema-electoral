@@ -31,7 +31,7 @@
                             <th>Opciones</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
-                            <th>Colegio Electoral</th>
+                            <th>Colegio</th>
                             <th>Edad</th>
                             <th>Profesion</th>
                         </tr>
@@ -362,6 +362,9 @@
     .modal-content{
         width: 100% !important;
         position: absolute !important;
+    }
+    .table{
+        overflow-x: scroll;
     }
     .mostrar{
         display: list-item !important;
