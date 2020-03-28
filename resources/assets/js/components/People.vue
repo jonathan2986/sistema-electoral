@@ -25,7 +25,7 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table table-responsive table-bordered table-striped table-sm">
+                    <table class="table table-responsive table-bordered table-striped table-sm horizontal-scrollable">
                         <thead>
                         <tr>
                             <th>Opciones</th>
@@ -407,12 +407,24 @@
     .persona{
         overflow-y: scroll;
     }
+    .table{
+        overflow: scroll;
+    }
     .modal-content{
         width: 100% !important;
         position: absolute !important;
     }
     .table{
-        overflow-x: scroll;
+        overflow-x: auto;
+    }
+    .horizontal-scrollable {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .horizontal-scrollable {
+        display: inline-block;
+        float: none;
     }
     .mostrar{
         display: list-item !important;
