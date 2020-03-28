@@ -411,6 +411,9 @@
         width: 100% !important;
         position: absolute !important;
     }
+    .table{
+        overflow-x: scroll;
+    }
     .mostrar{
         display: list-item !important;
         opacity: 1 !important;
