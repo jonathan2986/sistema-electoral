@@ -30,7 +30,7 @@
                         <tr>
                             <th>Opciones</th>
                             <th>Recintos</th>
-                            <th>Numeros de colegio</th>
+                            <th>Cantidad de colegios</th>
                             <th>Direccion</th>
                             <th>Municipio</th>
                             <th>Distrito</th>

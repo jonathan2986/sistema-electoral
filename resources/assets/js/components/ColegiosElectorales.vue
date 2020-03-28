@@ -29,8 +29,8 @@
                         <thead>
                         <tr>
                             <th>Opciones</th>
-                            <th>Recintos</th>
                             <th>Colegio</th>
+                            <th>Recintos</th>
                         </tr>
                         </thead>
                         <tbody>
