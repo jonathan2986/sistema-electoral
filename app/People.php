@@ -11,11 +11,6 @@ class People extends Model
     protected $table = 'people';
 
     protected $fillable = [
-        'provincias_id',
-        'municipios_id',
-        'distritos_id',
-        'circunscripciones_id',
-        'recintos_id',
         'first_name',
         'last_name',
         'card_id',
