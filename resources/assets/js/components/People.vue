@@ -30,9 +30,17 @@
                         <tr>
                             <th>Opciones</th>
                             <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Colegio</th>
+                            <th>Cedula</th>
+                            <th>Direccion</th>
+                            <th>Sector</th>
+                            <th>Telefono</th>
+                            <th>Celular</th>
+                            <th>Municipio</th>
+                            <th>Distritos</th>
+                            <th>Correo</th>
+                            <th>Redes</th>
                             <th>Edad</th>
+                            <th>Sexo</th>
                             <th>Profesion</th>
                         </tr>
                         </thead>
@@ -46,10 +54,18 @@
                                     <i class="icon-trash"></i>
                                 </button>
                             </td>
-                            <td v-text="model.first_name"></td>
-                            <td v-text="model.last_name"></td>
-                            <td v-text="model.colegio_electoral"></td>
+                            <td v-text="`${model.first_name} ${model.last_name}`"></td>
+                            <td v-text="model.card_id"></td>
+                            <td v-text="model.address"></td>
+                            <td v-text="model.sector"></td>
+                            <td v-text="model.phone_number"></td>
+                            <td v-text="model.celphone"></td>
+                            <td v-text="model.municipios"></td>
+                            <td v-text="model.distritos"></td>
+                            <td v-text="model.email"></td>
+                            <td v-text="model.redes"></td>
                             <td v-text="model.age"></td>
+                            <td v-text="model.sexo"></td>
                             <td v-text="model.profession"></td>
                         </tr>
                         </tbody>
@@ -139,6 +155,29 @@
                                     <span class="help-block">(*) Ingrese el colegio electoral</span>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Direccion</label>
+                                <div class="col-md-9">
+                                    <input type="text"  v-model="entity.address" class="form-control" placeholder="Direccion">
+                                    <span class="help-block">(*) Ingrese la direccion</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Sector</label>
+                                <div class="col-md-9">
+                                    <input type="text"  v-model="entity.sector" class="form-control" placeholder="Ingrese el sector">
+                                    <span class="help-block">(*) Ingrese el sector</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Sexo</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" id="">
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Femenino">Femenino</option>
+                                    </select>
+                                </div>
+                            </div>
                             <!-- <div v-show="errorProvincia" class="form-group row div-error">
                                 <div class="text-center text-error">
                                     <div v-for="error in errorMostrarMsjProvincia" :key="error" v-text="error">
@@ -219,10 +258,13 @@
                     last_name: '',
                     card_id: '',
                     phone_number: '',
+                    celphone: '',
                     email:'',
                     date_birthdate: '',
                     profession: '',
-                    colegio_electoral: '',
+                    address: '',
+                    sector: '',
+                    sexo: '',
                     id: 0,
                 },
 
@@ -301,10 +343,13 @@
                     last_name: '',
                     card_id: '',
                     phone_number: '',
+                    celphone: '',
                     email:'',
                     date_birthdate: '',
                     profession: '',
-                    colegio_electoral: '',
+                    address: '',
+                    sector: '',
+                    sexo: '',
                     id: 0,
                   }
                     this.listarData(1);
@@ -338,11 +383,14 @@
                         this.entity.first_name = data.first_name;
                         this.entity.last_name = data.last_name;
                         this.entity.card_id = data.card_id;
+                        this.entity.celphone = data.celphone;
                         this.entity.phone_number = data.phone_number;
                         this.entity.email = data.email;
                         this.entity.date_birthdate = data.date_birthdate;
                         this.entity.profession = data.profession;
-                        this.entity.colegio_electoral = data.colegio_electoral;
+                        this.entity.address = data.address;
+                        this.entity.sector = data.sector;
+                        this.entity.sexo = data.sexo;
                         break;
                     }
                 }
