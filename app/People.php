@@ -22,9 +22,10 @@ class People extends Model
         'address',
         'sector',
         'sexo',
+        'municipios'
     ];
 
-    protected $appends = ['age', 'municipios','distritos','name'];
+    protected $appends = ['age','name'];
 
     public function getAgeAttribute()
     {
@@ -44,24 +45,4 @@ class People extends Model
         return $this->belongsTo('App\ColegiosElectorales', 'colegio_electoral', 'name');
     }
 
-    public function getMunicipiosAttribute()
-    {
-        $colegio = $this->colegios_electorales;
-        if ($colegio) {
-            $recinto = $colegio->recintos;
-            $municipios = $recinto->municipios;
-        }
-        return $colegio ? $municipios->name : '';
-    }
-
-    public function getDistritosAttribute()
-    {
-        $colegio = $this->colegios_electorales;
-        $distritos = '';
-        if ($colegio) {
-            $recinto = $colegio->recintos;
-            $distritos = $recinto->distritos;
-        }
-        return $distritos ? $distritos->name : '';
-    }
 }
