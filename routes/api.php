@@ -26,4 +26,5 @@ Route::group([], function () {
     Route::resource('/colegios_electorales', 'ColegiosElectoralesController');
     Route::resource('/people', 'PeopleController');
     Route::resource('/users', 'UsersController');
+    Route::resource('/votantes', 'VotantesController');
 });

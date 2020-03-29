@@ -28,6 +28,9 @@
                             <li @click="menu='colegios-electorales'" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Colegios Electorales</a>
                             </li>
+                            <li @click="menu='personas'" class="nav-item">
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Personas</a>
+                            </li>
                             <li @click="menu='votantes'" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Votantes</a>
                             </li>
