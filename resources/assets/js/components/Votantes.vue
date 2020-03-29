@@ -194,19 +194,6 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Cedula</label
-                >
-                <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="entity.card_id"
-                    disabled
-                    class="form-control"
-                  />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
                   >Municipios</label
                 >
                 <div class="col-md-9">

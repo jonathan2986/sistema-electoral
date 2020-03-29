@@ -36,9 +36,6 @@
                             <th>Telefono</th>
                             <th>Celular</th>
                             <th>Municipio</th>
-                            <th>Distritos</th>
-                            <th>Correo</th>
-                            <th>Redes</th>
                             <th>Edad</th>
                             <th>Sexo</th>
                             <th>Profesion</th>
@@ -61,9 +58,6 @@
                             <td v-text="model.phone_number"></td>
                             <td v-text="model.celphone"></td>
                             <td v-text="model.municipios"></td>
-                            <td v-text="model.distritos"></td>
-                            <td v-text="model.email"></td>
-                            <td v-text="model.redes"></td>
                             <td v-text="model.age"></td>
                             <td v-text="model.sexo"></td>
                             <td v-text="model.profession"></td>
