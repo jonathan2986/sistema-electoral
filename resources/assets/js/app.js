@@ -32,7 +32,8 @@ Vue.component('circunscripcion', require('./components/Circunscripcion'));
 Vue.component('municipio', require('./components/Municipio'));
 Vue.component('distritos', require('./components/Distritos'));
 Vue.component('colegios-electorales', require('./components/ColegiosElectorales'));
-Vue.component('votantes', require('./components/People'));
+Vue.component('personas', require('./components/People'));
+Vue.component('votantes', require('./components/Votantes'));
 Vue.component('v-select', vSelect)
 
 const app = new Vue({

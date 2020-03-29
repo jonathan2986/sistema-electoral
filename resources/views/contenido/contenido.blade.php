@@ -28,6 +28,9 @@
             <template v-if="menu=='colegios-electorales'">
                 <colegios-electorales></colegios-electorales>
             </template>
+            <template v-if="menu=='personas'">
+                <personas></personas>
+            </template>
             <template v-if="menu=='votantes'">
                 <votantes></votantes>
             </template>

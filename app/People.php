@@ -24,7 +24,7 @@ class People extends Model
         'sexo',
     ];
 
-    protected $appends = ['age', 'municipios','distritos'];
+    protected $appends = ['age', 'municipios','distritos','name'];
 
     public function getAgeAttribute()
     {
@@ -32,6 +32,11 @@ class People extends Model
         $currentDate = new DateTime(date('Y-m-d'));
         $interval = $birthdate->diff($currentDate);
         return $interval->y;
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->card_id;
     }
 
     public function colegios_electorales()
