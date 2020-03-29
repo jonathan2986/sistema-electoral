@@ -8,8 +8,8 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Votantes
-                    <button type="button" @click="abrirModal('Votantes','registrar')" class="btn btn-secondary">
+                    <i class="fa fa-align-justify"></i> Personas
+                    <button type="button" @click="abrirModal('Persona','registrar')" class="btn btn-secondary">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
                 </div>
@@ -18,7 +18,7 @@
                         <div class="col-md-6">
                             <div class="input-group">
                                 <select class="form-control col-md-3" v-model="criterio">
-                                    <option value="municipio">Votantes</option>
+                                    <option value="municipio">Personas</option>
                                 </select>
                                 <input type="text" v-model="buscar" @keyup.enter="listarData(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
                                 <button type="submit" @click="listarData(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
@@ -44,7 +44,7 @@
                         <tbody>
                         <tr v-for="model in data" :key="model.id">
                             <td>
-                                <button type="button" @click="abrirModal('Distritos','actualizar', model)" class="btn btn-warning btn-sm">
+                                <button type="button" @click="abrirModal('Persona','actualizar', model)" class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
                                 </button> &nbsp;
                                 <button type="button"  class="btn btn-danger btn-sm">
@@ -152,7 +152,7 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Municipio</label>
                                 <div class="col-md-9">
-                                    <input type="text"  v-model="entity.municipios" class="form-control" placeholder="Colegio Municipio">
+                                    <input type="text"  v-model="entity.municipios" class="form-control" placeholder="Municipio">
                                     <span class="help-block">(*) Ingrese el Municipio</span>
                                 </div>
                             </div>
@@ -268,7 +268,6 @@
                     sexo: '',
                     id: 0,
                     municipios: '',
-                    colegio_electoral: '0'
                 },
 
                 offset: 3,
@@ -314,7 +313,8 @@
                 axios.get('/api/people',
                 {
                     params :{
-                        page: page
+                        page: page,
+                        perPage:100
                     }
                 }
                 ).then((response)=>{
@@ -395,7 +395,6 @@
                         this.entity.sector = data.sector;
                         this.entity.sexo = data.sexo;
                         this.entity.municipios = data.municipios;
-                        this.colegio_electoral = '0';
                         break;
                     }
                 }

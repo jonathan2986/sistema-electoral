@@ -15,6 +15,7 @@ class People extends Model
         'last_name',
         'card_id',
         'phone_number',
+        'celphone',
         'email',
         'date_birthdate',
         'profession',
@@ -38,11 +39,6 @@ class People extends Model
     public function getNameAttribute()
     {
         return $this->card_id;
-    }
-
-    public function colegios_electorales()
-    {
-        return $this->belongsTo('App\ColegiosElectorales', 'colegio_electoral', 'name');
     }
 
 }

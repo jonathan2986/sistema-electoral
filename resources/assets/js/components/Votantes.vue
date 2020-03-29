@@ -429,7 +429,7 @@ export default {
       axios
         .get("/api/votantes/?page=" + page, {
           params: {
-            eager: ["municipios", "circunscripciones",'distritos','recintos','colegios_electorales']
+            eager: ["municipios", "circunscripciones",'distritos','recintos','colegios_electorales','people']
           }
         })
         .then(response => {
@@ -534,6 +534,7 @@ export default {
               this.distritos = data.distritos ? [{label:data.distritos.name, id:data.distritos.id}] : [];
               this.recintos = [{label:data.recintos.name, id:data.recintos.id}];
               this.colegios_electorales = [{label:data.colegios_electorales.name, id:data.colegios_electorales.id}];
+              this.people = [{label:data.people.name, id:data.people.id}];
               break;
             }
           }
