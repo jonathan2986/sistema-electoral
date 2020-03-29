@@ -150,10 +150,10 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Colegio Electoral</label>
+                                <label class="col-md-3 form-control-label" for="text-input">Municipio</label>
                                 <div class="col-md-9">
-                                    <input type="text"  v-model="entity.colegio_electoral" class="form-control" placeholder="Colegio Electoral">
-                                    <span class="help-block">(*) Ingrese el colegio electoral</span>
+                                    <input type="text"  v-model="entity.municipios" class="form-control" placeholder="Colegio Municipio">
+                                    <span class="help-block">(*) Ingrese el Municipio</span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -267,6 +267,8 @@
                     sector: '',
                     sexo: '',
                     id: 0,
+                    municipios: '',
+                    colegio_electoral: '0'
                 },
 
                 offset: 3,
@@ -392,6 +394,8 @@
                         this.entity.address = data.address;
                         this.entity.sector = data.sector;
                         this.entity.sexo = data.sexo;
+                        this.entity.municipios = data.municipios;
+                        this.colegio_electoral = '0';
                         break;
                     }
                 }
