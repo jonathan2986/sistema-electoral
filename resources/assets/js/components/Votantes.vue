@@ -71,11 +71,11 @@
                     <i class="icon-trash"></i>
                   </button>
                 </td>
-                <td>{{`${model.first_name} ${model.last_name}`}}</td>
+                <td>{{ `${model.first_name} ${model.last_name}` }}</td>
                 <td v-text="model.card_id"></td>
                 <td v-text="model.circunscripciones.name"></td>
                 <td v-text="model.municipios.name"></td>
-                <td v-text="model.distritos ? model.distritos.name : '' "></td>
+                <td v-text="model.distritos ? model.distritos.name : ''"></td>
                 <td v-text="model.recintos.name"></td>
                 <td v-text="model.colegios_electorales.name"></td>
               </tr>
@@ -429,7 +429,14 @@ export default {
       axios
         .get("/api/votantes/?page=" + page, {
           params: {
-            eager: ["municipios", "circunscripciones",'distritos','recintos','colegios_electorales','people']
+            eager: [
+              "municipios",
+              "circunscripciones",
+              "distritos",
+              "recintos",
+              "colegios_electorales",
+              "people"
+            ]
           }
         })
         .then(response => {
@@ -463,9 +470,15 @@ export default {
       })
         .then(e => {
           this.entity = {
-            circunscripciones_id: 0,
-            provincias_id: 0,
-            name: "",
+            people_id: "",
+            circunscripciones_id: "",
+            municipios_id: "",
+            distritos_id: null,
+            recintos_id: "",
+            colegios_electorales_id: "",
+            first_name: "",
+            last_name: "",
+            card_id: "",
             id: 0
           };
           this.listarData(1);
@@ -524,17 +537,34 @@ export default {
               this.entity.circunscripciones_id = data.circunscripciones_id;
               this.entity.people_id = data.people_id;
               this.entity.municipios_id = data.municipios_id;
-              this.entity.distritos_id = data.distritos_id ;
-              this.entity.recintos_id = data.recintos_id ;
-              this.entity.colegios_electorales_id = data.colegios_electorales_id ;
-              this.entity.card_id = data.card_id ;
+              this.entity.distritos_id = data.distritos_id;
+              this.entity.recintos_id = data.recintos_id;
+              this.entity.colegios_electorales_id =
+                data.colegios_electorales_id;
+              this.entity.card_id = data.card_id;
 
-              this.circunscripciones = [{label:data.circunscripciones.name, id:data.circunscripciones.id}];
-              this.municipios = [{label:data.municipios.name, id:data.municipios.id}];
-              this.distritos = data.distritos ? [{label:data.distritos.name, id:data.distritos.id}] : [];
-              this.recintos = [{label:data.recintos.name, id:data.recintos.id}];
-              this.colegios_electorales = [{label:data.colegios_electorales.name, id:data.colegios_electorales.id}];
-              this.people = [{label:data.people.name, id:data.people.id}];
+              this.circunscripciones = [
+                {
+                  label: data.circunscripciones.name,
+                  id: data.circunscripciones.id
+                }
+              ];
+              this.municipios = [
+                { label: data.municipios.name, id: data.municipios.id }
+              ];
+              this.distritos = data.distritos
+                ? [{ label: data.distritos.name, id: data.distritos.id }]
+                : [];
+              this.recintos = [
+                { label: data.recintos.name, id: data.recintos.id }
+              ];
+              this.colegios_electorales = [
+                {
+                  label: data.colegios_electorales.name,
+                  id: data.colegios_electorales.id
+                }
+              ];
+              this.people = [{ label: data.people.name, id: data.people.id }];
               break;
             }
           }
