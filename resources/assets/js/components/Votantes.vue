@@ -157,6 +157,7 @@
                 >
                 <div class="col-md-9">
                   <v-select
+                    v-model="cedula"
                     @search="onSearchPeople"
                     :options="people"
                     :filterable="false"
@@ -376,6 +377,7 @@ export default {
         from: 0,
         to: 0
       },
+      cedula: '',
       entity: {
         people_id: "",
         circunscripciones_id: "",
@@ -513,6 +515,7 @@ export default {
         this.entity.last_name = res.data.last_name;
         this.entity.card_id = res.data.card_id;
         this.entity.people_id = res.data.id;
+        this.cedula = res.data.card_id;
       });
     },
     abrirModal(modelo, accion, data = []) {
@@ -539,9 +542,9 @@ export default {
               this.entity.municipios_id = data.municipios_id;
               this.entity.distritos_id = data.distritos_id;
               this.entity.recintos_id = data.recintos_id;
-              this.entity.colegios_electorales_id =
+              this.entity.colegios_electorales_id = data.colegios_electorales_id;
               this.entity.card_id = data.card_id;
-
+              this.cedula = data.people_id;
               this.circunscripciones = [
                 {
                   label: data.circunscripciones.name,
