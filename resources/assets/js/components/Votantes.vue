@@ -157,7 +157,6 @@
                 >
                 <div class="col-md-9">
                   <v-select
-                    v-model="entity.people_id"
                     @search="onSearchPeople"
                     :options="people"
                     :filterable="false"
@@ -513,6 +512,7 @@ export default {
         this.entity.first_name = res.data.first_name;
         this.entity.last_name = res.data.last_name;
         this.entity.card_id = res.data.card_id;
+        this.entity.people_id = res.data.id;
       });
     },
     abrirModal(modelo, accion, data = []) {
@@ -540,7 +540,6 @@ export default {
               this.entity.distritos_id = data.distritos_id;
               this.entity.recintos_id = data.recintos_id;
               this.entity.colegios_electorales_id =
-                data.colegios_electorales_id;
               this.entity.card_id = data.card_id;
 
               this.circunscripciones = [
