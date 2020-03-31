@@ -15,10 +15,13 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'name', 'email', 'password', 'people_id', 'roles_id',
+        'id', 'name', 'email', 'password', 'votantes_id', 'roles_id',
     ];
 
     public $timestamps = false;
+
+    protected $appends = ['cedula'];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -28,17 +31,19 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function rol()
+
+    public function roles()
     {
-        return $this->belongsTo('App\Rol'); //un usuario pertenece a un rol
+        return $this->belongsTo('App\Roles'); //un usuario pertenece a un rol
     }
 
-    public function persona()
+    public function votantes()
     {
-        return $this->belongsTo('App\Persona'); //un usuario pertenece a una pertenece
+        return $this->belongsTo('App\Votantes'); //un usuario pertenece a una pertenece
     }
-    public function electores()
+
+    public function getCedulaAttribute()
     {
-        return $this->hasMany('App\Elector'); //tiene varios electores
+        return $this->votantes->card_id;
     }
 }

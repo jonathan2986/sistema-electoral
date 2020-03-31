@@ -34,6 +34,9 @@
                             <li @click="menu='votantes'" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Votantes</a>
                             </li>
+                            <li @click="menu='users'" class="nav-item">
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Usuarios</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item nav-dropdown">
