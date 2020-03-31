@@ -34,6 +34,9 @@
             <template v-if="menu=='votantes'">
                 <votantes></votantes>
             </template>
+            <template v-if="menu=='users'">
+                <users></users>
+            </template>
             <template v-if="menu==4">
                 <usuarios></usuarios>
             </template>

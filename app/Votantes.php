@@ -20,6 +20,8 @@ class Votantes extends Model
         'last_name',
         'card_id',
     ];
+    
+    protected $appends = ['name'];
 
     public function people()
     {
@@ -49,5 +51,10 @@ class Votantes extends Model
     public function colegios_electorales()
     {
         return $this->belongsTo('App\ColegiosElectorales');
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->card_id;
     }
 }
