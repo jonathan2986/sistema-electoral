@@ -207,7 +207,7 @@
                 >
                 <div class="col-md-9">
                   <input
-                    type="text"
+                    type="password"
                     v-model="entity.password"
                     class="form-control"
                   />
@@ -500,9 +500,11 @@ export default {
           ]
         }
       }).then(r => {
-        vm[option] = r.data.data.map(function(model) {
-          return { label: model.name, id: model.id };
-        });
+        if(search.length > 0){
+          vm[option] = r.data.data.map(function(model) {
+            return { label: model.name, id: model.id };
+          });
+        } 
         loading(false);
       });
     }, 350)
