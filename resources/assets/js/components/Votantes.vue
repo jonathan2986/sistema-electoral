@@ -610,9 +610,11 @@ export default {
           ]
         }
       }).then(r => {
-        vm[option] = r.data.data.map(function(model) {
-          return { label: model.name, id: model.id };
-        });
+        if (search.length > 0) {
+          vm[option] = r.data.data.map(function(model) {
+            return { label: model.name, id: model.id };
+          });
+        }
         loading(false);
       });
     }, 350)
