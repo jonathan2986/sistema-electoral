@@ -52,6 +52,7 @@
                 <th>Direccion</th>
                 <th>Municipio</th>
                 <th>Distrito</th>
+                <th>Coordinador</th>
               </tr>
             </thead>
             <tbody>
@@ -74,6 +75,7 @@
                 <td v-text="model.address"></td>
                 <td v-text="model.municipios.name"></td>
                 <td v-text="model.distritos ? model.distritos.name : ''"></td>
+                <td v-text="model.coordinador"></td>
               </tr>
             </tbody>
           </table>

@@ -50,6 +50,9 @@
                 <th>Municipio</th>
                 <th>Provincia</th>
                 <th>Circunscripcion</th>
+                <th>Cantidad de Recintos</th>
+                <th>Coordinador</th>
+
               </tr>
             </thead>
             <tbody>
@@ -70,6 +73,8 @@
                 <td v-text="model.name"></td>
                 <td v-text="model.provincias.name"></td>
                 <td v-text="model.circunscripciones.name"></td>
+                <td v-text="model.recintos_number"></td>
+                <td v-text="model.coordinador"></td>
               </tr>
             </tbody>
           </table>

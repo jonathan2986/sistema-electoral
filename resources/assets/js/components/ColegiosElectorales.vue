@@ -49,6 +49,8 @@
                 <th>Opciones</th>
                 <th>Colegio</th>
                 <th>Recintos</th>
+                <th>Cantidad de Votantes</th>
+                <th>Coordinador</th>
               </tr>
             </thead>
             <tbody>
@@ -70,6 +72,8 @@
                 </td>
                 <td v-text="model.name"></td>
                 <td v-text="model.recintos.name"></td>
+                <td v-text="model.number_votantes"></td>
+                <td v-text="model.coordinador"></td>
               </tr>
             </tbody>
           </table>
