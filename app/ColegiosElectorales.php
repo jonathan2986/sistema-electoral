@@ -14,6 +14,10 @@ class ColegiosElectorales extends Model
         'name',
     ];
 
+    protected $foreignKey = 'colegios_electorales_id';
+
+    protected $appends = ['number_votantes','coordinador'];
+
     /**
      * municipios function
      *
@@ -29,10 +33,27 @@ class ColegiosElectorales extends Model
      *
      * @return Model
      */
-    public function people()
+    public function votantes()
     {
-        return $this->hasMany('App\People', 'colegio_electoral', 'name');
+        return $this->hasMany('App\Votantes');
     }
 
+    public function getCoordinadorAttribute()
+    {
+        $coordinador = self::join('votantes', "{$this->table}.id",'=','votantes.'.$this->foreignKey)
+                         ->join('users','votantes.id','=','users.votantes_id')
+                         ->join('roles','roles.id','=','users.roles_id')
+                         ->where('roles.name','Coordinador de Colegio')
+                         ->where("votantes.{$this->foreignKey}", $this->id)
+                         ->select('votantes.*')
+                         ->first();
+
+        return $coordinador ?  $coordinador->first_name. ' '.$coordinador->last_name : ' ';
+    }
+
+    public function getNumberVotantesAttribute()
+    {
+        return $this->votantes->count();
+    }
 
 }
