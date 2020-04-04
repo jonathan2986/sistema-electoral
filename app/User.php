@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->votantes->card_id;
     }
+
+    public function canAction(string $permiso): bool
+    {
+        return $this->roles->name == $permiso || $this->roles->name == 'Admin' ? 1 : 0;
+    }
 }

@@ -74,7 +74,6 @@
                 <td v-text="model.circunscripciones.name"></td>
                 <td v-text="model.recintos_number"></td>
                 <td v-text="model.coordinador"></td>
-
               </tr>
             </tbody>
           </table>
@@ -174,7 +173,7 @@
                     @search="onSearchMunicipios"
                     :options="municipios"
                     :filterable="false"
-                    :reduce="municipios => municipios.id"
+                    :reduce="(municipios) => municipios.id"
                   ></v-select>
                 </div>
               </div>
@@ -188,7 +187,7 @@
                     @search="onSearchCircunscripciones"
                     :options="circunscripciones"
                     :filterable="false"
-                    :reduce="circuscripcion => circuscripcion.id"
+                    :reduce="(circuscripcion) => circuscripcion.id"
                   ></v-select>
                 </div>
               </div>
@@ -279,6 +278,12 @@
 
 <script>
 export default {
+  props: {
+    permisionCondition: {
+      default: null,
+      type: String,
+    },
+  },
   data() {
     return {
       municipio_id: 0,
@@ -300,29 +305,26 @@ export default {
         per_page: 0,
         last_page: 0,
         from: 0,
-        to: 0
+        to: 0,
       },
       entity: {
         circunscripciones_id: 0,
         municipios_id: 0,
         name: "",
-        id: 0
+        id: 0,
       },
 
       offset: 3,
       criterio: "distrito",
-      buscar: ""
+      buscar: "",
     };
   },
-  created() {
-    this.searchDependeciesTables();
-  },
   computed: {
-    isActived: function() {
+    isActived: function () {
       return this.pagination.current_page;
     },
     //Calcula los elementos de la paginación
-    pagesNumber: function() {
+    pagesNumber: function () {
       if (!this.pagination.to) {
         return [];
       }
@@ -343,24 +345,39 @@ export default {
         from++;
       }
       return pagesArray;
-    }
+    },
+    defaultCondition() {
+      return this.permisionCondition != null
+        ? {
+            condition: "where",
+            operator: "=",
+            field: "municipios_id",
+            value: this.permisionCondition,
+          }
+        : null;
+    },
   },
   methods: {
     listarData(page) {
       let me = this;
+      let conditions = [];
+      if(this.defaultCondition != null){
+        conditions.push(this.defaultCondition)
+      }
       axios
         .get("/api/distritos", {
           params: {
             eager: ["municipios", "circunscripciones"],
-            page: page
-          }
+            page: page,
+            q: conditions,
+          },
         })
-        .then(response => {
+        .then((response) => {
           var respuesta = response.data;
           me.data = respuesta.data;
           me.pagination = respuesta.current_page;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
     },
@@ -381,19 +398,19 @@ export default {
       axios({
         url: url,
         method: method,
-        data: this.entity
+        data: this.entity,
       })
-        .then(e => {
+        .then((e) => {
           this.entity = {
             circunscripciones_id: 0,
             municipios_id: 0,
             name: "",
-            id: 0
+            id: 0,
           };
           this.listarData(1);
           this.cerrarModal();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -420,8 +437,15 @@ export default {
           this.entity.name = data.name;
           this.entity.municipios_id = data.municipios_id;
           this.entity.circunscripciones_id = data.circunscripciones_id;
-          this.circunscripciones = [{id:data.circunscripciones.id, label: data.circunscripciones.name}];
-          this.municipios = [{id:data.municipios.id, label: data.municipios.name}];
+          this.circunscripciones = [
+            {
+              id: data.circunscripciones.id,
+              label: data.circunscripciones.name,
+            },
+          ];
+          this.municipios = [
+            { id: data.municipios.id, label: data.municipios.name },
+          ];
           break;
         }
       }
@@ -442,23 +466,23 @@ export default {
               condition: "where",
               field: field,
               operator: "like",
-              value: `%${search}%`
-            })
-          ]
-        }
-      }).then(r => {
+              value: `%${search}%`,
+            }),
+          ],
+        },
+      }).then((r) => {
         if (search.length > 0) {
-          vm[option] = r.data.data.map(function(model) {
+          vm[option] = r.data.data.map(function (model) {
             return { label: model.name, id: model.id };
           });
         }
         loading(false);
       });
-    }, 350)
+    }, 350),
   },
   mounted() {
     this.listarData(1);
-  }
+  },
 };
 </script>
 <style>

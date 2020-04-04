@@ -298,8 +298,11 @@ export default {
       buscar: ""
     };
   },
-  created() {
-    this.searchDependeciesTables();
+  props: {
+    permisionCondition: {
+      default: null,
+      type: String,
+    },
   },
   computed: {
     isActived: function() {
@@ -332,11 +335,21 @@ export default {
   methods: {
     listarData(page) {
       let me = this;
+      let condition = [];
+      if(this.permisionCondition){
+        condition.push({
+          field:'recintos_id',
+          condition:'where',
+          operator:'=',
+          value:this.permisionCondition
+        });
+      }
       axios
         .get("/api/colegios_electorales", {
           params: {
             eager: ["recintos"],
-            page: page
+            page: page,
+            q: condition
           }
         })
         .then(response => {

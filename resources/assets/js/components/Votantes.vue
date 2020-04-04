@@ -396,6 +396,12 @@ export default {
       buscar: ""
     };
   },
+  props: {
+    permisionCondition: {
+      default: null,
+      type: String,
+    },
+  },
   computed: {
     isActived: function() {
       return this.pagination.current_page;
@@ -427,9 +433,19 @@ export default {
   methods: {
     listarData(page) {
       let me = this;
+      let condition = [];
+      if(this.permisionCondition){
+        condition.push({
+          field:'colegios_electorales_id',
+          condition:'where',
+          operator:'=',
+          value:this.permisionCondition
+        });
+      }
       axios
         .get("/api/votantes/?page=" + page, {
           params: {
+            q: condition,
             eager: [
               "municipios",
               "circunscripciones",

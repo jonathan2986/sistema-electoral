@@ -295,6 +295,16 @@
 
 <script>
 export default {
+  props:{
+    field: {
+      type: String,
+       default: 'municipios_id'
+    },
+    permisionCondition: {
+      type: String,
+      default: null
+    }
+  },
   data() {
     return {
       municipio_id: 0,
@@ -362,11 +372,21 @@ export default {
   methods: {
     listarData(page) {
       let me = this;
+      let conditions = [];
+      if(this.permisionCondition != null){
+        conditions.push({
+          field: this.field,
+          value: this.permisionCondition,
+          condition: 'where',
+          operator: '='
+        });
+      }
       axios
         .get("/api/recintos", {
           params: {
             eager: ["municipios", "distritos"],
-            page: page
+            page: page,
+            q: conditions
           }
         })
         .then(response => {
