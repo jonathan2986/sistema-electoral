@@ -10,33 +10,36 @@
                     <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i>Municipio</a>
                         <ul class="nav-dropdown-items">
-                            <li @click="menu=1" class="nav-item">
+                            <li @if(auth()->user()->canAction('Admin'))  @click="menu=1" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Provincias</a>
-                            </li>
-                            <li @click="menu=2" class="nav-item">
+                            </li @endif>
+                            <li @click="menu=2" class="nav-item" @if(auth()->user()->canAction('Admin'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i>Circunscripcion</a>
-                            </li>
-                            <li @click="menu=3" class="nav-item">
+                            </li @endif>
+                            <li @click="menu=3" class="nav-item" @if(auth()->user()->canAction('Admin'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Municipios</a>
-                            </li>
-                            <li @click="menu='distritos'" class="nav-item">
+                            </li @endif>
+                            <li @click="menu='distritos'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Distritos</a>
-                            </li>
-                            <li @click="menu='recintos'" class="nav-item">
+                            </li @endif>
+                            <li @click="menu='recintos'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
                             </li>
-                            <li @click="menu='colegios-electorales'" class="nav-item">
+                            <li @click="menu='recintos'" class="nav-item"  @elseif(auth()->user()->canAction('Coordinador de Distrito'))>
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
+                            </li @endif>
+                            <li @click="menu='colegios-electorales'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Recinto'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Colegios Electorales</a>
-                            </li>
+                            </li @endif>
                             <li @click="menu='personas'" class="nav-item">
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Personas</a>
                             </li>
-                            <li @click="menu='votantes'" class="nav-item">
+                            <li @click="menu='votantes'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Colegio'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Votantes</a>
-                            </li>
-                            <li @click="menu='users'" class="nav-item">
+                            </li @endif>
+                            <li @click="menu='users'" class="nav-item"  @if(auth()->user()->canAction('Admin'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Usuarios</a>
-                            </li>
+                            </li @endif>
                         </ul>
                     </li>
                     <li class="nav-item nav-dropdown">

@@ -20,19 +20,37 @@
 {{--                <colegios-electorales></colegios-electorales>--}}
             </template>
             <template v-if="menu=='distritos'">
-                <distritos></distritos>
+                @if(auth()->user()->canAction('Admin'))
+                    <distritos></distritos>
+                @else
+                    <distritos permision-condition="{{auth()->user()->votantes->municipios_id}}"></distritos>
+                @endif
             </template>
             <template v-if="menu=='recintos'">
-                <recintos></recintos>
+                @if(auth()->user()->canAction('Admin'))
+                    <recintos></recintos>
+                @elseif(auth()->user()->canAction('Coordinador de Distrito')) 
+                    <recintos field="distritos_id" permision-condition="{{auth()->user()->votantes->distritos_id}}" ></recintos>
+                @elseif(auth()->user()->canAction('Coordinador de Municipio'))
+                    <recintos permision-condition="{{auth()->user()->votantes->municipios_id}}" ></recintos>
+                @endif
             </template>
             <template v-if="menu=='colegios-electorales'">
-                <colegios-electorales></colegios-electorales>
+                @if(auth()->user()->canAction('Admin'))
+                    <colegios-electorales></colegios-electorales>
+                @elseif(auth()->user()->canAction('Coordinador de Recinto')) 
+                    <colegios-electorales permision-condition="{{auth()->user()->votantes->recintos_id}}" ></colegios-electorales>
+                @endif
             </template>
             <template v-if="menu=='personas'">
                 <personas></personas>
             </template>
             <template v-if="menu=='votantes'">
-                <votantes></votantes>
+                @if(auth()->user()->canAction('Admin'))
+                    <votantes></votantes>
+                @elseif(auth()->user()->canAction('Coordinador de Colegio'))
+                    <votantes permision-condition="{{auth()->user()->votantes->colegios_electorales_id}}"></votantes>
+                @endif
             </template>
             <template v-if="menu=='users'">
                 <users></users>

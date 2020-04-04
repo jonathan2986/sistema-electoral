@@ -16,8 +16,10 @@ Route::get('/login', 'Auth\LoginController@showLoginForm');
 
 //Route::group(['middleware' => ['auth']], function () {
 
-//    Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
-
+Route::get('/logout' , function(){
+        \Session::flush();
+        return redirect()->to('/');
+});
     Route::get('/main', function () {
         return view('contenido/contenido');
     })->name('main')->middleware('auth');
