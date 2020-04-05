@@ -350,6 +350,7 @@
 </template>
 
 <script>
+import {mask} from 'vue-the-mask'
 export default {
   data() {
     return {

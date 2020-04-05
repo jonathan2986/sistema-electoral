@@ -16,7 +16,7 @@ class AddVotantesIddUsers extends Migration
         Schema::table('users', function (Blueprint $table) {
             //
             $table->dropColumn('people_id');
-            $table->integer('votantes_id')->unsigned()->after('id');
+            $table->integer('votantes_id')->unsigned()->unique()->after('id');
             $table->foreign('votantes_id')->references('id')->on('votantes');
         });
     }
