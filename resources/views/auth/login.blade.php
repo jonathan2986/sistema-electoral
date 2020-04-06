@@ -1,6 +1,6 @@
 @extends('auth.contenido')
 
-@section('login')--}}
+@section('login')
    <div class="row justify-content-center">
        <div class="col-md-8">
            <div class="card-group mb-0">
@@ -31,9 +31,8 @@
                <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
                    <div class="card-body text-center">
                        <div>
-                           <h2>Sistema de registos Unidos por el cambio</h2>
-                           <p>Sistema de registros y control de simpatizantes unidos por el cambio con Eddy Baez.</p>
-                           <a href="https://www.udemy.com/user/juan-carlos-arcila-diaz/" target="_blank" class="btn btn-primary active mt-3">Ver el curso!</a>
+                           <h2>Sistema de registos electores y coordinadores</h2>
+                           <p>Sistema de registros y control de electores y coordinadores</p>
                        </div>
                    </div>
                </div>
