@@ -53,6 +53,10 @@
                 <th>Municipio</th>
                 <th>Distrito</th>
                 <th>Coordinador</th>
+                <th>Coordinador Ejecutivo</th>
+                <th>Coordinador Electoral</th>
+                <th>Coordinador Seguridad</th>
+                <th>Coordinador Finanza</th>
               </tr>
             </thead>
             <tbody>
@@ -76,6 +80,10 @@
                 <td v-text="model.municipios.name"></td>
                 <td v-text="model.distritos ? model.distritos.name : ''"></td>
                 <td v-text="model.coordinador"></td>
+                <td v-text="model.coordinador_ejecutivo"></td>
+                <td v-text="model.coordinador_electoral"></td>
+                <td v-text="model.coordinador_seguridad"></td>
+                <td v-text="model.coordinador_finanza"></td>
               </tr>
             </tbody>
           </table>
