@@ -177,13 +177,13 @@
                   ></v-select>
                 </div>
               </div>
-              <!-- <div v-show="errorProvincia" class="form-group row div-error">
+              <div v-show="errorColegio" class="form-group row div-error">
                                 <div class="text-center text-error">
-                                    <div v-for="error in errorMostrarMsjProvincia" :key="error" v-text="error">
+                                    <div v-for="error in errorMostrarMsjColegio" :key="error" v-text="error">
 
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -277,8 +277,8 @@ export default {
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
-      errorProvincia: 0,
-      errorMostrarMsjProvincia: [],
+      errorColegio: 0,
+      errorMostrarMsjColegio: [],
       pagination: {
         total: 0,
         current_page: 1,
@@ -369,8 +369,9 @@ export default {
       me.listarData(page, buscar, criterio);
     },
     save(method) {
-      // if(!this.validarForm()){
-      // }
+      if (this.validarColegio()) {
+        return;
+      }
       let url =
         method == "POST"
           ? `/api/colegios_electorales`
@@ -392,6 +393,19 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    validarColegio() {
+      this.errorColegio= 0;
+      this.errorMostrarMsjColegio = [];
+
+      if (!this.entity.name)
+        this.errorMostrarMsjColegio.push("El colegio no puede ir vacio.");
+      if (this.entity.recintos_id === 0)
+        this.errorMostrarMsjColegio.push("Seleccione un recinto.");
+
+      if (this.errorMostrarMsjColegio.length) this.errorColegio = 1;
+
+      return this.errorColegio;
     },
     cerrarModal() {
       this.modal = 0;
