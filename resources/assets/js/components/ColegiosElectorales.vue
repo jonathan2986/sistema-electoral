@@ -339,7 +339,7 @@ export default {
       if(this.permisionCondition){
         condition.push({
           field:'recintos_id',
-          condition:'where',
+          condition:'whereIn',
           operator:'=',
           value:this.permisionCondition
         });

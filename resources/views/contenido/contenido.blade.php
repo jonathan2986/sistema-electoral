@@ -26,20 +26,26 @@
                     <distritos permision-condition="{{auth()->user()->votantes->municipios_id}}"></distritos>
                 @endif
             </template>
-            <template v-if="menu=='recintos'">
+            <template v-if="menu=='recintos-municipios'">
                 @if(auth()->user()->canAction('Admin'))
-                    <recintos></recintos>
+                    <component :is="menu"></component>
                 @elseif(auth()->user()->canAction('Coordinador de Distrito')) 
-                    <recintos field="distritos_id" permision-condition="{{auth()->user()->votantes->distritos_id}}" ></recintos>
-                @elseif(auth()->user()->canAction('Coordinador de Municipio'))
-                    <recintos permision-condition="{{auth()->user()->votantes->municipios_id}}" ></recintos>
+                    <component :is="menu" field="distritos_id" permision-condition="{{implode(',', auth()->user()->getEntitiesId('Coordinador de Distrito'))}}" ></component>
                 @endif
             </template>
+            <template v-if="menu =='recintos-distritos'">
+                @if(auth()->user()->canAction('Admin'))
+                    <recintos-distritos></recintos-distritos>
+                @elseif(auth()->user()->canAction('Coordinador de Municipio'))
+                    <recintos-distritos permision-condition="{{implode(',', auth()->user()->getEntitiesId('Coordinador de Municipio'))}}"></recintos-distritos>
+                @endif
+            </template>
+
             <template v-if="menu=='colegios-electorales'">
                 @if(auth()->user()->canAction('Admin'))
                     <colegios-electorales></colegios-electorales>
                 @elseif(auth()->user()->canAction('Coordinador de Recinto')) 
-                    <colegios-electorales permision-condition="{{auth()->user()->votantes->recintos_id}}" ></colegios-electorales>
+                    <colegios-electorales permision-condition="{{implode(',', auth()->user()->getEntitiesId('Coordinador de Recinto'))}}" ></colegios-electorales>
                 @endif
             </template>
             <template v-if="menu=='personas'">
@@ -49,11 +55,14 @@
                 @if(auth()->user()->canAction('Admin'))
                     <votantes></votantes>
                 @elseif(auth()->user()->canAction('Coordinador de Colegio'))
-                    <votantes permision-condition="{{auth()->user()->votantes->colegios_electorales_id}}"></votantes>
+                    <votantes permision-condition="{{implode(',', auth()->user()->getEntitiesId('Coordinador de Colegio'))}}"></votantes>
                 @endif
             </template>
             <template v-if="menu=='users'">
                 <users></users>
+            </template>
+            <template v-if="menu=='roles_users'">
+                <roles-users></roles-users>
             </template>
             <template v-if="menu==4">
                 <usuarios></usuarios>

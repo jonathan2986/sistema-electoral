@@ -22,11 +22,11 @@
                             <li @click="menu='distritos'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio'))>
                                 <a class="nav-link" href="#"><i class="fa fa-map"></i> Distritos</a>
                             </li @endif>
-                            <li @click="menu='recintos'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio'))>
-                                <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
-                            </li>
-                            <li @click="menu='recintos'" class="nav-item"  @elseif(auth()->user()->canAction('Coordinador de Distrito'))>
-                                <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
+                            <li @click="menu='recintos-municipios'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio'))>
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos por M</a>
+                            </li @endif>
+                            <li @click="menu='recintos-distritos'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Distrito'))>
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos por D</a>
                             </li @endif>
                             <li @click="menu='colegios-electorales'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Recinto'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Colegios Electorales</a>
@@ -39,6 +39,9 @@
                             </li @endif>
                             <li @click="menu='users'" class="nav-item"  @if(auth()->user()->canAction('Admin'))>
                                 <a class="nav-link" href="#"><i class="icon-user"></i> Usuarios</a>
+                            </li @endif>
+                            <li @click="menu='roles_users'" class="nav-item"  @if(auth()->user()->canAction('Admin'))>
+                                <a class="nav-link" href="#"><i class="icon-user"></i> Roles</a>
                             </li @endif>
                         </ul>
 {{--                    </li>--}}

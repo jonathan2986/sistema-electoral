@@ -349,7 +349,7 @@ export default {
     defaultCondition() {
       return this.permisionCondition != null
         ? {
-            condition: "where",
+            condition: "whereIn",
             operator: "=",
             field: "municipios_id",
             value: this.permisionCondition,

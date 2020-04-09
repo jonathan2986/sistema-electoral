@@ -438,7 +438,7 @@ export default {
       if(this.permisionCondition){
         condition.push({
           field:'colegios_electorales_id',
-          condition:'where',
+          condition:'whereIn',
           operator:'=',
           value:this.permisionCondition
         });
