@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'name', 'email', 'password', 'votantes_id', 'roles_id',
+        'id', 'name', 'email', 'password', 'votantes_id',
     ];
 
     public $timestamps = false;
@@ -32,23 +32,18 @@ class User extends Authenticatable
     ];
 
 
-    public function roles()
-    {
-        return $this->belongsTo('App\Roles'); //un usuario pertenece a un rol
-    }
-
     public function votantes()
     {
-        return $this->belongsTo('App\Votantes'); //un usuario pertenece a una pertenece
+        // return $this->belongsTo('App\Votantes'); //un usuario pertenece a una pertenece
     }
 
     public function getCedulaAttribute()
     {
-        return $this->votantes->card_id;
+        return "";  #$this->votantes->card_id;
     }
 
     public function canAction(string $permiso): bool
     {
-        return $this->roles->name == $permiso || $this->roles->name == 'Admin' ? 1 : 0;
+        return 1 ;
     }
 }

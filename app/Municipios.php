@@ -24,7 +24,7 @@ class Municipios extends Model
         'name',
     ];
     
-    protected $appends = ['recintos_number', 'coordinador'];
+    protected $appends = ['recintos_number'];
 
     protected $foreignKey = 'municipios_id';
 
@@ -53,17 +53,4 @@ class Municipios extends Model
         return $this->recintos->count();
     }
 
-    
-    public function getCoordinadorAttribute()
-    {
-        $coordinador = self::join('votantes', "{$this->table}.id",'=','votantes.'.$this->foreignKey)
-                         ->join('users','votantes.id','=','users.votantes_id')
-                         ->join('roles','roles.id','=','users.roles_id')
-                         ->where('roles.name','Coordinador de Municipio')
-                         ->where("votantes.{$this->foreignKey}", $this->id)
-                         ->select('votantes.*')
-                         ->first();
-
-        return $coordinador ?  $coordinador->first_name. ' '.$coordinador->last_name : ' ';
-    }
 }
