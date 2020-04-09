@@ -9,6 +9,7 @@ use App\People;
 use App\ColegiosElectorales;
 use App\Votantes;
 use App\User;
+use App\RolesUsers;
 
 class InitialSeeder extends Seeder
 {
@@ -73,8 +74,13 @@ class InitialSeeder extends Seeder
             'email' => 'admin', 
             'password' => bcrypt('Admin@2020'),
             'votantes_id' => '1',
-            'roles_id' => '1',
         ]);
-
+        
+        RolesUsers::create([
+            'users_id' => '1',
+            'roles_id' => '1',
+            'entity' => 'Admin',
+            'entity_id' => '1'
+        ]);
     }
 }

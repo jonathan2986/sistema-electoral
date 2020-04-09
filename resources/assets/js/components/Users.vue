@@ -75,7 +75,6 @@
                 </td>
                 <td v-text="model.name"></td>
                 <td v-text="model.email"></td>
-                <td v-text="model.roles.name"></td>
               </tr>
             </tbody>
           </table>
@@ -160,20 +159,6 @@
                     :options="votantes"
                     :filterable="false"
                     :reduce="votante => votante.id"
-                  ></v-select>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Roles</label
-                >
-                <div class="col-md-9">
-                  <v-select
-                    v-model="entity.roles_id"
-                    @search="onSearchRoles"
-                    :options="roles"
-                    :filterable="false"
-                    :reduce="roles => roles.id"
                   ></v-select>
                 </div>
               </div>
@@ -309,7 +294,6 @@ export default {
       cantidadMunicipio: 0,
       data: [],
       votantes: [],
-      roles: [],
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
@@ -326,7 +310,6 @@ export default {
       cedula: "",
       entity: {
         votantes_id: "",
-        roles_id: "",
         name: "",
         password: "",
         email: null,
@@ -372,7 +355,7 @@ export default {
       axios
         .get("/api/users/?page=" + page, {
           params: {
-            eager: ["votantes", "roles"]
+            eager: ["votantes"]
           }
         })
         .then(response => {
@@ -407,7 +390,6 @@ export default {
         .then(e => {
           this.entity = {
             votantes_id: "",
-            roles_id: "",
             name: "",
             password: "",
             email: null,
@@ -459,19 +441,12 @@ export default {
               this.entity.id = data.id;
               this.entity.name = data.name;
               this.entity.email = data.email;
-              this.entity.roles_id = data.roles_id;
               delete this.entity.password;
               this.entity.votantes_id = data.votantes_id;
               this.votantes = [
                 {
                   label: data.votantes.name,
                   id: data.votantes.id
-                }
-              ];
-              this.roles = [
-                {
-                  label: data.roles.name,
-                  id: data.roles.id
                 }
               ];
             }
@@ -482,10 +457,6 @@ export default {
     onSearchVotantes(search, loading) {
       loading(true);
       this.search(loading, "votantes", search, this, "card_id");
-    },
-    onSearchRoles(search, loading) {
-      loading(true);
-      this.search(loading, "roles", search, this);
     },
     search: _.debounce((loading, option, search, vm, field = "name") => {
       axios(`/api/${option}`, {

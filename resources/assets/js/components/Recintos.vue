@@ -313,7 +313,7 @@ export default {
       default: null
     }
   },
-  data() {
+  data: () => {
     return {
       municipio_id: 0,
       municipio: "",
@@ -375,26 +375,30 @@ export default {
         from++;
       }
       return pagesArray;
-    }
-  },
-  methods: {
-    listarData(page) {
-      let me = this;
+    },
+    conditions: function(){
       let conditions = [];
       if(this.permisionCondition != null){
         conditions.push({
           field: this.field,
           value: this.permisionCondition,
-          condition: 'where',
+          condition: 'whereIn',
           operator: '='
         });
       }
+      return conditions
+    }
+  },
+  methods: {
+    listarData(page) {
+      let me = this;
+
       axios
         .get("/api/recintos", {
           params: {
             eager: ["municipios", "distritos"],
             page: page,
-            q: conditions
+            q: this.conditions
           }
         })
         .then(response => {

@@ -18,7 +18,8 @@ import 'vue-select/dist/vue-select.css';
  */
 
 Vue.component('colegios', require('./components/Colegios.vue'));
-Vue.component('recintos', require('./components/Recintos.vue'));
+Vue.component('recintos-municipios', require('./components/Recintos.vue'));
+Vue.component('recintos-distritos', require('./components/Recintos.vue'));
 Vue.component('usuarios', require('./components/Usuarios'));
 Vue.component('electores', require('./components/Electores'));
 Vue.component('partidos', require('./components/Partidos'));
@@ -34,6 +35,7 @@ Vue.component('distritos', require('./components/Distritos'));
 Vue.component('colegios-electorales', require('./components/ColegiosElectorales'));
 Vue.component('personas', require('./components/People'));
 Vue.component('votantes', require('./components/Votantes'));
+Vue.component('roles-users', require('./components/RolesUsers'));
 Vue.component('v-select', vSelect)
 
 const app = new Vue({

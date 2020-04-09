@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'name', 'email', 'password', 'votantes_id', 'roles_id',
+        'id', 'name', 'email', 'password', 'votantes_id',
     ];
 
     public $timestamps = false;
@@ -31,10 +31,9 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-
     public function roles()
     {
-        return $this->belongsTo('App\Roles'); //un usuario pertenece a un rol
+        return $this->belongsToMany('App\Roles', 'roles_users', 'users_id', 'roles_id');
     }
 
     public function votantes()
@@ -44,11 +43,41 @@ class User extends Authenticatable
 
     public function getCedulaAttribute()
     {
-        return $this->votantes->card_id;
+        return ""; #$this->votantes->card_id;
     }
 
     public function canAction(string $permiso): bool
     {
-        return $this->roles->name == $permiso || $this->roles->name == 'Admin' ? 1 : 0;
+        $roles = $this->roles ? $this->roles->toArray() : [];
+
+        $roles = array_map(function ($rol) {
+            return $rol['name'];
+        }, $roles);
+
+        if (in_array('Admin', $roles)) {
+            return true;
+        } elseif (in_array($permiso, $roles)) {
+            return true;
+        }
+
+        return false;
     }
+
+    public function getEntitiesId(string $name): array
+    {
+        $entitiesId = self::join('roles_users', 'roles_users.users_id', '=', 'users.id')
+            ->join('roles', 'roles.id', '=', 'roles_users.roles_id')
+            ->where('roles.name', $name)
+            ->where('roles_users.users_id', $this->id)
+            ->select('roles_users.entity_id')
+            ->get();
+
+        $entitiesId = $entitiesId->toArray();
+        $entitiesId = array_map(function ($entities) {
+            return $entities['entity_id'];
+        }, $entitiesId);
+
+        return $entitiesId;
+    }
+
 }
