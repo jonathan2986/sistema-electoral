@@ -216,13 +216,13 @@
                   ></textarea>
                 </div>
               </div>
-              <!-- <div v-show="errorProvincia" class="form-group row div-error">
+               <div v-show="errorRecinto" class="form-group row div-error">
                                 <div class="text-center text-error">
-                                    <div v-for="error in errorMostrarMsjProvincia" :key="error" v-text="error">
+                                    <div v-for="error in errorMostrarMsjRecinto" :key="error" v-text="error">
 
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -326,8 +326,8 @@ export default {
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
-      errorProvincia: 0,
-      errorMostrarMsjProvincia: [],
+      errorRecinto: 0,
+      errorMostrarMsjRecinto: [],
       pagination: {
         total: 0,
         current_page: 1,
@@ -414,8 +414,9 @@ export default {
       me.listarData(page, buscar, criterio);
     },
     save(method) {
-      // if(!this.validarForm()){
-      // }
+      if (this.validarRecinto()) {
+        return;
+      }
       let url =
         method == "POST" ? `/api/recintos` : `/api/recintos/${this.entity.id}`;
       axios({
@@ -437,6 +438,23 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    validarRecinto() {
+      this.errorRecinto = 0;
+      this.errorMostrarMsjRecinto = [];
+
+      if (!this.entity.name)
+        this.errorMostrarMsjRecinto.push("El distrito no puede ir vacio.");
+      if (!this.entity.address)
+        this.errorMostrarMsjRecinto.push("La direccion no puede ir vacia.");
+      if (this.entity.municipios_id === 0)
+        this.errorMostrarMsjRecinto.push("Seleccione un municipio.");
+      // if (this.entity.circunscripciones_id === 0)
+      //   this.errorMostrarMsjRecinto.push("Seleccione una circunscripcion.");
+
+      if (this.errorMostrarMsjRecinto.length) this.errorRecinto = 1;
+
+      return this.errorRecinto;
     },
     cerrarModal() {
       this.modal = 0;

@@ -191,13 +191,13 @@
                   ></v-select>
                 </div>
               </div>
-              <!-- <div v-show="errorProvincia" class="form-group row div-error">
+           <div v-show="errorDistrito" class="form-group row div-error">
                                 <div class="text-center text-error">
-                                    <div v-for="error in errorMostrarMsjProvincia" :key="error" v-text="error">
+                                    <div v-for="error in errorMostrarMsjDistrito" :key="error" v-text="error">
 
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -297,8 +297,8 @@ export default {
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
-      errorProvincia: 0,
-      errorMostrarMsjProvincia: [],
+      errorDistrito: 0,
+      errorMostrarMsjDistrito: [],
       pagination: {
         total: 0,
         current_page: 1,
@@ -389,8 +389,9 @@ export default {
       me.listarData(page, buscar, criterio);
     },
     save(method) {
-      // if(!this.validarForm()){
-      // }
+      if (this.validarDistrito()) {
+        return;
+      }
       let url =
         method == "POST"
           ? `/api/distritos`
@@ -413,6 +414,21 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    validarDistrito() {
+      this.errorDistrito = 0;
+      this.errorMostrarMsjDistrito = [];
+
+      if (!this.entity.name)
+        this.errorMostrarMsjDistrito.push("El distrito no puede ir vacio.");
+      if (this.entity.municipios_id === 0)
+        this.errorMostrarMsjDistrito.push("Seleccione un municipio.");
+      if (this.entity.circunscripciones_id === 0)
+        this.errorMostrarMsjDistrito.push("Seleccione una circunscripcion.");
+
+      if (this.errorMostrarMsjDistrito.length) this.errorDistrito = 1;
+
+      return this.errorDistrito;
     },
     cerrarModal() {
       this.modal = 0;
