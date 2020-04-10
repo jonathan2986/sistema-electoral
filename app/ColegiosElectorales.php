@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CoordinadorTrait;
 
 class ColegiosElectorales extends Model
 {
     //
+    use CoordinadorTrait;
+
     protected $table = 'colegios_electorales';
 
     protected $fillable = [
@@ -16,7 +19,11 @@ class ColegiosElectorales extends Model
 
     protected $foreignKey = 'colegios_electorales_id';
 
-    protected $appends = ['number_votantes'];
+    protected $appends = ['number_votantes', 'coordinador'];
+
+    protected $entity = 'colegios_electorales';
+
+    protected $rolName = 'Coordinador de Colegio';
 
     /**
      * municipios function
