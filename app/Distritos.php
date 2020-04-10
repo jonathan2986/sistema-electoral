@@ -3,10 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CoordinadorTrait;
 
 class Distritos extends Model
 {
     //
+    use CoordinadorTrait;
 
     protected $table = 'distritos';
 
@@ -16,9 +18,14 @@ class Distritos extends Model
         'name',
     ];
 
-    protected $appends = ['recintos_number'];
+    protected $appends = ['recintos_number','coordinador'];
 
     protected $foreignKey = "distritos_id";
+
+    protected $entity = 'distritos';
+
+    protected $rolName = 'Coordinador de Distrito';
+
     /**
      * circunscripciones function
      *

@@ -4,11 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\CoordinadorTrait;
 
 class Municipios extends Model
 {
 
     use SoftDeletes;
+    use CoordinadorTrait;
 
     //
     protected $table = 'municipios';
@@ -24,9 +26,13 @@ class Municipios extends Model
         'name',
     ];
     
-    protected $appends = ['recintos_number'];
+    protected $appends = ['recintos_number', 'coordinador'];
 
     protected $foreignKey = 'municipios_id';
+
+    protected $entity = 'municipios';
+
+    protected $rolName = 'Coordinador de Municipio';
 
     /**
      * provincias
