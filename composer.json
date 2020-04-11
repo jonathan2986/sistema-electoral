@@ -9,6 +9,7 @@
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "~4.0",
         "fredpeal/laravel-bakahttp": "dev-dev",
+        "guzzlehttp/guzzle": "~6.0",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0"
     },
