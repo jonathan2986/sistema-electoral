@@ -50,13 +50,37 @@
                     <nav>
                         <ul class="pagination">
                             <li class="page-item" v-if="pagination.current_page > 1">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1,buscar,criterio)">Ant</a>
+                                <a
+                                        class="page-link"
+                                        href="#"
+                                        @click.prevent="cambiarPagina(pagination.current_page - 1)"
+                                >Ant</a
+                                >
                             </li>
-                            <li class="page-item" v-for="page in pagesNumber" :key="page" :class="[page == isActived ? 'active' : '']">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(page,buscar,criterio)" v-text="page"></a>
+                            <li
+                                    class="page-item"
+                                    v-for="page in pagination.last_page"
+                                    :key="page"
+                                    :class="[page == isActived ? 'active' : '']"
+                                    @click="listarCircunscripcion(page)"
+                            >
+                                <a
+                                        class="page-link"
+                                        href="#"
+                                        @click.prevent="cambiarPagina(page)"
+                                        v-text="page"
+                                ></a>
                             </li>
-                            <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1,buscar,criterio)">Sig</a>
+                            <li
+                                    class="page-item"
+                                    v-if="pagination.current_page < pagination.last_page"
+                            >
+                                <a
+                                        class="page-link"
+                                        href="#"
+                                        @click.prevent="cambiarPagina(pagination.current_page + 1)"
+                                >Sig</a
+                                >
                             </li>
                         </ul>
                     </nav>
@@ -187,12 +211,14 @@
             }
         },
         methods: {
-            listarCircunscripcion(page){
+            listarCircunscripcion(page = 1){
                 let me = this;
                 axios.get('/api/circunscripciones/?page=' + page).then((response)=>{
                     var respuesta = response.data;
                     me.arrayCircunscripcion  = respuesta.data;
-                    me.pagination = respuesta.current_page;
+                    me.pagination.total = respuesta.total;
+                    me.pagination.last_page = respuesta.last_page;
+                    me.pagination.current_page = respuesta.current_page;
                     console.log(me.arrayCircunscripcion);
                 }).catch(function (error) {
                     console.log(error)

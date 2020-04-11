@@ -81,34 +81,35 @@
             <ul class="pagination">
               <li class="page-item" v-if="pagination.current_page > 1">
                 <a
-                  class="page-link"
-                  href="#"
-                  @click.prevent="cambiarPagina(pagination.current_page - 1)"
-                  >Ant</a
+                        class="page-link"
+                        href="#"
+                        @click.prevent="cambiarPagina(pagination.current_page - 1)"
+                >Ant</a
                 >
               </li>
               <li
-                class="page-item"
-                v-for="page in pagesNumber"
-                :key="page"
-                :class="[page == isActived ? 'active' : '']"
+                      class="page-item"
+                      v-for="page in pagination.last_page"
+                      :key="page"
+                      :class="[page == isActived ? 'active' : '']"
+                      @click="listarData(page)"
               >
                 <a
-                  class="page-link"
-                  href="#"
-                  @click.prevent="cambiarPagina(page)"
-                  v-text="page"
+                        class="page-link"
+                        href="#"
+                        @click.prevent="cambiarPagina(page)"
+                        v-text="page"
                 ></a>
               </li>
               <li
-                class="page-item"
-                v-if="pagination.current_page < pagination.last_page"
+                      class="page-item"
+                      v-if="pagination.current_page < pagination.last_page"
               >
                 <a
-                  class="page-link"
-                  href="#"
-                  @click.prevent="cambiarPagina(pagination.current_page + 1)"
-                  >Sig</a
+                        class="page-link"
+                        href="#"
+                        @click.prevent="cambiarPagina(pagination.current_page + 1)"
+                >Sig</a
                 >
               </li>
             </ul>
@@ -358,7 +359,7 @@ export default {
     },
   },
   methods: {
-    listarData(page) {
+    listarData(page = 1) {
       let me = this;
       let conditions = [];
       if(this.defaultCondition != null){
@@ -375,7 +376,9 @@ export default {
         .then((response) => {
           var respuesta = response.data;
           me.data = respuesta.data;
-          me.pagination = respuesta.current_page;
+          me.pagination.total = respuesta.total;
+          me.pagination.last_page = respuesta.last_page;
+          me.pagination.current_page = respuesta.current_page;
         })
         .catch(function (error) {
           console.log(error);
