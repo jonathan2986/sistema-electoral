@@ -75,7 +75,7 @@
                 <td>{{ `${model.first_name} ${model.last_name}` }}</td>
                 <td v-text="model.card_id"></td>
                 <td v-text="model.circunscripciones.name"></td>
-                <td v-text="pad(model.comites_bases_id,3)"></td>
+                <td v-text="model.comites_bases_id != null ? pad(model.comites_bases_id,3) : ''"></td>
                 <td v-text="model.municipios.name"></td>
                 <td v-text="model.distritos ? model.distritos.name : ''"></td>
                 <td v-text="model.recintos.name"></td>
