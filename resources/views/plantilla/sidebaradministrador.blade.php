@@ -43,6 +43,9 @@
                             <li @click="menu='roles_users'" class="nav-item"  @if(auth()->user()->canAction('Admin'))>
                                 <a class="nav-link" href="#"><i class="icon-user"></i> Roles</a>
                             </li @endif>
+                            <li @click="menu='comites_bases'" class="nav-item"  @if(auth()->user()->canAction('Admin'))>
+                                <a class="nav-link" href="#"><i class="icon-user"></i> Comites de Bases</a>
+                            </li @endif>
                         </ul>
 {{--                    </li>--}}
 {{--                    <li class="nav-item nav-dropdown">--}}

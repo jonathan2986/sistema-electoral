@@ -36,6 +36,7 @@ Vue.component('colegios-electorales', require('./components/ColegiosElectorales'
 Vue.component('personas', require('./components/People'));
 Vue.component('votantes', require('./components/Votantes'));
 Vue.component('roles-users', require('./components/RolesUsers'));
+Vue.component('comites-bases', require('./components/ComitesBases'));
 Vue.component('v-select', vSelect)
 
 const app = new Vue({
