@@ -64,6 +64,9 @@
             <template v-if="menu=='roles_users'">
                 <roles-users></roles-users>
             </template>
+            <template v-if="menu=='comites_bases'">
+                <comites-bases></comites-bases>
+            </template>
             <template v-if="menu==4">
                 <usuarios></usuarios>
             </template>

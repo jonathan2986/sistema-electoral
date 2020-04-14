@@ -8,10 +8,10 @@
       <!-- Ejemplo de tabla Listado -->
       <div class="card">
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> Votantes
+          <i class="fa fa-align-justify"></i> Comites de Bases
           <button
             type="button"
-            @click="abrirModal('votantes', 'registrar')"
+            @click="abrirModal('Comites de Bases', 'registrar')"
             class="btn btn-secondary"
           >
             <i class="icon-plus"></i>&nbsp;Nuevo
@@ -22,7 +22,7 @@
             <div class="col-md-6">
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
-                  <option value="municipio">Votantes</option>
+                  <option value="municipio">Comites de Bases</option>
                 </select>
                 <input
                   type="text"
@@ -47,14 +47,12 @@
             <thead>
               <tr>
                 <th>Opciones</th>
-                <th>Nombre</th>
-                <th>Cedula</th>
-                <th>Circunscripcion</th>
-                <th>Comite de Base</th>
-                <th>Municipio</th>
-                <th>Distrito</th>
-                <th>Recinto</th>
-                <th>Colegio</th>
+                <th>Codigo Comite de Base</th>
+                <th>Nombre del Coordinador</th>
+                <th>Apellido del Coordinador</th>
+                <th>Cedula del Coordinador</th>
+                <th>Direccion</th>
+                <th>Numeros de Miembros</th>
               </tr>
             </thead>
             <tbody>
@@ -62,7 +60,7 @@
                 <td>
                   <button
                     type="button"
-                    @click="abrirModal('votantes', 'actualizar', model)"
+                    @click="abrirModal('Distritos', 'actualizar', model)"
                     class="btn btn-warning btn-sm"
                   >
                     <i class="icon-pencil"></i>
@@ -72,14 +70,12 @@
                     <i class="icon-trash"></i>
                   </button>
                 </td>
-                <td>{{ `${model.first_name} ${model.last_name}` }}</td>
+                <td>{{ pad(model.id,3) }}</td>
+                <td v-text="model.first_name"></td>
+                <td v-text="model.last_name"></td>
                 <td v-text="model.card_id"></td>
-                <td v-text="model.circunscripciones.name"></td>
-                <td v-text="pad(model.comites_bases_id,3)"></td>
-                <td v-text="model.municipios.name"></td>
-                <td v-text="model.distritos ? model.distritos.name : ''"></td>
-                <td v-text="model.recintos.name"></td>
-                <td v-text="model.colegios_electorales.name"></td>
+                <td v-text="model.address"></td>
+                <td v-text="model.members_count"></td>
               </tr>
             </tbody>
           </table>
@@ -95,9 +91,10 @@
               </li>
               <li
                 class="page-item"
-                v-for="page in pagesNumber"
+                v-for="page in pagination.last_page"
                 :key="page"
                 :class="[page == isActived ? 'active' : '']"
+                @click="listarData(page)"
               >
                 <a
                   class="page-link"
@@ -155,131 +152,77 @@
             >
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Cedula</label
+                  >Digite la Cedula del Votante</label
                 >
                 <div class="col-md-9">
                   <v-select
-                    v-model="cedula"
-                    @search="onSearchPeople"
-                    :options="people"
+                    v-model="entity.votantes_id"
+                    @search="onSearchVotantes"
+                    :options="votantes"
                     :filterable="false"
-                    :reduce="people => people.id"
-                    @input="setPeople"
+                    :reduce="votante => votante.id"
+                    @input="setVotantes"
                   ></v-select>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Nombre</label
+                  >Nombre del Coordinador</label
                 >
                 <div class="col-md-9">
                   <input
                     type="text"
                     v-model="entity.first_name"
-                    disabled
                     class="form-control"
+                    placeholder="Nombre"
                   />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Apellido</label
+                  >Apellido del Coordinador</label
                 >
                 <div class="col-md-9">
                   <input
                     type="text"
                     v-model="entity.last_name"
-                    disabled
                     class="form-control"
+                    placeholder="Apellido"
                   />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Comites de Bases</label
+                  >Cedula del Coordinador</label
                 >
                 <div class="col-md-9">
                   <input
                     type="text"
-                    v-model="entity.comites_bases_id"
+                    v-model="entity.card_id"
                     class="form-control"
+                    placeholder="Cedula"
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Municipios</label
+                <label class="col-md-3 form-control-label" for=""
+                  >Direccion del Coorinador</label
                 >
                 <div class="col-md-9">
-                  <v-select
-                    v-model="entity.municipios_id"
-                    @search="onSearchMunicipios"
-                    :options="municipios"
-                    :filterable="false"
-                    :reduce="municipio => municipio.id"
-                  ></v-select>
+                  <textarea
+                    v-model="entity.address"
+                    name=""
+                    class="form-control"
+                    id=""
+                    cols="10"
+                    rows="5"
+                  ></textarea>
                 </div>
               </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Circunscripcion</label
-                >
-                <div class="col-md-9">
-                  <v-select
-                    v-model="entity.circunscripciones_id"
-                    @search="onSearchCircunscripciones"
-                    :options="circunscripciones"
-                    :filterable="false"
-                    :reduce="circunscripcion => circunscripcion.id"
-                  ></v-select>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Distrito</label
-                >
-                <div class="col-md-9">
-                  <v-select
-                    v-model="entity.distritos_id"
-                    @search="onSearchDistritos"
-                    :options="distritos"
-                    :filterable="false"
-                    :reduce="distrito => distrito.id"
-                  ></v-select>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Recintos</label
-                >
-                <div class="col-md-9">
-                  <v-select
-                    v-model="entity.recintos_id"
-                    @search="onSearchRecintos"
-                    :options="recintos"
-                    :filterable="false"
-                    :reduce="recinto => recinto.id"
-                  ></v-select>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Colegios</label
-                >
-                <div class="col-md-9">
-                  <v-select
-                    v-model="entity.colegios_electorales_id"
-                    @search="onSearchColegios"
-                    :options="colegios_electorales"
-                    :filterable="false"
-                    :reduce="colegio => colegio.id"
-                  ></v-select>
-                </div>
-              </div>
-              <div v-show="errorMunicipio" class="form-group row div-error">
+              <div v-show="errorDistrito" class="form-group row div-error">
                 <div class="text-center text-error">
                   <div
-                    v-for="error in errorMostrarMsjMunicipio"
+                    v-for="error in errorMostrarMsjDistrito"
                     :key="error"
                     v-text="error"
                   ></div>
@@ -364,26 +307,28 @@
 </template>
 
 <script>
-import {mask} from 'vue-the-mask'
 export default {
+  props: {
+    permisionCondition: {
+      default: null,
+      type: String
+    }
+  },
   data() {
     return {
       municipio_id: 0,
       municipio: "",
       cantidadMunicipio: 0,
       data: [],
+      // distrito_municipal: '',
+      // circuscripcion: '',
       circunscripciones: [],
-      provincias: [],
-      municipios: [],
-      recintos: [],
-      distritos: [],
-      colegios_electorales: [],
-      people: [],
+      votantes: [],
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
-      errorMunicipio: 0,
-      errorMostrarMsjMunicipio: [],
+      errorDistrito: 0,
+      errorMostrarMsjDistrito: [],
       pagination: {
         total: 0,
         current_page: 1,
@@ -392,31 +337,19 @@ export default {
         from: 0,
         to: 0
       },
-      cedula: '',
       entity: {
-        people_id: "",
-        circunscripciones_id: "",
-        municipios_id: "",
-        distritos_id: null,
-        recintos_id: "",
-        colegios_electorales_id: "",
+        votantes_id: 0,
         first_name: "",
         last_name: "",
         card_id: "",
-        comites_bases_id:0,
+        address: "",
         id: 0
       },
 
       offset: 3,
-      criterio: "votantes",
+      criterio: "",
       buscar: ""
     };
-  },
-  props: {
-    permisionCondition: {
-      default: null,
-      type: String,
-    },
   },
   computed: {
     isActived: function() {
@@ -444,44 +377,53 @@ export default {
         from++;
       }
       return pagesArray;
+    },
+    defaultCondition() {
+      return this.permisionCondition != null
+        ? {
+            condition: "whereIn",
+            operator: "=",
+            field: "municipios_id",
+            value: this.permisionCondition
+          }
+        : null;
     }
   },
   methods: {
-    listarData(page) {
+    listarData(page = 1) {
       let me = this;
-      let condition = [];
-      if(this.permisionCondition){
-        condition.push({
-          field:'colegios_electorales_id',
-          condition:'whereIn',
-          operator:'=',
-          value:this.permisionCondition
-        });
+      let conditions = [];
+      if (this.defaultCondition != null) {
+        conditions.push(this.defaultCondition);
       }
       axios
-        .get("/api/votantes/?page=" + page, {
+        .get("/api/coordinadores_comites_bases", {
           params: {
-            q: condition,
-            eager: [
-              "municipios",
-              "circunscripciones",
-              "distritos",
-              "recintos",
-              "colegios_electorales",
-              "people"
-            ]
+            eager: ["votantes"],
+            page: page,
+            q: conditions
           }
         })
         .then(response => {
-          console.log(response.data);
           var respuesta = response.data;
           me.data = respuesta.data;
-          me.pagination = respuesta.current_page;
-          console.log(this.arrayMunicipios);
+          me.pagination.total = respuesta.total;
+          me.pagination.last_page = respuesta.last_page;
+          me.pagination.current_page = respuesta.current_page;
         })
         .catch(function(error) {
           console.log(error);
         });
+    },
+    setVotantes(id) {
+      axios({
+        method: "GET",
+        url: `/api/votantes/${id}`
+      }).then(res => {
+        this.entity.first_name = res.data.first_name;
+        this.entity.last_name = res.data.last_name;
+        this.entity.card_id = res.data.card_id;
+      });
     },
     cambiarPagina(page, buscar, criterio) {
       let me = this;
@@ -491,12 +433,10 @@ export default {
       me.listarData(page, buscar, criterio);
     },
     save(method) {
-      //   if (this.validarMunicipio()) {
-      //     return;
-      //   }
-      this.entity.comites_bases_id = parseInt(this.entity.comites_bases_id, 10);
       let url =
-        method == "POST" ? `/api/votantes` : `/api/votantes/${this.entity.id}`;
+        method == "POST"
+          ? `/api/coordinadores_comites_bases`
+          : `/api/coordinadores_comites_bases/${this.entity.id}`;
       axios({
         url: url,
         method: method,
@@ -504,15 +444,9 @@ export default {
       })
         .then(e => {
           this.entity = {
-            people_id: "",
-            circunscripciones_id: "",
-            municipios_id: "",
-            distritos_id: null,
-            recintos_id: "",
-            colegios_electorales_id: "",
-            first_name: "",
-            last_name: "",
-            card_id: "",
+            circunscripciones_id: 0,
+            municipios_id: 0,
+            name: "",
             id: 0
           };
           this.listarData(1);
@@ -522,115 +456,63 @@ export default {
           console.log(err);
         });
     },
-    validarMunicipio() {
-      this.errorMunicipio = 0;
-      this.errorMostrarMsjMunicipio = [];
+    validarDistrito() {
+      this.errorDistrito = 0;
+      this.errorMostrarMsjDistrito = [];
 
       if (!this.entity.name)
-        this.errorMostrarMsjMunicipio.push("El municipio no puede ir vacio.");
-      if (this.entity.provincias_id === 0)
-        this.errorMostrarMsjMunicipio.push("Seleccione una provincia.");
+        this.errorMostrarMsjDistrito.push("El distrito no puede ir vacio.");
+      if (this.entity.municipios_id === 0)
+        this.errorMostrarMsjDistrito.push("Seleccione un municipio.");
       if (this.entity.circunscripciones_id === 0)
-        this.errorMostrarMsjMunicipio.push("Seleccione una circunscripcion.");
+        this.errorMostrarMsjDistrito.push("Seleccione una circunscripcion.");
 
-      if (this.errorMostrarMsjMunicipio.length) this.errorMunicipio = 1;
+      if (this.errorMostrarMsjDistrito.length) this.errorDistrito = 1;
 
-      return this.errorMunicipio;
+      return this.errorDistrito;
     },
     cerrarModal() {
       this.modal = 0;
       this.tituloModal = "";
       this.provincia = "";
     },
-    setPeople(value) {
-      axios(`/api/people/${value}`).then(res => {
-        this.entity.first_name = res.data.first_name;
-        this.entity.last_name = res.data.last_name;
-        this.entity.card_id = res.data.card_id;
-        this.entity.people_id = res.data.id;
-        this.cedula = res.data.card_id;
-      });
-    },
     abrirModal(modelo, accion, data = []) {
-      switch (modelo) {
-        case "votantes": {
-          switch (accion) {
-            case "registrar": {
-              this.modal = 1;
-              this.tituloModal = "Registrar Votantes";
-              this.provincia = "";
-              this.tipoAccion = 1;
-              break;
+      switch (accion) {
+        case "registrar": {
+          this.modal = 1;
+          this.tituloModal = `Registrar ${modelo}`;
+          this.provincia = "";
+          this.tipoAccion = 1;
+          break;
+        }
+        case "actualizar": {
+          //console.log(data);
+          this.modal = 1;
+          this.tituloModal = `Actualizar ${modelo}`;
+          this.tipoAccion = 2;
+          this.entity.id = data.id;
+          this.entity.first_name = data.name;
+          this.entity.last_name = data.municipios_id;
+          this.entity.card_id = data.card_id;
+          this.entity.votantes_id = data.votantes_id;
+          this.entity.address = data.address;
+          this.votantes = [
+            {
+              id: data.votantes.id,
+              label: data.votantes.card_id
             }
-            case "actualizar": {
-              //console.log(data);
-              console.log(data);
-              this.modal = 1;
-              this.tituloModal = "Actualizar Votantes";
-              this.tipoAccion = 2;
-              this.entity.id = data.id;
-              this.entity.first_name = data.first_name;
-              this.entity.last_name = data.last_name;
-              this.entity.circunscripciones_id = data.circunscripciones_id;
-              this.entity.people_id = data.people_id;
-              this.entity.municipios_id = data.municipios_id;
-              this.entity.distritos_id = data.distritos_id;
-              this.entity.recintos_id = data.recintos_id;
-              this.entity.colegios_electorales_id = data.colegios_electorales_id;
-              this.entity.comites_bases_id = this.pad(this.entity.comites_bases_id,3);
-              this.entity.card_id = data.card_id;
-              this.cedula = data.people_id;
-              this.circunscripciones = [
-                {
-                  label: data.circunscripciones.name,
-                  id: data.circunscripciones.id
-                }
-              ];
-              this.municipios = [
-                { label: data.municipios.name, id: data.municipios.id }
-              ];
-              this.distritos = data.distritos
-                ? [{ label: data.distritos.name, id: data.distritos.id }]
-                : [];
-              this.recintos = [
-                { label: data.recintos.name, id: data.recintos.id }
-              ];
-              this.colegios_electorales = [
-                {
-                  label: data.colegios_electorales.name,
-                  id: data.colegios_electorales.id
-                }
-              ];
-              this.people = [{ label: data.people.name, id: data.people.id }];
-              break;
-            }
-          }
+          ];
+          break;
         }
       }
     },
-    onSearchPeople(search, loading) {
+    onSearchVotantes(search, loading) {
       loading(true);
-      this.search(loading, "people", search, this, "card_id");
-    },
-    onSearchMunicipios(search, loading) {
-      loading(true);
-      this.search(loading, "municipios", search, this);
-    },
-    onSearchDistritos(search, loading) {
-      loading(true);
-      this.search(loading, "distritos", search, this);
-    },
-    onSearchRecintos(search, loading) {
-      loading(true);
-      this.search(loading, "recintos", search, this);
+      this.search(loading, "votantes", search, this, "card_id");
     },
     onSearchCircunscripciones(search, loading) {
       loading(true);
       this.search(loading, "circunscripciones", search, this);
-    },
-    onSearchColegios(search, loading) {
-      loading(true);
-      this.search(loading, "colegios_electorales", search, this);
     },
     pad(number, length) {
       var str = "" + number;

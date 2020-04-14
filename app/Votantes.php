@@ -19,6 +19,7 @@ class Votantes extends Model
         'first_name',
         'last_name',
         'card_id',
+        'comites_bases_id'
     ];
     
     protected $appends = ['name'];
