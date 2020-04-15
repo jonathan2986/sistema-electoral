@@ -50,7 +50,6 @@
                 <th>Nombre</th>
                 <th>Nombre de Usuarios</th>
                 <th>Email</th>
-                <th>Rol</th>
               </tr>
             </thead>
             <tbody>
