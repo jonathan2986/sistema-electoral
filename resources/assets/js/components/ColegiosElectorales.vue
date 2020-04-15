@@ -385,6 +385,7 @@ export default {
         data: this.entity
       })
         .then(e => {
+          this.actualizarVotante(e.data.votantes_id, e.data.id);
           this.entity = {
             recintos_id: 0,
             name: "",
@@ -409,6 +410,15 @@ export default {
       if (this.errorMostrarMsjColegio.length) this.errorColegio = 1;
 
       return this.errorColegio;
+    },
+    actualizarVotante(votantes_id, id){
+      axios({
+        method:'PUT',
+        url:`/api/votantes/${idvotantes_id}`,
+        data:{
+          comites_bases_id:id
+        }
+      })
     },
     cerrarModal() {
       this.modal = 0;
