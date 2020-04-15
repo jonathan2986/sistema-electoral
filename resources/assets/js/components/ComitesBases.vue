@@ -206,7 +206,7 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for=""
-                  >Direccion del Coorinador</label
+                  >Direccion del Coordinador</label
                 >
                 <div class="col-md-9">
                   <textarea
@@ -443,6 +443,7 @@ export default {
         data: this.entity
       })
         .then(e => {
+          this.actualizarVotante(e.data.votantes_id, e.data.id);
           this.entity = {
             circunscripciones_id: 0,
             municipios_id: 0,
@@ -475,6 +476,15 @@ export default {
       this.modal = 0;
       this.tituloModal = "";
       this.provincia = "";
+    },
+    actualizarVotante(votantes_id, id){
+      axios({
+        method:'PUT',
+        url:`/api/votantes/${idvotantes_id}`,
+        data:{
+          comites_bases_id:id
+        }
+      })
     },
     abrirModal(modelo, accion, data = []) {
       switch (accion) {
