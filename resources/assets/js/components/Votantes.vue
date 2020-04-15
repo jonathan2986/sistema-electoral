@@ -580,7 +580,7 @@ export default {
               this.entity.distritos_id = data.distritos_id;
               this.entity.recintos_id = data.recintos_id;
               this.entity.colegios_electorales_id = data.colegios_electorales_id;
-              this.entity.comites_bases_id = this.pad(this.entity.comites_bases_id,3);
+              this.entity.comites_bases_id = data.comites_bases_id != null ? this.pad(data.comites_bases_id,3): '';
               this.entity.card_id = data.card_id;
               this.cedula = data.people_id;
               this.circunscripciones = [
