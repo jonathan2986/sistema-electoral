@@ -480,7 +480,7 @@ export default {
     actualizarVotante(votantes_id, id){
       axios({
         method:'PUT',
-        url:`/api/votantes/${idvotantes_id}`,
+        url:`/api/votantes/${votantes_id}`,
         data:{
           comites_bases_id:id
         }
