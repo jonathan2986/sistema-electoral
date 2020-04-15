@@ -22,18 +22,18 @@
             <div class="col-md-6">
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
-                  <option value="provincia">Provincia</option>
+                  <option value="name">Provincia</option>
                 </select>
                 <input
                   type="text"
                   v-model="buscar"
-                  @keyup.enter="listarProvincias(1, buscar, criterio)"
+                  @keyup.enter="listarProvincias()"
                   class="form-control"
                   placeholder="Texto a buscar"
                 />
                 <button
                   type="submit"
-                  @click="listarProvincias(1, buscar, criterio)"
+                  @click="listarProvincias()"
                   class="btn btn-primary"
                 >
                   <i class="fa fa-search"></i> Buscar
@@ -247,162 +247,182 @@
 
 <script>
 export default {
-    data() {
-        return {
-            provincia_id: 0,
-            provincia: '',
-            cantidadMunicipio: 0,
-            // distrito_municipal: '',
-            // circuscripcion: '',
-            arrayProvincias: [],
-            modal : 0,
-            tituloModal : '',
-            tipoAccion : 0,
-            errorProvincia: 0,
-            errorMostrarMsjProvincia: [],
-            pagination: {
-                total: 0,
-                current_page: 1,
-                per_page: 0,
-                last_page: 0,
-                from: 0,
-                to: 0
-            },
-            offset: 3,
-            criterio : 'provincia',
-            buscar : ''
-        }
+  data() {
+    return {
+      provincia_id: 0,
+      provincia: "",
+      cantidadMunicipio: 0,
+      // distrito_municipal: '',
+      // circuscripcion: '',
+      arrayProvincias: [],
+      modal: 0,
+      tituloModal: "",
+      tipoAccion: 0,
+      errorProvincia: 0,
+      errorMostrarMsjProvincia: [],
+      pagination: {
+        total: 0,
+        current_page: 1,
+        per_page: 0,
+        last_page: 0,
+        from: 0,
+        to: 0,
+      },
+      offset: 3,
+      criterio: "provincia",
+      buscar: "",
+    };
+  },
+  computed: {
+    isActived: function() {
+      return this.pagination.current_page;
     },
-    computed:{
-        isActived: function(){
-            return this.pagination.current_page;
-        },
-        //Calcula los elementos de la paginación
-        pagesNumber: function() {
-            if(!this.pagination.to) {
-                return [];
-            }
+    //Calcula los elementos de la paginación
+    pagesNumber: function() {
+      if (!this.pagination.to) {
+        return [];
+      }
 
-            var from = this.pagination.current_page - this.offset;
-            if(from < 1) {
-                from = 1;
-            }
+      var from = this.pagination.current_page - this.offset;
+      if (from < 1) {
+        from = 1;
+      }
 
-            var to = from + (this.offset * 2);
-            if(to >= this.pagination.last_page){
-                to = this.pagination.last_page;
-            }
+      var to = from + this.offset * 2;
+      if (to >= this.pagination.last_page) {
+        to = this.pagination.last_page;
+      }
 
-            var pagesArray = [];
-            while(from <= to) {
-                pagesArray.push(from);
-                from++;
-            }
-            return pagesArray;
-
-        }
+      var pagesArray = [];
+      while (from <= to) {
+        pagesArray.push(from);
+        from++;
+      }
+      return pagesArray;
     },
-    methods: {
-        listarProvincias(page = 1){
-            let me = this;
-           axios.get('/api/provincias/?page=' + page).then((response)=>{
-               var respuesta = response.data;
-               me.arrayProvincias = respuesta.data;
-               me.pagination.total = respuesta.total;
-               me.pagination.last_page = respuesta.last_page;
-               me.pagination.current_page = respuesta.current_page;
-               console.log(this.arrayProvincias);
-           }).catch(function (error) {
-               console.log(error)
-           })
-        },
-        cambiarPagina(page, buscar, criterio){
-            let me = this;
-            //Actualiza la página actual
-            me.pagination.current_page = page;
-            //Envia la petición para visualizar la data de esa página
-            me.listarProvincias(page,buscar,criterio);
-        },
-        registrarProvincia(){
-            if (this.validarProvincia()){
-                return;
-            }
-
-            let me = this;
-
-            axios.post('/api/provincias',{
-                'name': this.provincia
-
-            }).then(function (response) {
-                me.cerrarModal();
-                me.listarProvincias(1);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        },
-        actualizarProvincia(){
-            if (this.validarProvincia()){
-                return;
-            }
-
-            let me = this;
-
-            axios.put(`/api/provincias/${this.provincia_id}`,{
-                'name': this.provincia,
-            }).then(function (response) {
-                me.cerrarModal();
-                me.listarProvincias(1);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        },
-        validarProvincia(){
-            this.errorProvincia=0;
-            this.errorMostrarMsjProvincia =[];
-
-            if (!this.provincia) this.errorMostrarMsjProvincia.push("La provincia no puede estar vacía.");
-
-            if (this.errorMostrarMsjProvincia.length) this.errorProvincia = 1;
-
-            return this.errorProvincia;
-        },
-        cerrarModal(){
-            this.modal=0;
-            this.tituloModal='';
-            this.provincia = '';
-        },
-        abrirModal(modelo, accion, data = []) {
-            switch(modelo){
-                case "provincia":
-                {
-                    switch (accion) {
-                        case "registrar":
-                        {
-                            this.modal = 1;
-                            this.tituloModal = 'Registrar Provincia';
-                            this.provincia = '';
-                            this.tipoAccion = 1;
-                            break;
-                        }
-                        case "actualizar":
-                        {
-                            //console.log(data);
-                            this.modal=1;
-                            this.tituloModal='Actualizar Provincia';
-                            this.tipoAccion=2;
-                            this.provincia_id=data['id'];
-                            this.provincia = data['name'];
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+  },
+  methods: {
+    listarProvincias(page = 1) {
+      let me = this;
+      let conditions = [];
+      if (this.buscar.length > 0 && this.criterio.length > 0) {
+        conditions.push({
+          condition: "where",
+          field: this.criterio,
+          operator: "like",
+          value: `%${this.buscar}%`,
+        });
+      }
+      axios
+        .get("/api/provincias/?page=" + page,{
+          params: {
+            q: conditions,
+          }
+        })
+        .then((response) => {
+          var respuesta = response.data;
+          me.arrayProvincias = respuesta.data;
+          me.pagination.total = respuesta.total;
+          me.pagination.last_page = respuesta.last_page;
+          me.pagination.current_page = respuesta.current_page;
+          console.log(this.arrayProvincias);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
-    mounted() {
-        this.listarProvincias(1);
-    }
-}
+    cambiarPagina(page, buscar, criterio) {
+      let me = this;
+      //Actualiza la página actual
+      me.pagination.current_page = page;
+      //Envia la petición para visualizar la data de esa página
+      me.listarProvincias(page, buscar, criterio);
+    },
+    registrarProvincia() {
+      if (this.validarProvincia()) {
+        return;
+      }
+
+      let me = this;
+
+      axios
+        .post("/api/provincias", {
+          name: this.provincia,
+        })
+        .then(function(response) {
+          me.cerrarModal();
+          me.listarProvincias(1);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    actualizarProvincia() {
+      if (this.validarProvincia()) {
+        return;
+      }
+
+      let me = this;
+
+      axios
+        .put(`/api/provincias/${this.provincia_id}`, {
+          name: this.provincia,
+        })
+        .then(function(response) {
+          me.cerrarModal();
+          me.listarProvincias(1);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    validarProvincia() {
+      this.errorProvincia = 0;
+      this.errorMostrarMsjProvincia = [];
+
+      if (!this.provincia)
+        this.errorMostrarMsjProvincia.push(
+          "La provincia no puede estar vacía."
+        );
+
+      if (this.errorMostrarMsjProvincia.length) this.errorProvincia = 1;
+
+      return this.errorProvincia;
+    },
+    cerrarModal() {
+      this.modal = 0;
+      this.tituloModal = "";
+      this.provincia = "";
+    },
+    abrirModal(modelo, accion, data = []) {
+      switch (modelo) {
+        case "provincia": {
+          switch (accion) {
+            case "registrar": {
+              this.modal = 1;
+              this.tituloModal = "Registrar Provincia";
+              this.provincia = "";
+              this.tipoAccion = 1;
+              break;
+            }
+            case "actualizar": {
+              //console.log(data);
+              this.modal = 1;
+              this.tituloModal = "Actualizar Provincia";
+              this.tipoAccion = 2;
+              this.provincia_id = data["id"];
+              this.provincia = data["name"];
+              break;
+            }
+          }
+        }
+      }
+    },
+  },
+  mounted() {
+    this.listarProvincias(1);
+  },
+};
 </script>
 <style>
 .modal-content {
