@@ -38,7 +38,7 @@ class People extends Model
 
     public function getNameAttribute()
     {
-        return $this->card_id;
+        return "{$this->first_name} {$this->last_name} {$this->card_id}";
     }
 
 }

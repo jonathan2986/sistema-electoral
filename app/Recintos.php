@@ -45,27 +45,27 @@ class Recintos extends Model
 
     public function coordinadores()
     {
-        return $this->belongsTo('App\Votantes', 'coordinadores_id', 'id');
+        return $this->belongsTo('App\People', 'coordinadores_id', 'id');
     }
 
     public function coordinadores_ejecutivos()
     {
-        return $this->belongsTo('App\Votantes', 'coordinadores_ejecutivos_id', 'id');
+        return $this->belongsTo('App\People', 'coordinadores_ejecutivos_id', 'id');
     }
 
     public function coordinadores_electorales()
     {
-        return $this->belongsTo('App\Votantes', 'coordinadores_electorales_id', 'id');
+        return $this->belongsTo('App\People', 'coordinadores_electorales_id', 'id');
     }
 
     public function coordinadores_seguridad()
     {
-        return $this->belongsTo('App\Votantes', 'coordinadores_seguridad_id', 'id');
+        return $this->belongsTo('App\People', 'coordinadores_seguridad_id', 'id');
     }
 
     public function coordinadores_finanzas()
     {
-        return $this->belongsTo('App\Votantes', 'coordinadores_finanzas_id', 'id');
+        return $this->belongsTo('App\People', 'coordinadores_finanzas_id', 'id');
     }
 
 

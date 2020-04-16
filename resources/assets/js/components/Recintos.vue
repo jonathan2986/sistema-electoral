@@ -192,7 +192,7 @@
                   <v-select
                     v-model="entity.coordinadores_id"
                     @search="onSearchCoordinadores"
-                    :options="votantes"
+                    :options="people"
                     :filterable="false"
                     :reduce="(coordinador) => coordinador.id"
                   ></v-select>
@@ -406,7 +406,7 @@ export default {
       // circuscripcion: '',
       municipios: [],
       distritos: [],
-      votantes: [],
+      people: [],
       coordinadores_ejecutivos: [],
       coordinadores_electorales: [],
       coordinadores_seguridad: [],
@@ -603,7 +603,7 @@ export default {
           this.entity.coordinadores_electorales_id = data.coordinadores_electorales_id;
           this.entity.coordinadores_seguridad_id = data.coordinadores_seguridad_id;
           this.entity.coordinadores_finanzas_id = data.coordinadores_finanzas_id;
-          this.votantes = data.coordinadores
+          this.people = data.coordinadores
             ? [{ id: data.coordinadores_id, label: data.coordinadores.name }]
             : [];
           this.distritos = data.distritos
@@ -648,7 +648,7 @@ export default {
         search,
         this,
         "card_id",
-        "votantes"
+        "people"
       );
     },
     onSearchCoordinadoresElectorales(search, loading) {
@@ -659,7 +659,7 @@ export default {
         search,
         this,
         "card_id",
-        "votantes"
+        "people"
       );
     },
     onSearchCoordinadoresEjecutivos(search, loading) {
@@ -670,7 +670,7 @@ export default {
         search,
         this,
         "card_id",
-        "votantes"
+        "people"
       );
     },
     onSearchCoordinadoresSeguridad(search, loading) {
@@ -681,7 +681,7 @@ export default {
         search,
         this,
         "card_id",
-        "votantes"
+        "people"
       );
     },
     onSearchCoordinadoresFinanzas(search, loading) {
@@ -692,7 +692,7 @@ export default {
         search,
         this,
         "card_id",
-        "votantes"
+        "people"
       );
     },
     onSearchMunicipios(search, loading) {
