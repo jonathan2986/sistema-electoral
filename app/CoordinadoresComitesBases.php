@@ -14,7 +14,6 @@ class CoordinadoresComitesBases extends Model
         'first_name',
         'last_name',
         'card_id',
-        'address',
     ];
 
     public $appends = ['members_count'];

@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Recintos extends Model
 {
     //
-    use CoordinadorTrait;
 
     protected $table = "recintos";
 
@@ -17,6 +16,11 @@ class Recintos extends Model
         'distritos_id',
         'name',
         'address',
+        'coordinadores_id',
+        'coordinadores_ejecutivos_id',
+        'coordinadores_electorales_id',
+        'coordinadores_seguridad_id',
+        'coordinadores_finanzas_id',
     ];
 
     protected $entity = 'recintos';
@@ -25,11 +29,6 @@ class Recintos extends Model
 
     protected $appends = [
         'number_colegios',
-        'coordinador',
-        'coordinador_ejecutivo',
-        'coordinador_electoral',
-        'coordinador_seguridad',
-        'coordinador_finanza',
     ];
 
     protected $foreignKey = 'recintos_id';
@@ -43,6 +42,32 @@ class Recintos extends Model
     {
         return $this->belongsTo('App\Distritos');
     }
+
+    public function coordinadores()
+    {
+        return $this->belongsTo('App\Votantes', 'coordinadores_id', 'id');
+    }
+
+    public function coordinadores_ejecutivos()
+    {
+        return $this->belongsTo('App\Votantes', 'coordinadores_ejecutivos_id', 'id');
+    }
+
+    public function coordinadores_electorales()
+    {
+        return $this->belongsTo('App\Votantes', 'coordinadores_electorales_id', 'id');
+    }
+
+    public function coordinadores_seguridad()
+    {
+        return $this->belongsTo('App\Votantes', 'coordinadores_seguridad_id', 'id');
+    }
+
+    public function coordinadores_finanzas()
+    {
+        return $this->belongsTo('App\Votantes', 'coordinadores_finanzas_id', 'id');
+    }
+
 
     /**
      * municipios function
@@ -62,61 +87,5 @@ class Recintos extends Model
     public function getNumberColegiosAttribute()
     {
         return $this->colegios_electorales->count();
-    }
-
-    public function getCoordinadorEjecutivoAttribute()
-    {
-        $coordiandor = \App\Votantes::join('users', 'users.votantes_id', '=', 'votantes.id')
-            ->join('roles_users', 'roles_users.users_id', '=', 'users.id')
-            ->join('roles', 'roles.id', '=', 'roles_users.roles_id')
-            ->where('roles_users.entity', $this->entity)
-            ->where('roles_users.entity_id', $this->id)
-            ->where('roles.name', 'Ejecutivo')
-            ->select('votantes.*')
-            ->first();
-
-        return $coordiandor ? $coordiandor->fist_name . ' ' . $coordiandor->last_name : ' ';
-    }
-
-    public function getCoordinadorElectoralAttribute()
-    {
-        $coordiandor = \App\Votantes::join('users', 'users.votantes_id', '=', 'votantes.id')
-            ->join('roles_users', 'roles_users.users_id', '=', 'users.id')
-            ->join('roles', 'roles.id', '=', 'roles_users.roles_id')
-            ->where('roles_users.entity', $this->entity)
-            ->where('roles_users.entity_id', $this->id)
-            ->where('roles.name', 'Electoral')
-            ->select('votantes.*')
-            ->first();
-
-        return $coordiandor ? $coordiandor->fist_name . ' ' . $coordiandor->last_name : ' ';
-    }
-
-    public function getCoordinadorFinanzaAttribute()
-    {
-        $coordiandor = \App\Votantes::join('users', 'users.votantes_id', '=', 'votantes.id')
-            ->join('roles_users', 'roles_users.users_id', '=', 'users.id')
-            ->join('roles', 'roles.id', '=', 'roles_users.roles_id')
-            ->where('roles_users.entity', $this->entity)
-            ->where('roles_users.entity_id', $this->id)
-            ->where('roles.name', 'Finanza')
-            ->select('votantes.*')
-            ->first();
-
-        return $coordiandor ? $coordiandor->fist_name . ' ' . $coordiandor->last_name : ' ';
-    }
-
-    public function getCoordinadorSeguridadAttribute()
-    {
-        $coordiandor = \App\Votantes::join('users', 'users.votantes_id', '=', 'votantes.id')
-            ->join('roles_users', 'roles_users.users_id', '=', 'users.id')
-            ->join('roles', 'roles.id', '=', 'roles_users.roles_id')
-            ->where('roles_users.entity', $this->entity)
-            ->where('roles_users.entity_id', $this->id)
-            ->where('roles.name', 'Seguridad')
-            ->select('votantes.*')
-            ->first();
-
-        return $coordiandor ? $coordiandor->fist_name . ' ' . $coordiandor->last_name : ' ';
     }
 }

@@ -23,17 +23,18 @@
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
                   <option value="name">Municipio</option>
+                  <option value="provincias">Provincia</option>
                 </select>
                 <input
                   type="text"
                   v-model="buscar"
-                  @keyup.enter="listarData()"
+                  @keyup.enter="buscarAction()"
                   class="form-control"
                   placeholder="Texto a buscar"
                 />
                 <button
                   type="submit"
-                  @click="listarData()"
+                  @click="buscarAction()"
                   class="btn btn-primary"
                 >
                   <i class="fa fa-search"></i> Buscar
@@ -290,8 +291,7 @@ export default {
       municipio: "",
       cantidadMunicipio: 0,
       data: [],
-      // distrito_municipal: '',
-      // circuscripcion: '',
+      url:'/api/municipios',
       circunscripciones: [],
       provincias: [],
       arrayMunicipios: [],
@@ -299,6 +299,7 @@ export default {
       tituloModal: "",
       tipoAccion: 0,
       errorMunicipio: 0,
+      conditions: [],
       errorMostrarMsjMunicipio: [],
       pagination: {
         total: 0,
@@ -365,22 +366,32 @@ export default {
     }
   },
   methods: {
+    buscarAction(){
+      switch(this.criterio){
+        case 'name':
+          this.conditions.push({
+            condition: "where",
+            field: this.criterio,
+            operator: "like",
+            value: `%${this.buscar}%`,
+          })
+          this.url = '/api/municipios'
+          break
+
+        case 'provincias':
+          this.url = `/api/advanced/municipios/${this.buscar}`
+          this.conditions = []
+      }
+      this.listarData();
+    },
     listarData(page = 1) {
       let me = this;
-      let conditions = [];
-      if (this.buscar.length > 0 && this.criterio.length > 0) {
-        conditions.push({
-          condition: "where",
-          field: this.criterio,
-          operator: "like",
-          value: `%${this.buscar}%`,
-        });
-      }
       axios
-        .get("/api/municipios/?page=" + page, {
+        .get(this.url, {
           params: {
+            page: page,
             eager: ["provincias", "circunscripciones"],
-            q: conditions
+            q: this.conditions
           }
         })
         .then(response => {

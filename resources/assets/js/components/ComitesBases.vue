@@ -51,7 +51,6 @@
                 <th>Nombre del Coordinador</th>
                 <th>Apellido del Coordinador</th>
                 <th>Cedula del Coordinador</th>
-                <th>Direccion</th>
                 <th>Numeros de Miembros</th>
               </tr>
             </thead>
@@ -60,7 +59,7 @@
                 <td>
                   <button
                     type="button"
-                    @click="abrirModal('Distritos', 'actualizar', model)"
+                    @click="abrirModal('Comite de Base', 'actualizar', model)"
                     class="btn btn-warning btn-sm"
                   >
                     <i class="icon-pencil"></i>
@@ -70,11 +69,10 @@
                     <i class="icon-trash"></i>
                   </button>
                 </td>
-                <td>{{ pad(model.id,3) }}</td>
+                <td>{{ pad(model.id, 3) }}</td>
                 <td v-text="model.first_name"></td>
                 <td v-text="model.last_name"></td>
                 <td v-text="model.card_id"></td>
-                <td v-text="model.address"></td>
                 <td v-text="model.members_count"></td>
               </tr>
             </tbody>
@@ -160,7 +158,7 @@
                     @search="onSearchVotantes"
                     :options="votantes"
                     :filterable="false"
-                    :reduce="votante => votante.id"
+                    :reduce="(votante) => votante.id"
                     @input="setVotantes"
                   ></v-select>
                 </div>
@@ -189,34 +187,6 @@
                     class="form-control"
                     placeholder="Apellido"
                   />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Cedula del Coordinador</label
-                >
-                <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="entity.card_id"
-                    class="form-control"
-                    placeholder="Cedula"
-                  />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for=""
-                  >Direccion del Coordinador</label
-                >
-                <div class="col-md-9">
-                  <textarea
-                    v-model="entity.address"
-                    name=""
-                    class="form-control"
-                    id=""
-                    cols="10"
-                    rows="5"
-                  ></textarea>
                 </div>
               </div>
               <div v-show="errorDistrito" class="form-group row div-error">
@@ -311,8 +281,8 @@ export default {
   props: {
     permisionCondition: {
       default: null,
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
@@ -335,20 +305,19 @@ export default {
         per_page: 0,
         last_page: 0,
         from: 0,
-        to: 0
+        to: 0,
       },
       entity: {
         votantes_id: 0,
         first_name: "",
         last_name: "",
         card_id: "",
-        address: "",
-        id: 0
+        id: 0,
       },
 
       offset: 3,
       criterio: "",
-      buscar: ""
+      buscar: "",
     };
   },
   computed: {
@@ -384,10 +353,10 @@ export default {
             condition: "whereIn",
             operator: "=",
             field: "municipios_id",
-            value: this.permisionCondition
+            value: this.permisionCondition,
           }
         : null;
-    }
+    },
   },
   methods: {
     listarData(page = 1) {
@@ -401,10 +370,10 @@ export default {
           params: {
             eager: ["votantes"],
             page: page,
-            q: conditions
-          }
+            q: conditions,
+          },
         })
-        .then(response => {
+        .then((response) => {
           var respuesta = response.data;
           me.data = respuesta.data;
           me.pagination.total = respuesta.total;
@@ -418,8 +387,8 @@ export default {
     setVotantes(id) {
       axios({
         method: "GET",
-        url: `/api/votantes/${id}`
-      }).then(res => {
+        url: `/api/votantes/${id}`,
+      }).then((res) => {
         this.entity.first_name = res.data.first_name;
         this.entity.last_name = res.data.last_name;
         this.entity.card_id = res.data.card_id;
@@ -440,20 +409,21 @@ export default {
       axios({
         url: url,
         method: method,
-        data: this.entity
+        data: this.entity,
       })
-        .then(e => {
+        .then((e) => {
           this.actualizarVotante(e.data.votantes_id, e.data.id);
           this.entity = {
-            circunscripciones_id: 0,
-            municipios_id: 0,
-            name: "",
-            id: 0
+            votantes_id: 0,
+            first_name: "",
+            last_name: "",
+            card_id: "",
+            id: 0,
           };
           this.listarData(1);
           this.cerrarModal();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -477,14 +447,14 @@ export default {
       this.tituloModal = "";
       this.provincia = "";
     },
-    actualizarVotante(votantes_id, id){
+    actualizarVotante(votantes_id, id) {
       axios({
-        method:'PUT',
-        url:`/api/votantes/${votantes_id}`,
-        data:{
-          comites_bases_id:id
-        }
-      })
+        method: "PUT",
+        url: `/api/votantes/${votantes_id}`,
+        data: {
+          comites_bases_id: id,
+        },
+      });
     },
     abrirModal(modelo, accion, data = []) {
       switch (accion) {
@@ -496,21 +466,20 @@ export default {
           break;
         }
         case "actualizar": {
-          //console.log(data);
+          console.log(data);
           this.modal = 1;
           this.tituloModal = `Actualizar ${modelo}`;
           this.tipoAccion = 2;
           this.entity.id = data.id;
-          this.entity.first_name = data.name;
-          this.entity.last_name = data.municipios_id;
+          this.entity.first_name = data.first_name;
+          this.entity.last_name = data.last_name;
           this.entity.card_id = data.card_id;
           this.entity.votantes_id = data.votantes_id;
-          this.entity.address = data.address;
           this.votantes = [
             {
               id: data.votantes.id,
-              label: data.votantes.card_id
-            }
+              label: data.votantes.card_id,
+            },
           ];
           break;
         }
@@ -540,11 +509,11 @@ export default {
               condition: "where",
               field: field,
               operator: "like",
-              value: `%${search}%`
-            })
-          ]
-        }
-      }).then(r => {
+              value: `%${search}%`,
+            }),
+          ],
+        },
+      }).then((r) => {
         if (search.length > 0) {
           vm[option] = r.data.data.map(function(model) {
             return { label: model.name, id: model.id };
@@ -552,11 +521,11 @@ export default {
         }
         loading(false);
       });
-    }, 350)
+    }, 350),
   },
   mounted() {
     this.listarData(1);
-  }
+  },
 };
 </script>
 <style>

@@ -63,6 +63,19 @@ class User extends Authenticatable
         return false;
     }
 
+    public function hasRol($name): bool
+    {
+        $roles = $this->roles ? $this->roles->toArray() : [];
+
+        $roles = array_map(function ($rol) {
+            return $rol['name'];
+        }, $roles);
+
+        if (in_array($name, $roles)) {
+            return true;
+        }
+        return false;
+    }
     public function getEntitiesId(string $name): array
     {
         $entitiesId = self::join('roles_users', 'roles_users.users_id', '=', 'users.id')

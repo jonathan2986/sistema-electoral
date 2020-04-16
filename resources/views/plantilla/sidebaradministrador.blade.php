@@ -23,10 +23,10 @@
                                 <a class="nav-link" href="#"><i class="fa fa-map"></i> Distritos</a>
                             </li @endif>
                             <li @click="menu='recintos-municipios'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio'))>
-                                <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos por M</a>
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
                             </li @endif>
-                            <li @click="menu='recintos-distritos'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Distrito'))>
-                                <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos por D</a>
+                            <li @click="menu='recintos-distritos'" class="nav-item"  @if(auth()->user()->hasRol('Coordinador de Distrito'))>
+                                <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
                             </li @endif>
                             <li @click="menu='colegios-electorales'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Recinto'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Colegios Electorales</a>

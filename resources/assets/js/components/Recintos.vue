@@ -79,47 +79,57 @@
                 <td v-text="model.address"></td>
                 <td v-text="model.municipios.name"></td>
                 <td v-text="model.distritos ? model.distritos.name : ''"></td>
-                <td v-text="model.coordinador"></td>
-                <td v-text="model.coordinador_ejecutivo"></td>
-                <td v-text="model.coordinador_electoral"></td>
-                <td v-text="model.coordinador_seguridad"></td>
-                <td v-text="model.coordinador_finanza"></td>
-              </tr>
+                
+                <td v-if="model.coordinadores">{{`${model.coordinadores.first_name} ${model.coordinadores.last_name}`}}</td>
+                <td v-else></td>
+                
+                <td v-if="model.coordinadores_ejecutivos">{{`${model.coordinadores_ejecutivos.first_name} ${model.coordinadores_ejecutivos.last_name}`}}</td>
+                <td v-else></td>
+
+                <td v-if="model.coordinadores_electorales">{{`${model.coordinadores_electorales.first_name} ${model.coordinadores_electorales.last_name}`}}</td>
+                <td v-else></td>
+
+                <td v-if="model.coordinadores_seguridad">{{`${model.coordinadores_seguridad.first_name} ${model.coordinadores_seguridad.last_name}`}}</td>
+                <td v-else></td>
+
+                <td v-if="model.coordinadores_finanzas">{{`${model.coordinadores_finanzas.first_name} ${model.coordinadores_finanzas.last_name}`}}</td>
+                <td v-else></td>  
+            </tr>
             </tbody>
           </table>
           <nav>
             <ul class="pagination">
               <li class="page-item" v-if="pagination.current_page > 1">
                 <a
-                        class="page-link"
-                        href="#"
-                        @click.prevent="cambiarPagina(pagination.current_page - 1)"
-                >Ant</a
+                  class="page-link"
+                  href="#"
+                  @click.prevent="cambiarPagina(pagination.current_page - 1)"
+                  >Ant</a
                 >
               </li>
               <li
-                      class="page-item"
-                      v-for="page in pagination.last_page"
-                      :key="page"
-                      :class="[page == isActived ? 'active' : '']"
-                      @click="listarData(page)"
+                class="page-item"
+                v-for="page in pagination.last_page"
+                :key="page"
+                :class="[page == isActived ? 'active' : '']"
+                @click="listarData(page)"
               >
                 <a
-                        class="page-link"
-                        href="#"
-                        @click.prevent="cambiarPagina(page)"
-                        v-text="page"
+                  class="page-link"
+                  href="#"
+                  @click.prevent="cambiarPagina(page)"
+                  v-text="page"
                 ></a>
               </li>
               <li
-                      class="page-item"
-                      v-if="pagination.current_page < pagination.last_page"
+                class="page-item"
+                v-if="pagination.current_page < pagination.last_page"
               >
                 <a
-                        class="page-link"
-                        href="#"
-                        @click.prevent="cambiarPagina(pagination.current_page + 1)"
-                >Sig</a
+                  class="page-link"
+                  href="#"
+                  @click.prevent="cambiarPagina(pagination.current_page + 1)"
+                  >Sig</a
                 >
               </li>
             </ul>
@@ -176,6 +186,76 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
+                  >Coordinador</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.coordinadores_id"
+                    @search="onSearchCoordinadores"
+                    :options="votantes"
+                    :filterable="false"
+                    :reduce="(coordinador) => coordinador.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Coordinador Ejecutivo</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.coordinadores_ejecutivos_id"
+                    @search="onSearchCoordinadoresEjecutivos"
+                    :options="coordinadores_ejecutivos"
+                    :filterable="false"
+                    :reduce="(coordinador) => coordinador.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Coordinador Electoral</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.coordinadores_electorales_id"
+                    @search="onSearchCoordinadoresElectorales"
+                    :options="coordinadores_electorales"
+                    :filterable="false"
+                    :reduce="(coordinador) => coordinador.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Coordinador de Seguridad</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.coordinadores_seguridad_id"
+                    @search="onSearchCoordinadoresSeguridad"
+                    :options="coordinadores_seguridad"
+                    :filterable="false"
+                    :reduce="(coordinador) => coordinador.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Coordinador de Finanzas</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.coordinadores_finanzas_id"
+                    @search="onSearchCoordinadoresFinanzas"
+                    :options="coordinadores_finanzas"
+                    :filterable="false"
+                    :reduce="(coordinador) => coordinador.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
                   >Municipios</label
                 >
                 <div class="col-md-9">
@@ -184,7 +264,7 @@
                     @search="onSearchMunicipios"
                     :options="municipios"
                     :filterable="false"
-                    :reduce="municipio => municipio.id"
+                    :reduce="(municipio) => municipio.id"
                   ></v-select>
                 </div>
               </div>
@@ -198,7 +278,7 @@
                     @search="onSearchDistritos"
                     :options="distritos"
                     :filterable="false"
-                    :reduce="distrito => distrito.id"
+                    :reduce="(distrito) => distrito.id"
                   ></v-select>
                 </div>
               </div>
@@ -217,13 +297,15 @@
                   ></textarea>
                 </div>
               </div>
-               <div v-show="errorRecinto" class="form-group row div-error">
-                                <div class="text-center text-error">
-                                    <div v-for="error in errorMostrarMsjRecinto" :key="error" v-text="error">
-
-                                    </div>
-                                </div>
-                            </div>
+              <div v-show="errorRecinto" class="form-group row div-error">
+                <div class="text-center text-error">
+                  <div
+                    v-for="error in errorMostrarMsjRecinto"
+                    :key="error"
+                    v-text="error"
+                  ></div>
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -304,15 +386,15 @@
 
 <script>
 export default {
-  props:{
+  props: {
     field: {
       type: String,
-       default: 'municipios_id'
+      default: "municipios_id",
     },
     permisionCondition: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
   data: () => {
     return {
@@ -324,6 +406,11 @@ export default {
       // circuscripcion: '',
       municipios: [],
       distritos: [],
+      votantes: [],
+      coordinadores_ejecutivos: [],
+      coordinadores_electorales: [],
+      coordinadores_seguridad: [],
+      coordinadores_finanzas: [],
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
@@ -335,19 +422,24 @@ export default {
         per_page: 0,
         last_page: 0,
         from: 0,
-        to: 0
+        to: 0,
       },
       entity: {
+        coordinadores_ejecutivos_id: '',
+        coordinadores_electorales_id: '',
+        coordinadores_seguridad_id: '',
+        coordinadores_finanzas_id: '',
+        coordinadores_id: 0,
         municipios_id: 0,
         distritos_id: 0,
         name: "",
         address: "",
-        id: 0
+        id: 0,
       },
 
       offset: 3,
       criterio: "recintos",
-      buscar: ""
+      buscar: "",
     };
   },
   computed: {
@@ -377,14 +469,14 @@ export default {
       }
       return pagesArray;
     },
-    conditions: function(){
+    conditions: function() {
       let conditions = [];
-      if(this.permisionCondition != null){
+      if (this.permisionCondition != null) {
         conditions.push({
           field: this.field,
           value: this.permisionCondition,
-          condition: 'whereIn',
-          operator: '='
+          condition: "whereIn",
+          operator: "=",
         });
       }
       if (this.buscar.length > 0 && this.criterio.length > 0) {
@@ -395,8 +487,8 @@ export default {
           value: `%${this.buscar}%`,
         });
       }
-      return conditions
-    }
+      return conditions;
+    },
   },
   methods: {
     listarData(page = 1) {
@@ -404,12 +496,19 @@ export default {
       axios
         .get("/api/recintos", {
           params: {
-            eager: ["municipios", "distritos"],
+            eager: ["municipios", 
+              "distritos", 
+              "coordinadores", 
+              'coordinadores_ejecutivos',
+              'coordinadores_electorales', 
+              'coordinadores_seguridad',
+              'coordinadores_finanzas'
+              ],
             page: page,
-            q: this.conditions
-          }
+            q: this.conditions,
+          },
         })
-        .then(response => {
+        .then((response) => {
           var respuesta = response.data;
           me.data = respuesta.data;
           me.pagination.total = respuesta.total;
@@ -436,20 +535,25 @@ export default {
       axios({
         url: url,
         method: method,
-        data: this.entity
+        data: this.entity,
       })
-        .then(e => {
+        .then((e) => {
           this.entity = {
-            distritos_id: 0,
+            coordinadores_ejecutivos_id: '',
+            coordinadores_electorales_id: '',
+            coordinadores_seguridad_id: '',
+            coordinadores_finanzas_id: '',
+            coordinadores_id: 0,
             municipios_id: 0,
-            address: "",
+            distritos_id: 0,
             name: "",
-            id: 0
+            address: "",
+            id: 0,
           };
           this.listarData(1);
           this.cerrarModal();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -485,7 +589,7 @@ export default {
           break;
         }
         case "actualizar": {
-          //console.log(data);
+          console.log(data);
           this.modal = 1;
           this.tituloModal = `Actualizar ${modelo}`;
           this.tipoAccion = 2;
@@ -494,11 +598,102 @@ export default {
           this.entity.municipios_id = data.municipios_id;
           this.entity.distritos_id = data.distritos_id;
           this.entity.address = data.address;
-          this.distritos = [{id: data.distritos.id, label:data.distritos.name}];
-          this.municipios = [{id: data.municipios.id, label:data.municipios.name}];
+          this.entity.coordinadores_id = data.coordinadores_id;
+          this.entity.coordinadores_ejecutivos_id = data.coordinadores_ejecutivos_id;
+          this.entity.coordinadores_electorales_id = data.coordinadores_electorales_id;
+          this.entity.coordinadores_seguridad_id = data.coordinadores_seguridad_id;
+          this.entity.coordinadores_finanzas_id = data.coordinadores_finanzas_id;
+          this.votantes = this.coordinadores
+            ? [{ id: data.coordinadores_id, label: data.coordinadores.name }]
+            : [];
+          this.distritos = data.distritos
+            ? [{ id: data.distritos.id, label: data.distritos.name }]
+            : [];
+          this.municipios = [
+            { id: data.municipios.id, label: data.municipios.name },
+          ];
+
+          this.coordinadores_ejecutivos = data.coordinadores_ejecutivos ? [{
+            id: data.coordinadores_ejecutivos.id, 
+            label: data.coordinadores_ejecutivos.name
+          }] : [];
+
+          this.coordinadores_electorales = data.coordinadores_electorales ? [{
+            id: data.coordinadores_electorales.id, 
+            label: data.coordinadores_electorales.name
+          }] : [];
+
+          this.coordinadores_seguridad = data.coordinadores_seguridad ? [{
+            id: data.coordinadores_seguridad.id, 
+            label: data.coordinadores_seguridad.name
+          }] : [];
+
+          this.coordinadores_finanzas = data.coordinadores_finanzas ? [{
+            id: data.coordinadores_finanzas.id, 
+            label: data.coordinadores_finanzas.name
+          }] : [];
           break;
         }
       }
+    },
+    onSearchCoordinadores(search, loading) {
+      loading(true);
+      this.search(loading, "votantes", search, this, 'card_id');
+    },
+    onSearchCoordinadoresEjecutivos(search, loading) {
+      loading(true);
+      this.search(
+        loading,
+        "coordinadores_ejecutivos",
+        search,
+        this,
+        "card_id",
+        "votantes"
+      );
+    },
+    onSearchCoordinadoresElectorales(search, loading) {
+      loading(true);
+      this.search(
+        loading,
+        "coordinadores_electorales",
+        search,
+        this,
+        "card_id",
+        "votantes"
+      );
+    },
+    onSearchCoordinadoresEjecutivos(search, loading) {
+      loading(true);
+      this.search(
+        loading,
+        "coordinadores_ejecutivos",
+        search,
+        this,
+        "card_id",
+        "votantes"
+      );
+    },
+    onSearchCoordinadoresSeguridad(search, loading) {
+      loading(true);
+      this.search(
+        loading,
+        "coordinadores_seguridad",
+        search,
+        this,
+        "card_id",
+        "votantes"
+      );
+    },
+    onSearchCoordinadoresFinanzas(search, loading) {
+      loading(true);
+      this.search(
+        loading,
+        "coordinadores_finanzas",
+        search,
+        this,
+        "card_id",
+        "votantes"
+      );
     },
     onSearchMunicipios(search, loading) {
       loading(true);
@@ -508,31 +703,35 @@ export default {
       loading(true);
       this.search(loading, "distritos", search, this);
     },
-    search: _.debounce((loading, option, search, vm, field = "name") => {
-      axios(`/api/${option}`, {
-        params: {
-          q: [
-            JSON.stringify({
-              condition: "where",
-              field: field,
-              operator: "like",
-              value: `%${search}%`
-            })
-          ]
-        }
-      }).then(r => {
-        if (search.length > 0) {
-          vm[option] = r.data.data.map(function(model) {
-            return { label: model.name, id: model.id };
-          });
-        }
-        loading(false);
-      });
-    }, 350)
+    search: _.debounce(
+      (loading, option, search, vm, field = "name", url = null) => {
+        url = !url ? option : url;
+        axios(`/api/${url}`, {
+          params: {
+            q: [
+              JSON.stringify({
+                condition: "where",
+                field: field,
+                operator: "like",
+                value: `%${search}%`,
+              }),
+            ],
+          },
+        }).then((r) => {
+          if (search.length > 0) {
+            vm[option] = r.data.data.map(function(model) {
+              return { label: model.name, id: model.id };
+            });
+          }
+          loading(false);
+        });
+      },
+      350
+    ),
   },
   mounted() {
     this.listarData(1);
-  }
+  },
 };
 </script>
 <style>
