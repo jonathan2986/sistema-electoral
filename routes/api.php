@@ -31,4 +31,5 @@ Route::group([], function () {
     Route::resource('/roles_users', 'RolesUsersController');
     Route::resource('/coordinadores_comites_bases', 'CoordinadnoresComitesBasesController');
     Route::resource('/miembros_comites_bases', 'MiembrosComitesBasesController');
+    Route::get('/colegios_electorales/searchByRecintos/{recintoName}', 'ColegiosElectoralesController@searchByRecintos');
 });

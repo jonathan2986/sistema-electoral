@@ -22,18 +22,18 @@
             <div class="col-md-6">
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
-                  <option value="municipio">Municipio</option>
+                  <option value="name">Municipio</option>
                 </select>
                 <input
                   type="text"
                   v-model="buscar"
-                  @keyup.enter="listarData(1, buscar, criterio)"
+                  @keyup.enter="listarData()"
                   class="form-control"
                   placeholder="Texto a buscar"
                 />
                 <button
                   type="submit"
-                  @click="listarData(1, buscar, criterio)"
+                  @click="listarData()"
                   class="btn btn-primary"
                 >
                   <i class="fa fa-search"></i> Buscar
@@ -51,6 +51,7 @@
                 <th>Provincia</th>
                 <th>Circunscripcion</th>
                 <th>Cantidad de Recintos</th>
+                <th>Cantidad de Distritos</th>
                 <th>Coordinador</th>
 
               </tr>
@@ -74,6 +75,7 @@
                 <td v-text="model.provincias.name"></td>
                 <td v-text="model.circunscripciones.name"></td>
                 <td v-text="model.recintos_number"></td>
+                <td v-text="model.distritos_number"></td>
                 <td v-text="model.coordinador"></td>
               </tr>
             </tbody>
@@ -365,14 +367,23 @@ export default {
   methods: {
     listarData(page = 1) {
       let me = this;
+      let conditions = [];
+      if (this.buscar.length > 0 && this.criterio.length > 0) {
+        conditions.push({
+          condition: "where",
+          field: this.criterio,
+          operator: "like",
+          value: `%${this.buscar}%`,
+        });
+      }
       axios
         .get("/api/municipios/?page=" + page, {
           params: {
-            eager: ["provincias", "circunscripciones"]
+            eager: ["provincias", "circunscripciones"],
+            q: conditions
           }
         })
         .then(response => {
-          console.log(response.data);
           var respuesta = response.data;
           me.data = respuesta.data;
           me.pagination.total = respuesta.total;

@@ -8,10 +8,10 @@
       <!-- Ejemplo de tabla Listado -->
       <div class="card">
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> Colegios Electorales
+          <i class="fa fa-align-justify"></i> Recintos
           <button
             type="button"
-            @click="abrirModal('Colegios Electorales', 'registrar')"
+            @click="abrirModal('Distritos', 'registrar')"
             class="btn btn-secondary"
           >
             <i class="icon-plus"></i>&nbsp;Nuevo
@@ -21,23 +21,19 @@
           <div class="form-group row">
             <div class="col-md-6">
               <div class="input-group">
-                <select
-                  @change="activatedAdvancedSearch"
-                  class="form-control col-md-3"
-                  v-model="criterio"
-                >
-                  <option value="name">Colegios Electorales</option>
+                <select class="form-control col-md-3" v-model="criterio">
+                  <option value="name">Recintos</option>
                 </select>
                 <input
                   type="text"
                   v-model="buscar"
-                  @keyup.enter="listarData(1, buscar, criterio)"
+                  @keyup.enter="listarData()"
                   class="form-control"
                   placeholder="Texto a buscar"
                 />
                 <button
                   type="submit"
-                  @click="listarData(1, buscar, criterio)"
+                  @click="listarData()"
                   class="btn btn-primary"
                 >
                   <i class="fa fa-search"></i> Buscar
@@ -51,10 +47,16 @@
             <thead>
               <tr>
                 <th>Opciones</th>
-                <th>Colegio</th>
                 <th>Recintos</th>
-                <th>Cantidad de Votantes</th>
+                <th>Cantidad de colegios</th>
+                <th>Direccion</th>
+                <th>Municipio</th>
+                <th>Distrito</th>
                 <th>Coordinador</th>
+                <th>Coordinador Ejecutivo</th>
+                <th>Coordinador Electoral</th>
+                <th>Coordinador Seguridad</th>
+                <th>Coordinador Finanza</th>
               </tr>
             </thead>
             <tbody>
@@ -62,9 +64,7 @@
                 <td>
                   <button
                     type="button"
-                    @click="
-                      abrirModal('Colegios Electorales', 'actualizar', model)
-                    "
+                    @click="abrirModal('Distritos', 'actualizar', model)"
                     class="btn btn-warning btn-sm"
                   >
                     <i class="icon-pencil"></i>
@@ -75,9 +75,15 @@
                   </button>
                 </td>
                 <td v-text="model.name"></td>
-                <td v-text="model.recintos.name"></td>
-                <td v-text="model.number_votantes"></td>
+                <td v-text="model.number_colegios"></td>
+                <td v-text="model.address"></td>
+                <td v-text="model.municipios.name"></td>
+                <td v-text="model.distritos ? model.distritos.name : ''"></td>
                 <td v-text="model.coordinador"></td>
+                <td v-text="model.coordinador_ejecutivo"></td>
+                <td v-text="model.coordinador_electoral"></td>
+                <td v-text="model.coordinador_seguridad"></td>
+                <td v-text="model.coordinador_finanza"></td>
               </tr>
             </tbody>
           </table>
@@ -85,35 +91,35 @@
             <ul class="pagination">
               <li class="page-item" v-if="pagination.current_page > 1">
                 <a
-                  class="page-link"
-                  href="#"
-                  @click.prevent="cambiarPagina(pagination.current_page - 1)"
-                  >Ant</a
+                        class="page-link"
+                        href="#"
+                        @click.prevent="cambiarPagina(pagination.current_page - 1)"
+                >Ant</a
                 >
               </li>
               <li
-                class="page-item"
-                v-for="page in pagination.last_page"
-                :key="page"
-                :class="[page == isActived ? 'active' : '']"
-                @click="listarData(page)"
+                      class="page-item"
+                      v-for="page in pagination.last_page"
+                      :key="page"
+                      :class="[page == isActived ? 'active' : '']"
+                      @click="listarData(page)"
               >
                 <a
-                  class="page-link"
-                  href="#"
-                  @click.prevent="cambiarPagina(page)"
-                  v-text="page"
+                        class="page-link"
+                        href="#"
+                        @click.prevent="cambiarPagina(page)"
+                        v-text="page"
                 ></a>
               </li>
               <li
-                class="page-item"
-                v-if="pagination.current_page < pagination.last_page"
+                      class="page-item"
+                      v-if="pagination.current_page < pagination.last_page"
               >
                 <a
-                  class="page-link"
-                  href="#"
-                  @click.prevent="cambiarPagina(pagination.current_page + 1)"
-                  >Sig</a
+                        class="page-link"
+                        href="#"
+                        @click.prevent="cambiarPagina(pagination.current_page + 1)"
+                >Sig</a
                 >
               </li>
             </ul>
@@ -154,43 +160,70 @@
             >
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Colegio Electoral</label
+                  >Recinto</label
                 >
                 <div class="col-md-9">
                   <input
                     type="text"
                     v-model="entity.name"
                     class="form-control"
-                    placeholder="Colegio Electoral"
+                    placeholder="Recinto"
                   />
                   <span class="help-block"
-                    >(*) Ingrese el nombre del Colegio</span
+                    >(*) Ingrese el nombre del Recinto</span
                   >
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Recintos</label
+                  >Municipios</label
                 >
                 <div class="col-md-9">
                   <v-select
-                    v-model="entity.recintos_id"
-                    @search="onSearchRecintos"
-                    :options="recintos"
+                    v-model="entity.municipios_id"
+                    @search="onSearchMunicipios"
+                    :options="municipios"
                     :filterable="false"
-                    :reduce="(recintos) => recintos.id"
+                    :reduce="municipio => municipio.id"
                   ></v-select>
                 </div>
               </div>
-              <div v-show="errorColegio" class="form-group row div-error">
-                <div class="text-center text-error">
-                  <div
-                    v-for="error in errorMostrarMsjColegio"
-                    :key="error"
-                    v-text="error"
-                  ></div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Distritos</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.distritos_id"
+                    @search="onSearchDistritos"
+                    :options="distritos"
+                    :filterable="false"
+                    :reduce="distrito => distrito.id"
+                  ></v-select>
                 </div>
               </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for=""
+                  >Direccion</label
+                >
+                <div class="col-md-9">
+                  <textarea
+                    v-model="entity.address"
+                    name=""
+                    class="form-control"
+                    id=""
+                    cols="10"
+                    rows="5"
+                  ></textarea>
+                </div>
+              </div>
+               <div v-show="errorRecinto" class="form-group row div-error">
+                                <div class="text-center text-error">
+                                    <div v-for="error in errorMostrarMsjRecinto" :key="error" v-text="error">
+
+                                    </div>
+                                </div>
+                            </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -271,44 +304,51 @@
 
 <script>
 export default {
-  data() {
+  props:{
+    field: {
+      type: String,
+       default: 'municipios_id'
+    },
+    permisionCondition: {
+      type: String,
+      default: null
+    }
+  },
+  data: () => {
     return {
       municipio_id: 0,
       municipio: "",
       cantidadMunicipio: 0,
       data: [],
-      advancedSearch: 0,
-      recintos: [],
+      // distrito_municipal: '',
+      // circuscripcion: '',
+      municipios: [],
       distritos: [],
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
-      errorColegio: 0,
-      errorMostrarMsjColegio: [],
+      errorRecinto: 0,
+      errorMostrarMsjRecinto: [],
       pagination: {
         total: 0,
         current_page: 1,
         per_page: 0,
         last_page: 0,
         from: 0,
-        to: 0,
+        to: 0
       },
       entity: {
-        recintos_id: 0,
+        municipios_id: 0,
+        distritos_id: 0,
         name: "",
-        id: 0,
+        address: "",
+        id: 0
       },
 
       offset: 3,
-      criterio: "colegios_electorales",
-      buscar: "",
+      criterio: "recintos",
+      buscar: ""
     };
-  },
-  props: {
-    permisionCondition: {
-      default: null,
-      type: String,
-    },
   },
   computed: {
     isActived: function() {
@@ -337,35 +377,40 @@ export default {
       }
       return pagesArray;
     },
-  },
-  methods: {
-    activatedAdvancedSearch() {
-      if (this.criterio != "name") {
-        this.advancedSearch = 1;
-      }else{
-        this.advancedSearch = 0;
-      }
-    },
-    listarData(page = 1) {
-      let me = this;
-      let condition = [];
-      if (this.permisionCondition) {
-        condition.push({
-          field: "recintos_id",
-          condition: "whereIn",
-          operator: "=",
+    conditions: function(){
+      let conditions = [];
+      if(this.permisionCondition != null){
+        conditions.push({
+          field: this.field,
           value: this.permisionCondition,
+          condition: 'whereIn',
+          operator: '='
         });
       }
+     if (this.buscar.length > 0 && this.criterio.length > 0) {
+        conditions.push({
+          condition: "where",
+          field: this.criterio,
+          operator: "like",
+          value: `%${this.buscar}%`,
+        });
+      }
+      return conditions
+    }
+  },
+  methods: {
+    listarData(page = 1) {
+      let me = this;
+
       axios
-        .get("/api/colegios_electorales", {
+        .get("/api/recintos", {
           params: {
-            eager: ["recintos"],
+            eager: ["municipios", "distritos"],
             page: page,
-            q: condition,
-          },
+            q: this.conditions
+          }
         })
-        .then((response) => {
+        .then(response => {
           var respuesta = response.data;
           me.data = respuesta.data;
           me.pagination.total = respuesta.total;
@@ -384,43 +429,47 @@ export default {
       me.listarData(page, buscar, criterio);
     },
     save(method) {
-      if (this.validarColegio()) {
+      if (this.validarRecinto()) {
         return;
       }
       let url =
-        method == "POST"
-          ? `/api/colegios_electorales`
-          : `/api/colegios_electorales/${this.entity.id}`;
+        method == "POST" ? `/api/recintos` : `/api/recintos/${this.entity.id}`;
       axios({
         url: url,
         method: method,
-        data: this.entity,
+        data: this.entity
       })
-        .then((e) => {
+        .then(e => {
           this.entity = {
-            recintos_id: 0,
+            distritos_id: 0,
+            municipios_id: 0,
+            address: "",
             name: "",
-            id: 0,
+            id: 0
           };
           this.listarData(1);
           this.cerrarModal();
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     },
-    validarColegio() {
-      this.errorColegio = 0;
-      this.errorMostrarMsjColegio = [];
+    validarRecinto() {
+      this.errorRecinto = 0;
+      this.errorMostrarMsjRecinto = [];
 
       if (!this.entity.name)
-        this.errorMostrarMsjColegio.push("El colegio no puede ir vacio.");
-      if (this.entity.recintos_id === 0)
-        this.errorMostrarMsjColegio.push("Seleccione un recinto.");
+        this.errorMostrarMsjRecinto.push("El distrito no puede ir vacio.");
+      if (!this.entity.address)
+        this.errorMostrarMsjRecinto.push("La direccion no puede ir vacia.");
+      if (this.entity.municipios_id === 0)
+        this.errorMostrarMsjRecinto.push("Seleccione un municipio.");
+      // if (this.entity.circunscripciones_id === 0)
+      //   this.errorMostrarMsjRecinto.push("Seleccione una circunscripcion.");
 
-      if (this.errorMostrarMsjColegio.length) this.errorColegio = 1;
+      if (this.errorMostrarMsjRecinto.length) this.errorRecinto = 1;
 
-      return this.errorColegio;
+      return this.errorRecinto;
     },
     cerrarModal() {
       this.modal = 0;
@@ -428,7 +477,6 @@ export default {
       this.provincia = "";
     },
     abrirModal(modelo, accion, data = []) {
-      console.log(data);
       switch (accion) {
         case "registrar": {
           this.modal = 1;
@@ -444,15 +492,22 @@ export default {
           this.tipoAccion = 2;
           this.entity.id = data.id;
           this.entity.name = data.name;
-          this.entity.recintos_id = data.recintos_id;
-          this.recintos = [{ id: data.recintos.id, label: data.recintos.name }];
+          this.entity.municipios_id = data.municipios_id;
+          this.entity.distritos_id = data.distritos_id;
+          this.entity.address = data.address;
+          this.distritos = [{id: data.distritos.id, label:data.distritos.name}];
+          this.municipios = [{id: data.municipios.id, label:data.municipios.name}];
           break;
         }
       }
     },
-    onSearchRecintos(search, loading) {
+    onSearchMunicipios(search, loading) {
       loading(true);
-      this.search(loading, "recintos", search, this);
+      this.search(loading, "municipios", search, this);
+    },
+    onSearchDistritos(search, loading) {
+      loading(true);
+      this.search(loading, "distritos", search, this);
     },
     search: _.debounce((loading, option, search, vm, field = "name") => {
       axios(`/api/${option}`, {
@@ -462,11 +517,11 @@ export default {
               condition: "where",
               field: field,
               operator: "like",
-              value: `%${search}%`,
-            }),
-          ],
-        },
-      }).then((r) => {
+              value: `%${search}%`
+            })
+          ]
+        }
+      }).then(r => {
         if (search.length > 0) {
           vm[option] = r.data.data.map(function(model) {
             return { label: model.name, id: model.id };
@@ -474,11 +529,11 @@ export default {
         }
         loading(false);
       });
-    }, 350),
+    }, 350)
   },
   mounted() {
     this.listarData(1);
-  },
+  }
 };
 </script>
 <style>

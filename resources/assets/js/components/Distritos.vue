@@ -22,7 +22,7 @@
             <div class="col-md-6">
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
-                  <option value="municipio">Distritos</option>
+                  <option value="name">Distritos</option>
                 </select>
                 <input
                   type="text"
@@ -364,6 +364,14 @@ export default {
       let conditions = [];
       if(this.defaultCondition != null){
         conditions.push(this.defaultCondition)
+      }
+      if (this.buscar.length > 0 && this.criterio.length > 0) {
+        conditions.push({
+          condition: "where",
+          field: this.criterio,
+          operator: "like",
+          value: `%${this.buscar}%`,
+        });
       }
       axios
         .get("/api/distritos", {

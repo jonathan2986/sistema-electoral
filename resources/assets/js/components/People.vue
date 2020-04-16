@@ -22,7 +22,7 @@
             <div class="col-md-6">
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
-                  <option value="municipio">Personas</option>
+                  <option value="first_name">Nombre</option>
                 </select>
                 <input
                   type="text"

@@ -19,7 +19,7 @@ import 'vue-select/dist/vue-select.css';
 
 Vue.component('colegios', require('./components/Colegios.vue'));
 Vue.component('recintos-municipios', require('./components/Recintos.vue'));
-Vue.component('recintos-distritos', require('./components/Recintos.vue'));
+Vue.component('recintos-distritos', require('./components/RecintosDistritales.vue'));
 Vue.component('usuarios', require('./components/Usuarios'));
 Vue.component('electores', require('./components/Electores'));
 Vue.component('partidos', require('./components/Partidos'));

@@ -26,7 +26,7 @@ class Municipios extends Model
         'name',
     ];
     
-    protected $appends = ['recintos_number', 'coordinador'];
+    protected $appends = ['recintos_number', 'coordinador', 'distritos_number'];
 
     protected $foreignKey = 'municipios_id';
 
@@ -54,9 +54,18 @@ class Municipios extends Model
         return $this->hasMany('App\Recintos');
     }
 
+    public function distritos()
+    {
+        return $this->hasMany('App\Distritos');
+    }
+
     public function getRecintosNumberAttribute()
     {
         return $this->recintos->count();
     }
 
+    public function getDistritosNumberAttribute()
+    {
+        return $this->distritos->count();
+    }
 }

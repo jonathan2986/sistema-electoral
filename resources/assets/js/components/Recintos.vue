@@ -11,7 +11,7 @@
           <i class="fa fa-align-justify"></i> Recintos
           <button
             type="button"
-            @click="abrirModal('Distritos', 'registrar')"
+            @click="abrirModal('Recintos', 'registrar')"
             class="btn btn-secondary"
           >
             <i class="icon-plus"></i>&nbsp;Nuevo
@@ -22,18 +22,18 @@
             <div class="col-md-6">
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
-                  <option value="municipio">Recintos</option>
+                  <option value="name">Recintos</option>
                 </select>
                 <input
                   type="text"
                   v-model="buscar"
-                  @keyup.enter="listarData(1, buscar, criterio)"
+                  @keyup.enter="listarData()"
                   class="form-control"
                   placeholder="Texto a buscar"
                 />
                 <button
                   type="submit"
-                  @click="listarData(1, buscar, criterio)"
+                  @click="listarData()"
                   class="btn btn-primary"
                 >
                   <i class="fa fa-search"></i> Buscar
@@ -387,13 +387,20 @@ export default {
           operator: '='
         });
       }
+      if (this.buscar.length > 0 && this.criterio.length > 0) {
+        conditions.push({
+          condition: "where",
+          field: this.criterio,
+          operator: "like",
+          value: `%${this.buscar}%`,
+        });
+      }
       return conditions
     }
   },
   methods: {
     listarData(page = 1) {
       let me = this;
-
       axios
         .get("/api/recintos", {
           params: {
