@@ -48,11 +48,11 @@
               <tr>
                 <th>Opciones</th>
                 <th>Codigo Comite de Base</th>
-                <th>Nombre del Coordinador</th>
-                <th>Apellido del Coordinador</th>
-                <th>Cedula del Coordinador</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Cedula</th>
                 <th>Direccion</th>
-                <th>Numeros de Miembros</th>
+                <th>Cantidad de Miembros</th>
               </tr>
             </thead>
             <tbody>
@@ -167,7 +167,7 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Nombre del Coordinador</label
+                  >Nombre</label
                 >
                 <div class="col-md-9">
                   <input
@@ -180,7 +180,7 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Apellido del Coordinador</label
+                  >Apellido</label
                 >
                 <div class="col-md-9">
                   <input
@@ -193,7 +193,7 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Cedula del Coordinador</label
+                  >Cedula</label
                 >
                 <div class="col-md-9">
                   <input
@@ -206,7 +206,7 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for=""
-                  >Direccion del Coordinador</label
+                  >Direccion</label
                 >
                 <div class="col-md-9">
                   <textarea
