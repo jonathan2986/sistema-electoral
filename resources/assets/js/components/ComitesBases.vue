@@ -48,18 +48,10 @@
               <tr>
                 <th>Opciones</th>
                 <th>Codigo Comite de Base</th>
-<<<<<<< HEAD
-                <th>Nombre del Coordinador</th>
-                <th>Apellido del Coordinador</th>
-                <th>Cedula del Coordinador</th>
-                <th>Numeros de Miembros</th>
-=======
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Cedula</th>
-                <th>Direccion</th>
-                <th>Cantidad de Miembros</th>
->>>>>>> 6dbcd6856858c60979e1a4deee43ec38adf791a9
+                <th>Numeros de Miembros</th>
               </tr>
             </thead>
             <tbody>
