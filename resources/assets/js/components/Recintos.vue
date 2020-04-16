@@ -603,7 +603,7 @@ export default {
           this.entity.coordinadores_electorales_id = data.coordinadores_electorales_id;
           this.entity.coordinadores_seguridad_id = data.coordinadores_seguridad_id;
           this.entity.coordinadores_finanzas_id = data.coordinadores_finanzas_id;
-          this.votantes = this.coordinadores
+          this.votantes = data.coordinadores
             ? [{ id: data.coordinadores_id, label: data.coordinadores.name }]
             : [];
           this.distritos = data.distritos
