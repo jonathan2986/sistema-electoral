@@ -35,7 +35,7 @@
                                 <a class="nav-link" href="#"><i class="fa fa-users"></i>Personas</a>
                             </li>
                             <li @click="menu='votantes'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Colegio'))>
-                                <a class="nav-link" href="#"><i class="fa fa-address-book"></i> Votantes</a>
+                                <a class="nav-link" href="#"><i class="fa fa-address-book"></i> Electores</a>
                             </li @endif>
                             <li @click="menu='users'" class="nav-item"  @if(auth()->user()->canAction('Admin'))>
                                 <a class="nav-link" href="#"><i class="icon-user"></i> Usuarios</a>

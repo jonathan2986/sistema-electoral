@@ -8,7 +8,7 @@
       <!-- Ejemplo de tabla Listado -->
       <div class="card">
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> Votantes
+          <i class="fa fa-align-justify"></i> Electores
           <button
             type="button"
             @click="abrirModal('votantes', 'registrar')"
@@ -560,7 +560,7 @@ export default {
           switch (accion) {
             case "registrar": {
               this.modal = 1;
-              this.tituloModal = "Registrar Votantes";
+              this.tituloModal = "Registrar Electores";
               this.provincia = "";
               this.tipoAccion = 1;
               break;
@@ -569,7 +569,7 @@ export default {
               //console.log(data);
               console.log(data);
               this.modal = 1;
-              this.tituloModal = "Actualizar Votantes";
+              this.tituloModal = "Actualizar Electores";
               this.tipoAccion = 2;
               this.entity.id = data.id;
               this.entity.first_name = data.first_name;
