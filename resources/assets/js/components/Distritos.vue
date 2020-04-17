@@ -73,7 +73,12 @@
                 <td v-text="model.municipios.name"></td>
                 <td v-text="model.circunscripciones.name"></td>
                 <td v-text="model.recintos_number"></td>
-                <td v-text="model.coordinador"></td>
+                <td v-if="model.coordinadores">
+                  {{
+                    `${model.coordinadores.first_name} ${model.coordinadores.last_name}`
+                  }}
+                </td>
+                <td v-else></td>
               </tr>
             </tbody>
           </table>
@@ -81,35 +86,35 @@
             <ul class="pagination">
               <li class="page-item" v-if="pagination.current_page > 1">
                 <a
-                        class="page-link"
-                        href="#"
-                        @click.prevent="cambiarPagina(pagination.current_page - 1)"
-                >Ant</a
+                  class="page-link"
+                  href="#"
+                  @click.prevent="cambiarPagina(pagination.current_page - 1)"
+                  >Ant</a
                 >
               </li>
               <li
-                      class="page-item"
-                      v-for="page in pagination.last_page"
-                      :key="page"
-                      :class="[page == isActived ? 'active' : '']"
-                      @click="listarData(page)"
+                class="page-item"
+                v-for="page in pagination.last_page"
+                :key="page"
+                :class="[page == isActived ? 'active' : '']"
+                @click="listarData(page)"
               >
                 <a
-                        class="page-link"
-                        href="#"
-                        @click.prevent="cambiarPagina(page)"
-                        v-text="page"
+                  class="page-link"
+                  href="#"
+                  @click.prevent="cambiarPagina(page)"
+                  v-text="page"
                 ></a>
               </li>
               <li
-                      class="page-item"
-                      v-if="pagination.current_page < pagination.last_page"
+                class="page-item"
+                v-if="pagination.current_page < pagination.last_page"
               >
                 <a
-                        class="page-link"
-                        href="#"
-                        @click.prevent="cambiarPagina(pagination.current_page + 1)"
-                >Sig</a
+                  class="page-link"
+                  href="#"
+                  @click.prevent="cambiarPagina(pagination.current_page + 1)"
+                  >Sig</a
                 >
               </li>
             </ul>
@@ -166,6 +171,20 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
+                  >Coordinador</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.coordinadores_id"
+                    @search="onSearchCoordinadores"
+                    :options="people"
+                    :filterable="false"
+                    :reduce="(coordinador) => coordinador.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
                   >Municipios</label
                 >
                 <div class="col-md-9">
@@ -192,13 +211,15 @@
                   ></v-select>
                 </div>
               </div>
-           <div v-show="errorDistrito" class="form-group row div-error">
-                                <div class="text-center text-error">
-                                    <div v-for="error in errorMostrarMsjDistrito" :key="error" v-text="error">
-
-                                    </div>
-                                </div>
-                            </div>
+              <div v-show="errorDistrito" class="form-group row div-error">
+                <div class="text-center text-error">
+                  <div
+                    v-for="error in errorMostrarMsjDistrito"
+                    :key="error"
+                    v-text="error"
+                  ></div>
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -291,6 +312,7 @@ export default {
       municipio: "",
       cantidadMunicipio: 0,
       data: [],
+      people: [],
       // distrito_municipal: '',
       // circuscripcion: '',
       circunscripciones: [],
@@ -310,6 +332,7 @@ export default {
       },
       entity: {
         circunscripciones_id: 0,
+        coordinadores_id: 0,
         municipios_id: 0,
         name: "",
         id: 0,
@@ -321,11 +344,11 @@ export default {
     };
   },
   computed: {
-    isActived: function () {
+    isActived: function() {
       return this.pagination.current_page;
     },
     //Calcula los elementos de la paginación
-    pagesNumber: function () {
+    pagesNumber: function() {
       if (!this.pagination.to) {
         return [];
       }
@@ -362,8 +385,8 @@ export default {
     listarData(page = 1) {
       let me = this;
       let conditions = [];
-      if(this.defaultCondition != null){
-        conditions.push(this.defaultCondition)
+      if (this.defaultCondition != null) {
+        conditions.push(this.defaultCondition);
       }
       if (this.buscar.length > 0 && this.criterio.length > 0) {
         conditions.push({
@@ -376,7 +399,7 @@ export default {
       axios
         .get("/api/distritos", {
           params: {
-            eager: ["municipios", "circunscripciones"],
+            eager: ["municipios", "circunscripciones", "coordinadores"],
             page: page,
             q: conditions,
           },
@@ -388,7 +411,7 @@ export default {
           me.pagination.last_page = respuesta.last_page;
           me.pagination.current_page = respuesta.current_page;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.log(error);
         });
     },
@@ -456,7 +479,7 @@ export default {
           break;
         }
         case "actualizar": {
-          //console.log(data);
+          console.log(data);
           this.modal = 1;
           this.tituloModal = `Actualizar ${modelo}`;
           this.tipoAccion = 2;
@@ -464,6 +487,15 @@ export default {
           this.entity.name = data.name;
           this.entity.municipios_id = data.municipios_id;
           this.entity.circunscripciones_id = data.circunscripciones_id;
+          this.entity.coordinadores_id = data.coordinadores_id;
+          this.people = data.coordinadores
+            ? [
+                {
+                  id: data.coordinadores_id,
+                  label: data.coordinadores.name,
+                },
+              ]
+            : [];
           this.circunscripciones = [
             {
               id: data.circunscripciones.id,
@@ -476,6 +508,10 @@ export default {
           break;
         }
       }
+    },
+    onSearchCoordinadores(search, loading) {
+      loading(true);
+      this.search(loading, "people", search, this, "card_id");
     },
     onSearchMunicipios(search, loading) {
       loading(true);
@@ -499,7 +535,7 @@ export default {
         },
       }).then((r) => {
         if (search.length > 0) {
-          vm[option] = r.data.data.map(function (model) {
+          vm[option] = r.data.data.map(function(model) {
             return { label: model.name, id: model.id };
           });
         }

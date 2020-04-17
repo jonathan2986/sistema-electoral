@@ -8,18 +8,17 @@ use App\Traits\CoordinadorTrait;
 class ColegiosElectorales extends Model
 {
     //
-    use CoordinadorTrait;
-
     protected $table = 'colegios_electorales';
 
     protected $fillable = [
         'recintos_id',
         'name',
+        'coordinadores_id'
     ];
 
     protected $foreignKey = 'colegios_electorales_id';
 
-    protected $appends = ['number_votantes', 'coordinador'];
+    protected $appends = ['number_votantes'];
 
     protected $entity = 'colegios_electorales';
 
@@ -35,6 +34,11 @@ class ColegiosElectorales extends Model
         return $this->belongsTo('App\Recintos');
     }
 
+    public function coordinadores()
+    {
+        return $this->belongsTo('App\People', 'coordinadores_id', 'id');
+    }
+    
     /**
      * people function
      *

@@ -638,7 +638,7 @@ export default {
     },
     onSearchCoordinadores(search, loading) {
       loading(true);
-      this.search(loading, "votantes", search, this, 'card_id');
+      this.search(loading, "people", search, this, 'card_id');
     },
     onSearchCoordinadoresEjecutivos(search, loading) {
       loading(true);

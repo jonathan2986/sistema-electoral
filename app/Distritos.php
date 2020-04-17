@@ -8,17 +8,16 @@ use App\Traits\CoordinadorTrait;
 class Distritos extends Model
 {
     //
-    use CoordinadorTrait;
-
     protected $table = 'distritos';
 
     protected $fillable = [
         'circunscripciones_id',
         'municipios_id',
         'name',
+        'coordinadores_id'
     ];
 
-    protected $appends = ['recintos_number','coordinador'];
+    protected $appends = ['recintos_number'];
 
     protected $foreignKey = "distritos_id";
 
@@ -36,6 +35,10 @@ class Distritos extends Model
         return $this->belongsTo('App\Circunscripciones');
     }
 
+    public function coordinadores()
+    {
+        return $this->belongsTo('App\People', 'coordinadores_id', 'id');
+    }
     /**
      * municipios function
      *

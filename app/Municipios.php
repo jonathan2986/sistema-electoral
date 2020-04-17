@@ -24,6 +24,7 @@ class Municipios extends Model
         'circunscripciones_id',
         'provincias_id',
         'name',
+        'coordinadores_id'
     ];
     
     protected $appends = ['recintos_number', 'coordinador', 'distritos_number'];
@@ -34,6 +35,12 @@ class Municipios extends Model
 
     protected $rolName = 'Coordinador de Municipio';
 
+
+    public function coordinadores()
+    {
+        return $this->belongsTo('App\People', 'coordinadores_id', 'id');
+    }
+    
     /**
      * provincias
      *

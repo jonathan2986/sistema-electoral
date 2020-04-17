@@ -54,7 +54,6 @@
                 <th>Cantidad de Recintos</th>
                 <th>Cantidad de Distritos</th>
                 <th>Coordinador</th>
-
               </tr>
             </thead>
             <tbody>
@@ -77,7 +76,12 @@
                 <td v-text="model.circunscripciones.name"></td>
                 <td v-text="model.recintos_number"></td>
                 <td v-text="model.distritos_number"></td>
-                <td v-text="model.coordinador"></td>
+                <td v-if="model.coordinadores">
+                  {{
+                    `${model.coordinadores.first_name} ${model.coordinadores.last_name}`
+                  }}
+                </td>
+                <td v-else></td>
               </tr>
             </tbody>
           </table>
@@ -85,35 +89,35 @@
             <ul class="pagination">
               <li class="page-item" v-if="pagination.current_page > 1">
                 <a
-                        class="page-link"
-                        href="#"
-                        @click.prevent="cambiarPagina(pagination.current_page - 1)"
-                >Ant</a
+                  class="page-link"
+                  href="#"
+                  @click.prevent="cambiarPagina(pagination.current_page - 1)"
+                  >Ant</a
                 >
               </li>
               <li
-                      class="page-item"
-                      v-for="page in pagination.last_page"
-                      :key="page"
-                      :class="[page == isActived ? 'active' : '']"
-                      @click="listarData(page)"
+                class="page-item"
+                v-for="page in pagination.last_page"
+                :key="page"
+                :class="[page == isActived ? 'active' : '']"
+                @click="listarData(page)"
               >
                 <a
-                        class="page-link"
-                        href="#"
-                        @click.prevent="cambiarPagina(page)"
-                        v-text="page"
+                  class="page-link"
+                  href="#"
+                  @click.prevent="cambiarPagina(page)"
+                  v-text="page"
                 ></a>
               </li>
               <li
-                      class="page-item"
-                      v-if="pagination.current_page < pagination.last_page"
+                class="page-item"
+                v-if="pagination.current_page < pagination.last_page"
               >
                 <a
-                        class="page-link"
-                        href="#"
-                        @click.prevent="cambiarPagina(pagination.current_page + 1)"
-                >Sig</a
+                  class="page-link"
+                  href="#"
+                  @click.prevent="cambiarPagina(pagination.current_page + 1)"
+                  >Sig</a
                 >
               </li>
             </ul>
@@ -170,6 +174,20 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
+                  >Coordinador</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.coordinadores_id"
+                    @search="onSearchCoordinadores"
+                    :options="people"
+                    :filterable="false"
+                    :reduce="(coordinador) => coordinador.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
                   >Provincia</label
                 >
                 <div class="col-md-9">
@@ -178,7 +196,7 @@
                     @search="onSearchProvincias"
                     :options="provincias"
                     :filterable="false"
-                    :reduce="provincias => provincias.id"
+                    :reduce="(provincias) => provincias.id"
                   ></v-select>
                 </div>
               </div>
@@ -192,7 +210,7 @@
                     @search="onSearchCircunscripciones"
                     :options="circunscripciones"
                     :filterable="false"
-                    :reduce="circuscripcion => circuscripcion.id"
+                    :reduce="(circuscripcion) => circuscripcion.id"
                   ></v-select>
                 </div>
               </div>
@@ -291,10 +309,11 @@ export default {
       municipio: "",
       cantidadMunicipio: 0,
       data: [],
-      url:'/api/municipios',
+      url: "/api/municipios",
       circunscripciones: [],
       provincias: [],
       arrayMunicipios: [],
+      people: [],
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
@@ -307,18 +326,19 @@ export default {
         per_page: 0,
         last_page: 0,
         from: 0,
-        to: 0
+        to: 0,
       },
       entity: {
         circunscripciones_id: 0,
+        coordinadores_id: 0,
         provincias_id: 0,
         name: "",
-        id: 0
+        id: 0,
       },
 
       offset: 3,
       criterio: "municipio",
-      buscar: ""
+      buscar: "",
     };
   },
   computed: {
@@ -363,24 +383,24 @@ export default {
         options.push({ id: circunscripcion.id, label: circunscripcion.name });
       });
       return options;
-    }
+    },
   },
   methods: {
-    buscarAction(){
-      switch(this.criterio){
-        case 'name':
+    buscarAction() {
+      switch (this.criterio) {
+        case "name":
           this.conditions.push({
             condition: "where",
             field: this.criterio,
             operator: "like",
             value: `%${this.buscar}%`,
-          })
-          this.url = '/api/municipios'
-          break
+          });
+          this.url = "/api/municipios";
+          break;
 
-        case 'provincias':
-          this.url = `/api/advanced/municipios/${this.buscar}`
-          this.conditions = []
+        case "provincias":
+          this.url = `/api/advanced/municipios/${this.buscar}`;
+          this.conditions = [];
       }
       this.listarData();
     },
@@ -390,11 +410,11 @@ export default {
         .get(this.url, {
           params: {
             page: page,
-            eager: ["provincias", "circunscripciones"],
-            q: this.conditions
-          }
+            eager: ["provincias", "circunscripciones", "coordinadores"],
+            q: this.conditions,
+          },
         })
-        .then(response => {
+        .then((response) => {
           var respuesta = response.data;
           me.data = respuesta.data;
           me.pagination.total = respuesta.total;
@@ -424,19 +444,19 @@ export default {
       axios({
         url: url,
         method: method,
-        data: this.entity
+        data: this.entity,
       })
-        .then(e => {
+        .then((e) => {
           this.entity = {
             circunscripciones_id: 0,
             provincias_id: 0,
             name: "",
-            id: 0
+            id: 0,
           };
           this.listarData(1);
           this.cerrarModal();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -479,13 +499,33 @@ export default {
               this.entity.name = data.name;
               this.entity.provincias_id = data.provincias_id;
               this.entity.circunscripciones_id = data.circunscripciones_id;
-              this.provincias = [{id:data.provincias.id, label:data.provincias.name}];
-              this.circunscripciones = [{id:data.circunscripciones.id, label:data.circunscripciones.name}];
+              this.entity.coordinadores_id = data.coordinadores_id;
+              this.provincias = [
+                { id: data.provincias.id, label: data.provincias.name },
+              ];
+              this.circunscripciones = [
+                {
+                  id: data.circunscripciones.id,
+                  label: data.circunscripciones.name,
+                },
+              ];
+              this.people = data.coordinadores
+                ? [
+                    {
+                      id: data.coordinadores_id,
+                      label: data.coordinadores.name,
+                    },
+                  ]
+                : [];
               break;
             }
           }
         }
       }
+    },
+    onSearchCoordinadores(search, loading) {
+      loading(true);
+      this.search(loading, "people", search, this, "card_id");
     },
     onSearchProvincias(search, loading) {
       loading(true);
@@ -503,11 +543,11 @@ export default {
               condition: "where",
               field: field,
               operator: "like",
-              value: `%${search}%`
-            })
-          ]
-        }
-      }).then(r => {
+              value: `%${search}%`,
+            }),
+          ],
+        },
+      }).then((r) => {
         if (search.length > 0) {
           vm[option] = r.data.data.map(function(model) {
             return { label: model.name, id: model.id };
@@ -515,11 +555,11 @@ export default {
         }
         loading(false);
       });
-    }, 350)
+    }, 350),
   },
   mounted() {
     this.listarData(1);
-  }
+  },
 };
 </script>
 <style>

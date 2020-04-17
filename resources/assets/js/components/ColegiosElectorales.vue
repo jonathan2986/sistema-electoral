@@ -77,7 +77,12 @@
                 <td v-text="model.name"></td>
                 <td v-text="model.recintos.name"></td>
                 <td v-text="model.number_votantes"></td>
-                <td v-text="model.coordinador"></td>
+                <td v-if="model.coordinadores">
+                  {{
+                    `${model.coordinadores.first_name} ${model.coordinadores.last_name}`
+                  }}
+                </td>
+                <td v-else></td>
               </tr>
             </tbody>
           </table>
@@ -166,6 +171,20 @@
                   <span class="help-block"
                     >(*) Ingrese el nombre del Colegio</span
                   >
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Coordinador</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.coordinadores_id"
+                    @search="onSearchCoordinadores"
+                    :options="people"
+                    :filterable="false"
+                    :reduce="(coordinador) => coordinador.id"
+                  ></v-select>
                 </div>
               </div>
               <div class="form-group row">
@@ -280,6 +299,7 @@ export default {
       advancedSearch: 0,
       recintos: [],
       distritos: [],
+      people: [],
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
@@ -295,6 +315,7 @@ export default {
       },
       entity: {
         recintos_id: 0,
+        coordinadores_id: 0,
         name: "",
         id: 0,
       },
@@ -342,7 +363,7 @@ export default {
     activatedAdvancedSearch() {
       if (this.criterio != "name") {
         this.advancedSearch = 1;
-      }else{
+      } else {
         this.advancedSearch = 0;
       }
     },
@@ -360,7 +381,7 @@ export default {
       axios
         .get("/api/colegios_electorales", {
           params: {
-            eager: ["recintos"],
+            eager: ["recintos", 'coordinadores'],
             page: page,
             q: condition,
           },
@@ -398,6 +419,7 @@ export default {
       })
         .then((e) => {
           this.entity = {
+            coordinadores_id:0,
             recintos_id: 0,
             name: "",
             id: 0,
@@ -445,10 +467,22 @@ export default {
           this.entity.id = data.id;
           this.entity.name = data.name;
           this.entity.recintos_id = data.recintos_id;
+          this.people = data.coordinadores
+            ? [
+                {
+                  id: data.coordinadores_id,
+                  label: data.coordinadores.name,
+                },
+              ]
+            : [];
           this.recintos = [{ id: data.recintos.id, label: data.recintos.name }];
           break;
         }
       }
+    },
+    onSearchCoordinadores(search, loading) {
+      loading(true);
+      this.search(loading, "people", search, this, "card_id");
     },
     onSearchRecintos(search, loading) {
       loading(true);
