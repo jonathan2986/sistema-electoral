@@ -23,6 +23,8 @@
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
                   <option value="name">Distritos</option>
+                  <option value="municipios">Municipios</option>
+                  <option value="circunscripciones">Circunscripciones</option>
                 </select>
                 <input
                   type="text"
@@ -322,6 +324,7 @@ export default {
       tipoAccion: 0,
       errorDistrito: 0,
       errorMostrarMsjDistrito: [],
+      url:'/api/distritos',
       pagination: {
         total: 0,
         current_page: 1,
@@ -370,6 +373,52 @@ export default {
       }
       return pagesArray;
     },
+    conditions(){
+      let condition = [];
+      if(this.permisionCondition != null){
+        condition.push({
+            condition: "whereIn",
+            operator: "=",
+            field: "municipios_id",
+            value: this.permisionCondition,
+          });
+      }
+
+      switch(this.criterio){
+        case 'name':
+          condition.push({
+            condition:'where',
+            operator: 'like',
+            value: `%${this.buscar}%`,
+            field: 'name'
+          });
+          this.url = '/api/distritos'
+          break;
+        case 'municipios':
+          this.url = `/api/advanced/distritos/${this.buscar}`
+          if(this.permisionCondition != null){
+            condition = [{
+              condition: "whereIn",
+              operator: "=",
+              field: "municipios_id",
+              value: this.permisionCondition,
+            }];
+          }
+          break;
+        case 'circunscripciones':
+          this.url = `/api/advanced/distritos/circunscripciones/${this.buscar}`
+          if(this.permisionCondition != null){
+            condition = [{
+              condition: "whereIn",
+              operator: "=",
+              field: "municipios_id",
+              value: this.permisionCondition,
+            }];
+          }
+          break;
+      }
+      return condition;
+    },
     defaultCondition() {
       return this.permisionCondition != null
         ? {
@@ -384,24 +433,12 @@ export default {
   methods: {
     listarData(page = 1) {
       let me = this;
-      let conditions = [];
-      if (this.defaultCondition != null) {
-        conditions.push(this.defaultCondition);
-      }
-      if (this.buscar.length > 0 && this.criterio.length > 0) {
-        conditions.push({
-          condition: "where",
-          field: this.criterio,
-          operator: "like",
-          value: `%${this.buscar}%`,
-        });
-      }
       axios
-        .get("/api/distritos", {
+        .get(this.url, {
           params: {
             eager: ["municipios", "circunscripciones", "coordinadores"],
             page: page,
-            q: conditions,
+            q: this.conditions,
           },
         })
         .then((response) => {

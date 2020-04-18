@@ -35,4 +35,6 @@ Route::group([], function () {
 
 Route::group(['prefix' => '/advanced'], function(){
     Route::get('/municipios/{name}', 'MunicipiosController@searchByProvincias');
+    Route::get('/distritos/{name}', 'DistritosController@getByMunicipios');
+    Route::get('/distritos/circunscripciones/{name}', 'DistritosController@getByCircunscripciones');
 });
