@@ -23,6 +23,8 @@
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
                   <option value="name">Recintos</option>
+                  <option value="distritos">Distritos</option>
+                  <option value="municipios">Municipios</option>
                 </select>
                 <input
                   type="text"
@@ -416,6 +418,7 @@ export default {
       tipoAccion: 0,
       errorRecinto: 0,
       errorMostrarMsjRecinto: [],
+      url: '/api/recintos',
       pagination: {
         total: 0,
         current_page: 1,
@@ -479,13 +482,22 @@ export default {
           operator: "=",
         });
       }
-      if (this.buscar.length > 0 && this.criterio.length > 0) {
-        conditions.push({
-          condition: "where",
-          field: this.criterio,
-          operator: "like",
-          value: `%${this.buscar}%`,
-        });
+      switch(this.criterio){
+         case 'name':
+          conditions.push({
+            condition: "where",
+            field: this.criterio,
+            operator: "like",
+            value: `%${this.buscar}%`,
+          });
+          this.url = '/api/recintos';
+          break;
+        case 'municipios':
+          this.url = `/api/advanced/recintos/municipios/${this.buscar}`
+          break;
+        case 'distritos':
+          this.url = `/api/advanced/recintos/distritos/${this.buscar}`
+          break;
       }
       return conditions;
     },
@@ -494,7 +506,7 @@ export default {
     listarData(page = 1) {
       let me = this;
       axios
-        .get("/api/recintos", {
+        .get(this.url, {
           params: {
             eager: ["municipios", 
               "distritos", 
