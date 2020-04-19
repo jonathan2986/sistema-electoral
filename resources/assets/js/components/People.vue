@@ -500,7 +500,7 @@ export default {
         .get("/api/people", {
           params: {
             page: page,
-            perPage: 100,
+            perPage: 20,
           },
         })
         .then((response) => {

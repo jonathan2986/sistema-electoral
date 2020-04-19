@@ -439,6 +439,8 @@ export default {
             eager: ["municipios", "circunscripciones", "coordinadores"],
             page: page,
             q: this.conditions,
+            perPage: 20,
+
           },
         })
         .then((response) => {

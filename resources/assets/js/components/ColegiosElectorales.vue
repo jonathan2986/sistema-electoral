@@ -300,6 +300,7 @@ export default {
       recintos: [],
       distritos: [],
       people: [],
+      url: '',
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
@@ -358,6 +359,37 @@ export default {
       }
       return pagesArray;
     },
+    conditions: function(){
+      let condition = [];
+      
+      if (this.permisionCondition) {
+        condition.push({
+          field: "recintos_id",
+          condition: "whereIn",
+          operator: "=",
+          value: this.permisionCondition,
+        });
+      }
+
+      switch(this.criterio){
+        case 'name':
+          this.url = '/api/colegios_electorales'
+          condition.push({
+            field: 'name',
+            condition: 'where',
+            operator: 'like',
+            value: `%${this.buscar}%`
+          });
+          break;
+        case 'recintos':
+          this.url = `/api/advanced/colegios_electorales/recintos/${this.buscar}`
+          break;
+        case 'coordinadores':
+          this.url = `/api/advanced/colegios_electorales/coordinadores/${this.buscar}`
+      }
+
+      return condition;
+    }
   },
   methods: {
     activatedAdvancedSearch() {
@@ -368,22 +400,12 @@ export default {
       }
     },
     listarData(page = 1) {
-      let me = this;
-      let condition = [];
-      if (this.permisionCondition) {
-        condition.push({
-          field: "recintos_id",
-          condition: "whereIn",
-          operator: "=",
-          value: this.permisionCondition,
-        });
-      }
       axios
-        .get("/api/colegios_electorales", {
+        .get(this.url, {
           params: {
             eager: ["recintos", 'coordinadores'],
             page: page,
-            q: condition,
+            q: this.conditions,
           },
         })
         .then((response) => {

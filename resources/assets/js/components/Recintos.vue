@@ -518,6 +518,7 @@ export default {
               ],
             page: page,
             q: this.conditions,
+            perPage: 20,
           },
         })
         .then((response) => {

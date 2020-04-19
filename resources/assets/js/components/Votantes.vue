@@ -463,6 +463,7 @@ export default {
         .get("/api/votantes/?page=" + page, {
           params: {
             q: condition,
+            perPage: 20,
             eager: [
               "municipios",
               "circunscripciones",

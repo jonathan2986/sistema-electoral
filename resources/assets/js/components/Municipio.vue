@@ -409,6 +409,7 @@ export default {
       axios
         .get(this.url, {
           params: {
+            perPage: 20,
             page: page,
             eager: ["provincias", "circunscripciones", "coordinadores"],
             q: this.conditions,

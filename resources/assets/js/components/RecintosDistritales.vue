@@ -517,6 +517,7 @@ export default {
               'coordinadores_finanzas'
               ],
             page: page,
+            perPage: 20,
             q: this.conditions,
           },
         })
