@@ -23,6 +23,10 @@
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
                   <option value="first_name">Nombre</option>
+                  <option value="card_id">Cedula</option>
+                  <option value="phone_number">Telefono</option>
+                  <option value="sexo">Sexo</option>
+                  <option value="profession">Profesion</option>
                 </select>
                 <input
                   type="text"
@@ -458,7 +462,7 @@ export default {
       },
 
       offset: 3,
-      criterio: "recintos",
+      criterio: "",
       buscar: "",
     };
   },
@@ -496,11 +500,24 @@ export default {
   methods: {
     listarData(page = 1) {
       let me = this;
+      let condition = [];
+      if(this.criterio.length > 0){
+       condition = [
+        {
+          field: this.criterio,
+          value: `%${this.buscar}%`,
+          operator: 'like',
+          condition: 'where'
+        }
+      ];
+      }
+
       axios
         .get("/api/people", {
           params: {
             page: page,
             perPage: 20,
+            q: condition
           },
         })
         .then((response) => {

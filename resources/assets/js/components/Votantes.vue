@@ -22,7 +22,14 @@
             <div class="col-md-6">
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
-                  <option value="municipio">Votantes</option>
+                  <option value="first_name">Nombre</option>
+                  <option value="card_id">Cedula</option>
+                  <option value="circunscripciones">Circunscripcion</option>
+                  <option value="municipios">Municipios</option>
+                  <option value="distritos">Distritos</option>
+                  <option value="recintos">Recintos</option>
+                  <option value="colegios_electorales">Colegios Electorales</option>
+                  <option value="comite_base">Comite de Base</option>
                 </select>
                 <input
                   type="text"
@@ -384,6 +391,7 @@ export default {
       tituloModal: "",
       tipoAccion: 0,
       errorMunicipio: 0,
+      url: '/api/votantes',
       errorMostrarMsjMunicipio: [],
       pagination: {
         total: 0,
@@ -409,7 +417,7 @@ export default {
       },
 
       offset: 3,
-      criterio: "votantes",
+      criterio: "",
       buscar: ""
     };
   },
@@ -445,11 +453,8 @@ export default {
         from++;
       }
       return pagesArray;
-    }
-  },
-  methods: {
-    listarData(page = 1) {
-      let me = this;
+    },
+    conditions: function(){
       let condition = [];
       if(this.permisionCondition){
         condition.push({
@@ -459,10 +464,56 @@ export default {
           value:this.permisionCondition
         });
       }
+
+      switch(this.criterio){
+        case "circunscripciones":
+          this.url = `/api/advanced/votantes/circunscripciones/${this.buscar}`
+          break;
+        case "municipios":
+          this.url = `/api/advanced/votantes/municipios/${this.buscar}`
+          break;
+        case "distritos":
+          this.url = `/api/advanced/votantes/distritos/${this.buscar}`
+          break;
+        case "recintos":
+          this.url = `/api/advanced/votantes/recintos/${this.buscar}`
+          break;
+        case "colegios_electorales":
+          this.url = `/api/advanced/votantes/colegios_electorales/${this.buscar}`
+          break;
+        case "comite_base":
+          this.url = "/api/votantes"
+          let valor = parseInt(this.buscar, 10);
+          condition.push({
+              field: 'comites_bases_id',
+              value: valor,
+              condition: 'where',
+              operator: '='
+          });
+          break;
+        default:
+          this.url="/api/votantes"
+          if(this.criterio.length > 0){
+            condition.push({
+              field: this.criterio,
+              value: `%${this.buscar}%`,
+              condition: 'where',
+              operator: 'like'
+            });
+          }
+      }
+      return condition;
+    }
+  },
+  methods: {
+    listarData(page = 1) {
+      let me = this;
+
       axios
-        .get("/api/votantes/?page=" + page, {
+        .get(this.url, {
           params: {
-            q: condition,
+            q: this.conditions,
+            page: page,
             perPage: 20,
             eager: [
               "municipios",
