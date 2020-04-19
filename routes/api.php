@@ -39,4 +39,6 @@ Route::group(['prefix' => '/advanced'], function(){
     Route::get('/distritos/circunscripciones/{name}', 'DistritosController@getByCircunscripciones');
     Route::get('/recintos/distritos/{name}', 'RecintosController@getByDistritos');
     Route::get('/recintos/municipios/{name}', 'RecintosController@getByMunicipios');
+    Route::get('/colegios_electorales/recintos/{name}', 'ColegiosElectoralesController@getByMunicipios');
+    Route::get('/colegios_electorales/coordinadores/{name}', 'ColegiosElectoralesController@getByCoordinadores');
 });

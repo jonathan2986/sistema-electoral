@@ -27,6 +27,8 @@
                   v-model="criterio"
                 >
                   <option value="name">Colegios Electorales</option>
+                  <option value="recintos">Recintos</option>
+                  <option value="coordinadores">Coordinadores</option>
                 </select>
                 <input
                   type="text"
@@ -300,7 +302,7 @@ export default {
       recintos: [],
       distritos: [],
       people: [],
-      url: '',
+      url: '/api/colegios_electorales',
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
@@ -410,10 +412,10 @@ export default {
         })
         .then((response) => {
           var respuesta = response.data;
-          me.data = respuesta.data;
-          me.pagination.total = respuesta.total;
-          me.pagination.last_page = respuesta.last_page;
-          me.pagination.current_page = respuesta.current_page;
+          this.data = respuesta.data;
+          this.pagination.total = respuesta.total;
+          this.pagination.last_page = respuesta.last_page;
+          this.pagination.current_page = respuesta.current_page;
         })
         .catch(function(error) {
           console.log(error);

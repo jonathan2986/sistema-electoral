@@ -45,8 +45,8 @@ class RecintosController extends Controller
         $municipios = Municipios::where('name', 'like', "%{$name}%")->select('id')->get();
         $municipios = $municipios->toArray();
         
-        $municipiosId = array_map(function($municipios){
-            return $municipios['id'];;
+        $municipiosId = array_map(function($municipio){
+            return $municipio['id'];;
         }, $municipios);
 
         $request = $request->toArray();
