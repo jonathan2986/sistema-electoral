@@ -19,22 +19,22 @@
                             <li @click="menu=3" class="nav-item" @if(auth()->user()->canAction('Admin'))>
                                 <a class="nav-link" href="#"><i class="fa fa-map"></i>Municipios</a>
                             </li @endif>
-                            <li @click="menu='distritos'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio'))>
+                            <li @click="menu='distritos'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio') || auth()->user()->canAction('Digitador'))>
                                 <a class="nav-link" href="#"><i class="fa fa-map"></i> Distritos</a>
                             </li @endif>
-                            <li @click="menu='recintos-municipios'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio'))>
+                            <li @click="menu='recintos-municipios'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio') || auth()->user()->canAction('Digitador'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
                             </li @endif>
                             <li @click="menu='recintos-distritos'" class="nav-item"  @if(auth()->user()->hasRol('Coordinador de Distrito'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
                             </li @endif>
-                            <li @click="menu='colegios-electorales'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Recinto'))>
+                            <li @click="menu='colegios-electorales'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Recinto' || auth()->user()->canAction('Digitador')))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Colegios Electorales</a>
                             </li @endif>
                             <li @click="menu='personas'" class="nav-item">
                                 <a class="nav-link" href="#"><i class="fa fa-users"></i>Personas</a>
                             </li>
-                            <li @click="menu='votantes'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Colegio'))>
+                            <li @click="menu='votantes'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Colegio') || auth()->user()->canAction('Digitador'))>
                                 <a class="nav-link" href="#"><i class="fa fa-address-book"></i> Electores</a>
                             </li @endif>
                             <li @click="menu='users'" class="nav-item"  @if(auth()->user()->canAction('Admin'))>

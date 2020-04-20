@@ -40,7 +40,6 @@
                     <recintos-distritos permision-condition="{{implode(',', auth()->user()->getEntitiesId('Coordinador de Municipio'))}}"></recintos-distritos>
                 @endif
             </template>
-
             <template v-if="menu=='colegios-electorales'">
                 @if(auth()->user()->canAction('Admin') || auth()->user()->canAction('Digitador'))
                     <colegios-electorales></colegios-electorales>

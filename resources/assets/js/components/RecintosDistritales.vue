@@ -102,7 +102,7 @@
           <nav>
             <sliding-pagination
               :page-count="pagination.last_page"
-              :click-handler="listarProvincias"
+              :click-handler="listarData"
               :prev-text="'Anterior'"
               :next-text="'Siguiente'"
               :containerClass="'pagination'"
