@@ -100,41 +100,14 @@
             </tbody>
           </table>
           <nav>
-            <ul class="pagination">
-              <li class="page-item" v-if="pagination.current_page > 1">
-                <a
-                  class="page-link"
-                  href="#"
-                  @click.prevent="cambiarPagina(pagination.current_page - 1)"
-                  >Ant</a
-                >
-              </li>
-              <li
-                class="page-item"
-                v-for="page in pagination.last_page"
-                :key="page"
-                :class="[page == isActived ? 'active' : '']"
-                @click="listarData(page)"
+            <sliding-pagination
+              :page-count="pagination.last_page"
+              :click-handler="listarProvincias"
+              :prev-text="'Anterior'"
+              :next-text="'Siguiente'"
+              :containerClass="'pagination'"
               >
-                <a
-                  class="page-link"
-                  href="#"
-                  @click.prevent="cambiarPagina(page)"
-                  v-text="page"
-                ></a>
-              </li>
-              <li
-                class="page-item"
-                v-if="pagination.current_page < pagination.last_page"
-              >
-                <a
-                  class="page-link"
-                  href="#"
-                  @click.prevent="cambiarPagina(pagination.current_page + 1)"
-                  >Sig</a
-                >
-              </li>
-            </ul>
+            ></sliding-pagination>
           </nav>
         </div>
       </div>
@@ -517,7 +490,7 @@ export default {
               'coordinadores_finanzas'
               ],
             page: page,
-            perPage: 20,
+            perPage: 10,
             q: this.conditions,
           },
         })

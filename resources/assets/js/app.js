@@ -10,6 +10,8 @@ require('./bootstrap');
 window.Vue = require('vue');
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
+import Paginate from 'vuejs-paginate'
+import "vue-sliding-pagination/dist/style/vue-sliding-pagination.css";
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -38,7 +40,7 @@ Vue.component('votantes', require('./components/Votantes'));
 Vue.component('roles-users', require('./components/RolesUsers'));
 Vue.component('comites-bases', require('./components/ComitesBases'));
 Vue.component('v-select', vSelect)
-
+Vue.component('sliding-pagination', Paginate)
 const app = new Vue({
     el: '#app',
     data: {
