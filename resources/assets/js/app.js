@@ -11,7 +11,6 @@ window.Vue = require('vue');
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 import Paginate from 'vuejs-paginate'
-import "vue-sliding-pagination/dist/style/vue-sliding-pagination.css";
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
