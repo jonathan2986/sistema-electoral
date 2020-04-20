@@ -28,7 +28,7 @@
                             <li @click="menu='recintos-distritos'" class="nav-item"  @if(auth()->user()->hasRol('Coordinador de Distrito'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
                             </li @endif>
-                            <li @click="menu='colegios-electorales'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Recinto' || auth()->user()->canAction('Digitador')))>
+                            <li @click="menu='colegios-electorales'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Recinto' )|| auth()->user()->canAction('Digitador'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Colegios Electorales</a>
                             </li @endif>
                             <li @click="menu='personas'" class="nav-item">

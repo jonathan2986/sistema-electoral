@@ -392,7 +392,9 @@ export default {
           this.pagination.current_page = respuesta.current_page;
         })
         .catch(function(error) {
-          console.log(error);
+              if (error.response.status === 404) {
+                alert('Error, esta intentando crear un colegio duplicado')
+              }
         });
     },
     cambiarPagina(page, buscar, criterio) {
