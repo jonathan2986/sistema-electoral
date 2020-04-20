@@ -59,6 +59,7 @@
                 <th>Coordinador Electoral</th>
                 <th>Coordinador Seguridad</th>
                 <th>Coordinador Finanza</th>
+                <th>Activistas</th>
               </tr>
             </thead>
             <tbody>
@@ -81,22 +82,48 @@
                 <td v-text="model.address"></td>
                 <td v-text="model.municipios.name"></td>
                 <td v-text="model.distritos ? model.distritos.name : ''"></td>
-                
-                <td v-if="model.coordinadores">{{`${model.coordinadores.first_name} ${model.coordinadores.last_name}`}}</td>
-                <td v-else></td>
-                
-                <td v-if="model.coordinadores_ejecutivos">{{`${model.coordinadores_ejecutivos.first_name} ${model.coordinadores_ejecutivos.last_name}`}}</td>
+
+                <td v-if="model.coordinadores">
+                  {{
+                    `${model.coordinadores.first_name} ${model.coordinadores.last_name}`
+                  }}
+                </td>
                 <td v-else></td>
 
-                <td v-if="model.coordinadores_electorales">{{`${model.coordinadores_electorales.first_name} ${model.coordinadores_electorales.last_name}`}}</td>
+                <td v-if="model.coordinadores_ejecutivos">
+                  {{
+                    `${model.coordinadores_ejecutivos.first_name} ${model.coordinadores_ejecutivos.last_name}`
+                  }}
+                </td>
                 <td v-else></td>
 
-                <td v-if="model.coordinadores_seguridad">{{`${model.coordinadores_seguridad.first_name} ${model.coordinadores_seguridad.last_name}`}}</td>
+                <td v-if="model.coordinadores_electorales">
+                  {{
+                    `${model.coordinadores_electorales.first_name} ${model.coordinadores_electorales.last_name}`
+                  }}
+                </td>
                 <td v-else></td>
 
-                <td v-if="model.coordinadores_finanzas">{{`${model.coordinadores_finanzas.first_name} ${model.coordinadores_finanzas.last_name}`}}</td>
-                <td v-else></td>  
-            </tr>
+                <td v-if="model.coordinadores_seguridad">
+                  {{
+                    `${model.coordinadores_seguridad.first_name} ${model.coordinadores_seguridad.last_name}`
+                  }}
+                </td>
+                <td v-else></td>
+
+                <td v-if="model.coordinadores_finanzas">
+                  {{
+                    `${model.coordinadores_finanzas.first_name} ${model.coordinadores_finanzas.last_name}`
+                  }}
+                </td>
+                <td v-else></td>
+                <td v-if="model.activistas">
+                  {{
+                    `${model.activistas.first_name} ${model.activistas.last_name}`
+                  }}
+                </td>
+                <td v-else></td>
+              </tr>
             </tbody>
           </table>
           <nav>
@@ -258,6 +285,20 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
+                  >Activistas</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.activistas_id"
+                    @search="onSearchActivistas"
+                    :options="activistas"
+                    :filterable="false"
+                    :reduce="(activista) => activista.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
                   >Municipios</label
                 >
                 <div class="col-md-9">
@@ -413,12 +454,13 @@ export default {
       coordinadores_electorales: [],
       coordinadores_seguridad: [],
       coordinadores_finanzas: [],
+      activistas: [],
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
       errorRecinto: 0,
       errorMostrarMsjRecinto: [],
-      url: '/api/recintos',
+      url: "/api/recintos",
       pagination: {
         total: 0,
         current_page: 1,
@@ -428,15 +470,16 @@ export default {
         to: 0,
       },
       entity: {
-        coordinadores_ejecutivos_id: '',
-        coordinadores_electorales_id: '',
-        coordinadores_seguridad_id: '',
-        coordinadores_finanzas_id: '',
+        coordinadores_ejecutivos_id: "",
+        coordinadores_electorales_id: "",
+        coordinadores_seguridad_id: "",
+        coordinadores_finanzas_id: "",
         coordinadores_id: 0,
         municipios_id: 0,
         distritos_id: 0,
         name: "",
         address: "",
+        activistas_id: 0,
         id: 0,
       },
 
@@ -482,21 +525,21 @@ export default {
           operator: "=",
         });
       }
-      switch(this.criterio){
-         case 'name':
+      switch (this.criterio) {
+        case "name":
           conditions.push({
             condition: "where",
             field: this.criterio,
             operator: "like",
             value: `%${this.buscar}%`,
           });
-          this.url = '/api/recintos';
+          this.url = "/api/recintos";
           break;
-        case 'municipios':
-          this.url = `/api/advanced/recintos/municipios/${this.buscar}`
+        case "municipios":
+          this.url = `/api/advanced/recintos/municipios/${this.buscar}`;
           break;
-        case 'distritos':
-          this.url = `/api/advanced/recintos/distritos/${this.buscar}`
+        case "distritos":
+          this.url = `/api/advanced/recintos/distritos/${this.buscar}`;
           break;
       }
       return conditions;
@@ -508,14 +551,16 @@ export default {
       axios
         .get(this.url, {
           params: {
-            eager: ["municipios", 
-              "distritos", 
-              "coordinadores", 
-              'coordinadores_ejecutivos',
-              'coordinadores_electorales', 
-              'coordinadores_seguridad',
-              'coordinadores_finanzas'
-              ],
+            eager: [
+              "municipios",
+              "distritos",
+              "activistas",
+              "coordinadores",
+              "coordinadores_ejecutivos",
+              "coordinadores_electorales",
+              "coordinadores_seguridad",
+              "coordinadores_finanzas",
+            ],
             page: page,
             q: this.conditions,
             perPage: 20,
@@ -552,14 +597,15 @@ export default {
       })
         .then((e) => {
           this.entity = {
-            coordinadores_ejecutivos_id: '',
-            coordinadores_electorales_id: '',
-            coordinadores_seguridad_id: '',
-            coordinadores_finanzas_id: '',
+            coordinadores_ejecutivos_id: "",
+            coordinadores_electorales_id: "",
+            coordinadores_seguridad_id: "",
+            coordinadores_finanzas_id: "",
             coordinadores_id: 0,
             municipios_id: 0,
             distritos_id: 0,
             name: "",
+            activistas_id: 0,
             address: "",
             id: 0,
           };
@@ -612,10 +658,15 @@ export default {
           this.entity.distritos_id = data.distritos_id;
           this.entity.address = data.address;
           this.entity.coordinadores_id = data.coordinadores_id;
-          this.entity.coordinadores_ejecutivos_id = data.coordinadores_ejecutivos_id;
-          this.entity.coordinadores_electorales_id = data.coordinadores_electorales_id;
-          this.entity.coordinadores_seguridad_id = data.coordinadores_seguridad_id;
-          this.entity.coordinadores_finanzas_id = data.coordinadores_finanzas_id;
+          this.entity.activistas_id = data.activistas_id;
+          this.entity.coordinadores_ejecutivos_id =
+            data.coordinadores_ejecutivos_id;
+          this.entity.coordinadores_electorales_id =
+            data.coordinadores_electorales_id;
+          this.entity.coordinadores_seguridad_id =
+            data.coordinadores_seguridad_id;
+          this.entity.coordinadores_finanzas_id =
+            data.coordinadores_finanzas_id;
           this.people = data.coordinadores
             ? [{ id: data.coordinadores_id, label: data.coordinadores.name }]
             : [];
@@ -626,32 +677,57 @@ export default {
             { id: data.municipios.id, label: data.municipios.name },
           ];
 
-          this.coordinadores_ejecutivos = data.coordinadores_ejecutivos ? [{
-            id: data.coordinadores_ejecutivos.id, 
-            label: data.coordinadores_ejecutivos.name
-          }] : [];
+          this.coordinadores_ejecutivos = data.coordinadores_ejecutivos
+            ? [
+                {
+                  id: data.coordinadores_ejecutivos.id,
+                  label: data.coordinadores_ejecutivos.name,
+                },
+              ]
+            : [];
 
-          this.coordinadores_electorales = data.coordinadores_electorales ? [{
-            id: data.coordinadores_electorales.id, 
-            label: data.coordinadores_electorales.name
-          }] : [];
+          this.coordinadores_electorales = data.coordinadores_electorales
+            ? [
+                {
+                  id: data.coordinadores_electorales.id,
+                  label: data.coordinadores_electorales.name,
+                },
+              ]
+            : [];
 
-          this.coordinadores_seguridad = data.coordinadores_seguridad ? [{
-            id: data.coordinadores_seguridad.id, 
-            label: data.coordinadores_seguridad.name
-          }] : [];
+          this.coordinadores_seguridad = data.coordinadores_seguridad
+            ? [
+                {
+                  id: data.coordinadores_seguridad.id,
+                  label: data.coordinadores_seguridad.name,
+                },
+              ]
+            : [];
 
-          this.coordinadores_finanzas = data.coordinadores_finanzas ? [{
-            id: data.coordinadores_finanzas.id, 
-            label: data.coordinadores_finanzas.name
-          }] : [];
+          this.coordinadores_finanzas = data.coordinadores_finanzas
+            ? [
+                {
+                  id: data.coordinadores_finanzas.id,
+                  label: data.coordinadores_finanzas.name,
+                },
+              ]
+            : [];
+
+          this.activistas = data.activistas
+            ? [
+                {
+                  label: data.activistas.name,
+                  id: data.activistas.id,
+                },
+              ]
+            : [];
           break;
         }
       }
     },
     onSearchCoordinadores(search, loading) {
       loading(true);
-      this.search(loading, "people", search, this, 'card_id');
+      this.search(loading, "people", search, this, "card_id");
     },
     onSearchCoordinadoresEjecutivos(search, loading) {
       loading(true);
@@ -707,6 +783,10 @@ export default {
         "card_id",
         "people"
       );
+    },
+    onSearchActivistas(search, loading) {
+      loading(true);
+      this.search(loading, "activistas", search, this, "card_id", "people");
     },
     onSearchMunicipios(search, loading) {
       loading(true);

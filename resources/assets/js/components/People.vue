@@ -84,7 +84,7 @@
                 <td v-text="model.sector"></td>
                 <td v-text="model.phone_number"></td>
                 <td v-text="model.celphone"></td>
-                <td v-text="model.municipios"></td>
+                <td v-text="model.municipios ? model.municipios.name : ''"></td>
                 <td v-text="model.age"></td>
                 <td v-text="model.sexo"></td>
                 <td v-text="model.profession"></td>
@@ -279,16 +279,16 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Municipio</label
+                  >Municipios</label
                 >
                 <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="entity.municipios"
-                    class="form-control"
-                    placeholder="Municipio"
-                  />
-                  <span class="help-block">(*) Ingrese el Municipio</span>
+                  <v-select
+                    v-model="entity.municipios_id"
+                    @search="onSearchMunicipios"
+                    :options="municipios"
+                    :filterable="false"
+                    :reduce="municipio => municipio.id"
+                  ></v-select>
                 </div>
               </div>
               <div class="form-group row">
@@ -458,7 +458,7 @@ export default {
         sector: "",
         sexo: "",
         id: 0,
-        municipios: "",
+        municipios_id: 0
       },
 
       offset: 3,
@@ -517,7 +517,8 @@ export default {
           params: {
             page: page,
             perPage: 20,
-            q: condition
+            q: condition,
+            eager: ['municipios']
           },
         })
         .then((response) => {
@@ -561,6 +562,7 @@ export default {
             address: "",
             sector: "",
             sexo: "",
+            municipios_id: 0,
             id: 0,
           };
           this.listarData(1);
@@ -601,11 +603,41 @@ export default {
           this.entity.address = data.address;
           this.entity.sector = data.sector;
           this.entity.sexo = data.sexo;
-          this.entity.municipios = data.municipios;
+          this.entity.municipios_id = data.municipios_id;
+          this.municipios = [
+            {
+              label: data.municipios.name,
+              id: data.municipios_id
+            }];
           break;
         }
       }
     },
+    onSearchMunicipios(search, loading) {
+      loading(true);
+      this.search(loading, "municipios", search, this);
+    },
+    search: _.debounce((loading, option, search, vm, field = "name") => {
+      axios(`/api/${option}`, {
+        params: {
+          q: [
+            JSON.stringify({
+              condition: "where",
+              field: field,
+              operator: "like",
+              value: `%${search}%`
+            })
+          ]
+        }
+      }).then(r => {
+        if (search.length > 0) {
+          vm[option] = r.data.data.map(function(model) {
+            return { label: model.name, id: model.id };
+          });
+        }
+        loading(false);
+      });
+    }, 350),
     searchDependeciesTables() {},
   },
   mounted() {

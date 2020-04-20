@@ -23,7 +23,7 @@ class People extends Model
         'address',
         'sector',
         'sexo',
-        'municipios'
+        'municipios_id'
     ];
 
     protected $appends = ['age','name'];
@@ -39,6 +39,11 @@ class People extends Model
     public function getNameAttribute()
     {
         return "{$this->first_name} {$this->last_name} {$this->card_id}";
+    }
+
+    public function municipios()
+    {
+        return $this->belongsTo('App\Municipios');    
     }
 
 }

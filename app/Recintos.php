@@ -21,6 +21,7 @@ class Recintos extends Model
         'coordinadores_electorales_id',
         'coordinadores_seguridad_id',
         'coordinadores_finanzas_id',
+        'activistas_id'
     ];
 
     protected $entity = 'recintos';
@@ -66,6 +67,11 @@ class Recintos extends Model
     public function coordinadores_finanzas()
     {
         return $this->belongsTo('App\People', 'coordinadores_finanzas_id', 'id');
+    }
+
+    public function activistas()
+    {
+        return $this->belongsTo('App\People', 'activistas_id', 'id');
     }
 
 
