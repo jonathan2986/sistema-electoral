@@ -44,7 +44,7 @@
             </div>
           </div>
           <table
-            class="table table-responsive table-bordered table-striped table-sm"
+            class="table table-responsive table-bordered table-striped table-sm horizontal-scrollable"
           >
             <thead>
               <tr>
@@ -142,7 +142,7 @@
     </div>
     <!--Inicio del modal agregar/actualizar-->
     <div
-      class="modal fade"
+      class="modal fade recinto"
       tabindex="-1"
       :class="{ mostrar: modal }"
       role="dialog"
@@ -801,6 +801,10 @@ export default {
 };
 </script>
 <style>
+  .recinto {
+    overflow-y: scroll;
+  }
+  ::-webkit-scrollbar {display: none;}
 .modal-content {
   width: 100% !important;
   position: absolute !important;

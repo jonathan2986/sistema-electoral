@@ -634,6 +634,8 @@ export default {
 }
 .horizontal-scrollable {
   overflow-x: auto;
+  overflow-y: hidden;
+
   white-space: nowrap;
 }
 
@@ -641,6 +643,7 @@ export default {
   display: inline-block;
   float: none;
 }
+::-webkit-scrollbar {display: none;}
 .mostrar {
   display: list-item !important;
   opacity: 1 !important;
