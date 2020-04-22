@@ -38,7 +38,7 @@ class User extends Authenticatable
 
     public function votantes()
     {
-        return $this->belongsTo('App\Votantes'); //un usuario pertenece a una pertenece
+        return $this->belongsTo('App\People', 'votantes_id', 'id'); //un usuario pertenece a una pertenece
     }
 
     public function getCedulaAttribute()

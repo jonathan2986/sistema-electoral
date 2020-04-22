@@ -11,6 +11,10 @@ class People extends Model
     protected $table = 'people';
 
     protected $fillable = [
+        'circunscripciones_id',
+        'municipios_id',
+        'distritos_id',
+        'recintos_id',
         'first_name',
         'last_name',
         'card_id',
@@ -19,14 +23,14 @@ class People extends Model
         'email',
         'date_birthdate',
         'profession',
-        'colegio_electoral',
+        'colegios_electorales_id',
         'address',
         'sector',
         'sexo',
-        'municipios_id'
+
     ];
 
-    protected $appends = ['age','name'];
+    protected $appends = ['age', 'name'];
 
     public function getAgeAttribute()
     {
@@ -43,7 +47,33 @@ class People extends Model
 
     public function municipios()
     {
-        return $this->belongsTo('App\Municipios');    
+        return $this->belongsTo('App\Municipios');
+    }
+
+    public function provincias()
+    {
+        return $this->belongsTo('App\Provincias');
+    }
+
+
+    public function circunscripciones()
+    {
+        return $this->belongsTo('App\Circunscripciones');
+    }
+
+    public function distritos()
+    {
+        return $this->belongsTo('App\Distritos');
+    }
+
+    public function recintos()
+    {
+        return $this->belongsTo('App\Recintos');
+    }
+
+    public function colegios_electorales()
+    {
+        return $this->belongsTo('App\ColegiosElectorales');
     }
 
 }

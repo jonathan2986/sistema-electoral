@@ -45,52 +45,65 @@
               </div>
             </div>
           </div>
-          <table
-            class="table table-responsive table-bordered table-striped table-sm horizontal-scrollable"
-          >
-            <thead>
-              <tr>
-                <th>Opciones</th>
-                <th>Nombre</th>
-                <th>Cedula</th>
-                <th>Direccion</th>
-                <th>Sector</th>
-                <th>Telefono</th>
-                <th>Celular</th>
-                <th>Municipio</th>
-                <th>Edad</th>
-                <th>Sexo</th>
-                <th>Profesion</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="model in data" :key="model.id">
-                <td>
-                  <button
-                    type="button"
-                    @click="abrirModal('Persona', 'actualizar', model)"
-                    class="btn btn-warning btn-sm"
-                  >
-                    <i class="icon-pencil"></i>
-                  </button>
-                  &nbsp;
-                  <button type="button" class="btn btn-danger btn-sm">
-                    <i class="icon-trash"></i>
-                  </button>
-                </td>
-                <td v-text="`${model.first_name} ${model.last_name}`"></td>
-                <td v-text="model.card_id"></td>
-                <td v-text="model.address"></td>
-                <td v-text="model.sector"></td>
-                <td v-text="model.phone_number"></td>
-                <td v-text="model.celphone"></td>
-                <td v-text="model.municipios ? model.municipios.name : ''"></td>
-                <td v-text="model.age"></td>
-                <td v-text="model.sexo"></td>
-                <td v-text="model.profession"></td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>Opciones</th>
+                  <th>Nombre</th>
+                  <th>Cedula</th>
+                  <th>Direccion</th>
+                  <th>Sector</th>
+                  <th>Telefono</th>
+                  <th>Celular</th>
+                  <th>Edad</th>
+                  <th>Sexo</th>
+                  <th>Profesion</th>
+                  <th>Municipio</th>
+                  <th>Recinto</th>
+                  <th>Colegio Electoral</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="model in data" :key="model.id">
+                  <td>
+                    <button
+                      type="button"
+                      @click="abrirModal('Persona', 'actualizar', model)"
+                      class="btn btn-warning btn-sm"
+                    >
+                      <i class="icon-pencil"></i>
+                    </button>
+                    &nbsp;
+                    <button type="button" class="btn btn-danger btn-sm">
+                      <i class="icon-trash"></i>
+                    </button>
+                  </td>
+                  <td v-text="`${model.first_name} ${model.last_name}`"></td>
+                  <td v-text="model.card_id"></td>
+                  <td v-text="model.address"></td>
+                  <td v-text="model.sector"></td>
+                  <td v-text="model.phone_number"></td>
+                  <td v-text="model.celphone"></td>
+                  <td v-text="model.age"></td>
+                  <td v-text="model.sexo"></td>
+                  <td v-text="model.profession"></td>
+                  <td
+                    v-text="model.municipios ? model.municipios.name : ''"
+                  ></td>
+                  <td v-text="model.recintos ? model.recintos.name : ''"></td>
+                  <td
+                    v-text="
+                      model.colegios_electorales
+                        ? model.colegios_electorales.name
+                        : ''
+                    "
+                  ></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
           <nav>
             <sliding-pagination
               :page-count="pagination.last_page"
@@ -98,8 +111,9 @@
               :prev-text="'Anterior'"
               :next-text="'Siguiente'"
               :containerClass="'pagination'"
-              >
-            ></sliding-pagination>
+            >
+              ></sliding-pagination
+            >
           </nav>
         </div>
       </div>
@@ -252,20 +266,6 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Municipios</label
-                >
-                <div class="col-md-9">
-                  <v-select
-                    v-model="entity.municipios_id"
-                    @search="onSearchMunicipios"
-                    :options="municipios"
-                    :filterable="false"
-                    :reduce="municipio => municipio.id"
-                  ></v-select>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
                   >Direccion</label
                 >
                 <div class="col-md-9">
@@ -301,6 +301,76 @@
                     <option value="Masculino">M</option>
                     <option value="Femenino">F</option>
                   </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Circunscripcion</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.circunscripciones_id"
+                    @search="onSearchCircunscripciones"
+                    :options="circunscripciones"
+                    :filterable="false"
+                    :reduce="(circunscripcion) => circunscripcion.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Municipios</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.municipios_id"
+                    @search="onSearchMunicipios"
+                    :options="municipios"
+                    :filterable="false"
+                    :reduce="(municipio) => municipio.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Distrito</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.distritos_id"
+                    @search="onSearchDistritos"
+                    :options="distritos"
+                    :filterable="false"
+                    :reduce="(distrito) => distrito.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Recintos</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.recintos_id"
+                    @search="onSearchRecintos"
+                    :options="recintos"
+                    :filterable="false"
+                    :reduce="(recinto) => recinto.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Colegios Electorales</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.colegios_electorales_id"
+                    @search="onSearchColegiosElectorales"
+                    :options="colegios_electorales"
+                    :filterable="false"
+                    :reduce="(colegio) => colegio.id"
+                  ></v-select>
                 </div>
               </div>
               <!-- <div v-show="errorProvincia" class="form-group row div-error">
@@ -405,6 +475,7 @@ export default {
       provincias: [],
       municipios: [],
       recintos: [],
+      colegios_electorales: [],
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
@@ -431,7 +502,11 @@ export default {
         sector: "",
         sexo: "",
         id: 0,
-        municipios_id: 0
+        municipios_id: 0,
+        circunscripciones_id: 0,
+        distritos_id: 0,
+        recintos_id: 0,
+        colegios_electorales_id: 0,
       },
 
       offset: 3,
@@ -443,11 +518,11 @@ export default {
     this.searchDependeciesTables();
   },
   computed: {
-    isActived: function () {
+    isActived: function() {
       return this.pagination.current_page;
     },
     //Calcula los elementos de la paginación
-    pagesNumber: function () {
+    pagesNumber: function() {
       if (!this.pagination.to) {
         return [];
       }
@@ -474,15 +549,15 @@ export default {
     listarData(page = 1) {
       let me = this;
       let condition = [];
-      if(this.criterio.length > 0){
-       condition = [
-        {
-          field: this.criterio,
-          value: `%${this.buscar}%`,
-          operator: 'like',
-          condition: 'where'
-        }
-      ];
+      if (this.criterio.length > 0) {
+        condition = [
+          {
+            field: this.criterio,
+            value: `%${this.buscar}%`,
+            operator: "like",
+            condition: "where",
+          },
+        ];
       }
 
       axios
@@ -491,7 +566,13 @@ export default {
             page: page,
             perPage: 10,
             q: condition,
-            eager: ['municipios']
+            eager: [
+              "municipios",
+              "circunscripciones",
+              "distritos",
+              "recintos",
+              "colegios_electorales",
+            ],
           },
         })
         .then((response) => {
@@ -501,7 +582,7 @@ export default {
           me.pagination.last_page = respuesta.last_page;
           me.pagination.current_page = respuesta.current_page;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.log(error);
         });
     },
@@ -536,6 +617,10 @@ export default {
             sector: "",
             sexo: "",
             municipios_id: 0,
+            circunscripciones_id: 0,
+            distritos_id: 0,
+            recintos_id: 0,
+            colegios_electorales_id: 0,
             id: 0,
           };
           this.listarData(1);
@@ -577,11 +662,43 @@ export default {
           this.entity.sector = data.sector;
           this.entity.sexo = data.sexo;
           this.entity.municipios_id = data.municipios_id;
-          this.municipios = [
-            {
-              label: data.municipios.name,
-              id: data.municipios_id
-            }];
+          this.entity.provincias_id = data.provincias_id;
+          this.entity.circunscripciones_id = data.circunscripciones_id;
+          this.entity.distritos_id = data.distritos_id;
+          this.entity.recintos_id = data.recintos_id;
+          this.entity.colegios_electorales_id = data.colegios_electorales_id;
+          if (this.municipios) {
+            this.municipios = [
+              {
+                label: data.municipios.name,
+                id: data.municipios_id,
+              },
+            ];
+            this.circunscripciones = [
+              {
+                label: data.circunscripciones.name,
+                id: data.circunscripciones_id,
+              },
+            ];
+            this.distritos = [
+              {
+                label: data.distritos.name,
+                id: data.distritos_id,
+              },
+            ];
+            this.recintos = [
+              {
+                label: data.recintos.name,
+                id: data.recintos_id,
+              },
+            ];
+            this.colegios_electorales = [
+              {
+                label: data.colegios_electorales.name,
+                id: data.colegios_electorales_id,
+              },
+            ];
+          }
           break;
         }
       }
@@ -589,6 +706,26 @@ export default {
     onSearchMunicipios(search, loading) {
       loading(true);
       this.search(loading, "municipios", search, this);
+    },
+    onSearchProvincias(search, loading) {
+      loading(true);
+      this.search(loading, "provincias", search, this);
+    },
+    onSearchCircunscripciones(search, loading) {
+      loading(true);
+      this.search(loading, "circunscripciones", search, this);
+    },
+    onSearchDistritos(search, loading) {
+      loading(true);
+      this.search(loading, "distritos", search, this);
+    },
+    onSearchRecintos(search, loading) {
+      loading(true);
+      this.search(loading, "recintos", search, this);
+    },
+    onSearchColegiosElectorales(search, loading) {
+      loading(true);
+      this.search(loading, "colegios_electorales", search, this);
     },
     search: _.debounce((loading, option, search, vm, field = "name") => {
       axios(`/api/${option}`, {
@@ -598,11 +735,11 @@ export default {
               condition: "where",
               field: field,
               operator: "like",
-              value: `%${search}%`
-            })
-          ]
-        }
-      }).then(r => {
+              value: `%${search}%`,
+            }),
+          ],
+        },
+      }).then((r) => {
         if (search.length > 0) {
           vm[option] = r.data.data.map(function(model) {
             return { label: model.name, id: model.id };

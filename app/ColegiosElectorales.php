@@ -46,7 +46,7 @@ class ColegiosElectorales extends Model
      */
     public function votantes()
     {
-        return $this->hasMany('App\Votantes');
+        return $this->hasMany('App\People');
     }
 
     public function getNumberVotantesAttribute()
