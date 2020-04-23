@@ -31,6 +31,7 @@ Route::group([], function () {
     Route::resource('/roles_users', 'RolesUsersController');
     Route::resource('/coordinadores_comites_bases', 'CoordinadnoresComitesBasesController');
     Route::resource('/miembros_comites_bases', 'MiembrosComitesBasesController');
+    Route::resource('/comites_bases', 'ComitesBasesController');
 });
 
 Route::group(['prefix' => '/advanced'], function(){

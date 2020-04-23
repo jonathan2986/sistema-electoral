@@ -62,6 +62,7 @@
                   <th>Municipio</th>
                   <th>Recinto</th>
                   <th>Colegio Electoral</th>
+                  <th>Comite de Base</th>
                 </tr>
               </thead>
               <tbody>
@@ -96,6 +97,13 @@
                     v-text="
                       model.colegios_electorales
                         ? model.colegios_electorales.name
+                        : ''
+                    "
+                  ></td>
+                  <td
+                    v-text="
+                      model.comites_bases
+                        ? model.comites_bases.name
                         : ''
                     "
                   ></td>
@@ -373,6 +381,20 @@
                   ></v-select>
                 </div>
               </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Comites de Bases</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.comites_bases_id"
+                    @search="onSearchComitesBases"
+                    :options="comites_bases"
+                    :filterable="false"
+                    :reduce="(comite_base) => comite_base.id"
+                  ></v-select>
+                </div>
+              </div>
               <!-- <div v-show="errorProvincia" class="form-group row div-error">
                                 <div class="text-center text-error">
                                     <div v-for="error in errorMostrarMsjProvincia" :key="error" v-text="error">
@@ -481,6 +503,7 @@ export default {
       tipoAccion: 0,
       errorProvincia: 0,
       errorMostrarMsjProvincia: [],
+      comites_bases: [],
       pagination: {
         total: 0,
         current_page: 1,
@@ -572,6 +595,7 @@ export default {
               "distritos",
               "recintos",
               "colegios_electorales",
+              "comites_bases"
             ],
           },
         })
@@ -621,6 +645,7 @@ export default {
             distritos_id: 0,
             recintos_id: 0,
             colegios_electorales_id: 0,
+            comites_bases_id: 0,
             id: 0,
           };
           this.listarData(1);
@@ -668,36 +693,40 @@ export default {
           this.entity.recintos_id = data.recintos_id;
           this.entity.colegios_electorales_id = data.colegios_electorales_id;
           if (this.municipios) {
-            this.municipios = [
+            this.municipios = data.municipios ? [
               {
                 label: data.municipios.name,
                 id: data.municipios_id,
               },
-            ];
-            this.circunscripciones = [
+            ] : [];
+            this.circunscripciones = data.circunscripciones ? [
               {
                 label: data.circunscripciones.name,
                 id: data.circunscripciones_id,
               },
-            ];
-            this.distritos = [
+            ]: [];
+            this.distritos = data.distritos ? [
               {
                 label: data.distritos.name,
                 id: data.distritos_id,
               },
-            ];
-            this.recintos = [
+            ] : [];
+            this.recintos = data.recintos ? [
               {
                 label: data.recintos.name,
                 id: data.recintos_id,
               },
-            ];
-            this.colegios_electorales = [
+            ] : [];
+            this.colegios_electorales = data.colegios_electorales ? [
               {
                 label: data.colegios_electorales.name,
                 id: data.colegios_electorales_id,
               },
-            ];
+            ] : [];
+            this.comites_bases = data.comites_bases ? [{
+              label: data.comites_bases.name,
+              id: data.comites_bases_id
+            }]: [];
           }
           break;
         }
@@ -726,6 +755,10 @@ export default {
     onSearchColegiosElectorales(search, loading) {
       loading(true);
       this.search(loading, "colegios_electorales", search, this);
+    },    
+    onSearchComitesBases(search, loading) {
+      loading(true);
+      this.search(loading, "comites_bases", search, this);
     },
     search: _.debounce((loading, option, search, vm, field = "name") => {
       axios(`/api/${option}`, {

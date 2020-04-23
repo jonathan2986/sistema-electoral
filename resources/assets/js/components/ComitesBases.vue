@@ -69,11 +69,11 @@
                     <i class="icon-trash"></i>
                   </button>
                 </td>
-                <td>{{ pad(model.id, 3) }}</td>
-                <td v-text="model.first_name"></td>
-                <td v-text="model.last_name"></td>
-                <td v-text="model.card_id"></td>
-                <td v-text="model.members_count"></td>
+                <td>{{ model.name }}</td>
+                <td v-text="model.people.first_name"></td>
+                <td v-text="model.people.last_name"></td>
+                <td v-text="model.people.card_id"></td>
+                <td v-text="model.miembros.length"></td>
               </tr>
             </tbody>
           </table>
@@ -154,39 +154,33 @@
                 >
                 <div class="col-md-9">
                   <v-select
-                    v-model="entity.votantes_id"
-                    @search="onSearchVotantes"
-                    :options="votantes"
+                    v-model="entity.people_id"
+                    @search="onSearcPeople"
+                    :options="people"
                     :filterable="false"
-                    :reduce="(votante) => votante.id"
-                    @input="setVotantes"
+                    :reduce="(people) => people.id"
                   ></v-select>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Nombre</label
+                  >Codigo del Comite de Base</label
                 >
                 <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="entity.first_name"
-                    class="form-control"
-                    placeholder="Nombre"
-                  />
+                    <input type="text" class="form-control" v-model="entity.name" name="" id="">
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group row" v-if="tipoAccion == 1">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Apellido</label
+                  >Miembros</label
                 >
                 <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="entity.last_name"
-                    class="form-control"
-                    placeholder="Apellido"
-                  />
+                  <v-select
+                    multiple
+                    @search="onSearchMiembros"
+                    v-model="entity.miembros"
+                    :options="miembros"
+                  ></v-select>
                 </div>
               </div>
               <div v-show="errorDistrito" class="form-group row div-error">
@@ -293,7 +287,8 @@ export default {
       // distrito_municipal: '',
       // circuscripcion: '',
       circunscripciones: [],
-      votantes: [],
+      people: [],
+      miembros: [],
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
@@ -308,13 +303,11 @@ export default {
         to: 0,
       },
       entity: {
-        votantes_id: 0,
-        first_name: "",
-        last_name: "",
-        card_id: "",
+        miembros: [],
+        people_id: 0,
+        name: "",
         id: 0,
       },
-
       offset: 3,
       criterio: "",
       buscar: "",
@@ -366,9 +359,9 @@ export default {
         conditions.push(this.defaultCondition);
       }
       axios
-        .get("/api/coordinadores_comites_bases", {
+        .get("/api/comites_bases", {
           params: {
-            eager: ["votantes"],
+            eager: ["people", 'miembros'],
             page: page,
             q: conditions,
           },
@@ -384,16 +377,6 @@ export default {
           console.log(error);
         });
     },
-    setVotantes(id) {
-      axios({
-        method: "GET",
-        url: `/api/votantes/${id}`,
-      }).then((res) => {
-        this.entity.first_name = res.data.first_name;
-        this.entity.last_name = res.data.last_name;
-        this.entity.card_id = res.data.card_id;
-      });
-    },
     cambiarPagina(page, buscar, criterio) {
       let me = this;
       //Actualiza la página actual
@@ -404,8 +387,8 @@ export default {
     save(method) {
       let url =
         method == "POST"
-          ? `/api/coordinadores_comites_bases`
-          : `/api/coordinadores_comites_bases/${this.entity.id}`;
+          ? `/api/comites_bases`
+          : `/api/comites_bases/${this.entity.id}`;
       axios({
         url: url,
         method: method,
@@ -450,7 +433,7 @@ export default {
     actualizarVotante(votantes_id, id) {
       axios({
         method: "PUT",
-        url: `/api/votantes/${votantes_id}`,
+        url: `/api/people/${votantes_id}`,
         data: {
           comites_bases_id: id,
         },
@@ -471,38 +454,28 @@ export default {
           this.tituloModal = `Actualizar ${modelo}`;
           this.tipoAccion = 2;
           this.entity.id = data.id;
-          this.entity.first_name = data.first_name;
-          this.entity.last_name = data.last_name;
-          this.entity.card_id = data.card_id;
-          this.entity.votantes_id = data.votantes_id;
-          this.votantes = [
+          this.entity.name = data.name;
+          this.entity.people_id = data.people_id
+          this.people = [
             {
-              id: data.votantes.id,
-              label: data.votantes.card_id,
+              id: data.people.id,
+              label: data.people.name,
             },
           ];
           break;
         }
       }
     },
-    onSearchVotantes(search, loading) {
+    onSearcPeople(search, loading) {
       loading(true);
-      this.search(loading, "votantes", search, this, "card_id");
+      this.search(loading, "people", search, this, "card_id");
     },
-    onSearchCircunscripciones(search, loading) {
-      loading(true);
-      this.search(loading, "circunscripciones", search, this);
+    onSearchMiembros(search, loading){
+      this.search(loading, "miembros", search, this, "card_id", "people");
     },
-    pad(number, length) {
-      var str = "" + number;
-      while (str.length < length) {
-        str = "0" + str;
-      }
-
-      return str;
-    },
-    search: _.debounce((loading, option, search, vm, field = "name") => {
-      axios(`/api/${option}`, {
+    search: _.debounce((loading, option, search, vm, field = "name",endpoint = null) => {
+      endpoint = endpoint != null ? endpoint : option;
+      axios(`/api/${endpoint}`, {
         params: {
           q: [
             JSON.stringify({

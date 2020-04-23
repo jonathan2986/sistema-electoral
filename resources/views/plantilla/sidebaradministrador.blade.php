@@ -31,11 +31,8 @@
                             <li @click="menu='colegios-electorales'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Recinto' )|| auth()->user()->canAction('Digitador'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Colegios Electorales</a>
                             </li @endif>
-                            <li @click="menu='personas'" class="nav-item">
+                            <li @click="menu='personas'" class="nav-item" @if(auth()->user()->canAction('Coordinador de Colegio') || auth()->user()->canAction('Digitador'))>
                                 <a class="nav-link" href="#"><i class="fa fa-users"></i>Personas</a>
-                            </li>
-                            <li @click="menu='votantes'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Colegio') || auth()->user()->canAction('Digitador'))>
-                                <a class="nav-link" href="#"><i class="fa fa-address-book"></i> Electores</a>
                             </li @endif>
                             <li @click="menu='users'" class="nav-item"  @if(auth()->user()->canAction('Admin'))>
                                 <a class="nav-link" href="#"><i class="icon-user"></i> Usuarios</a>

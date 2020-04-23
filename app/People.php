@@ -27,7 +27,7 @@ class People extends Model
         'address',
         'sector',
         'sexo',
-
+        'comites_bases_id',
     ];
 
     protected $appends = ['age', 'name'];
@@ -55,7 +55,6 @@ class People extends Model
         return $this->belongsTo('App\Provincias');
     }
 
-
     public function circunscripciones()
     {
         return $this->belongsTo('App\Circunscripciones');
@@ -76,4 +75,8 @@ class People extends Model
         return $this->belongsTo('App\ColegiosElectorales');
     }
 
+    public function comites_bases()
+    {
+       return $this->belongsTo('App\ComitesBases');
+    }
 }
