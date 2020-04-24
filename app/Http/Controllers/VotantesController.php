@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Votantes;
-use Fredpeal\BakaHttp\Traits\CrudTrait;
-use App\Circunscripciones; 
-use App\Municipios;
+use App\Circunscripciones;
 use App\Distritos;
+use App\Municipios;
+use App\People;
 use App\Recintos;
-use App\ColegiosElectorales;
+use Fredpeal\BakaHttp\Traits\CrudTrait;
 use Illuminate\Http\Request;
 
 class VotantesController extends Controller
@@ -19,9 +18,9 @@ class VotantesController extends Controller
     //
     public function __construct()
     {
-        $this->model = new Votantes;
+        $this->model = new People;
     }
-    
+
     /**
      * getByCircunscripciones function
      *
@@ -33,8 +32,8 @@ class VotantesController extends Controller
     {
         $circunscripciones = Circunscripciones::where('name', 'like', "%{$name}%")->select('id')->get();
         $circunscripciones = $circunscripciones->toArray();
-        
-        $circunscripcionesId = array_map(function($circunscripcion){
+
+        $circunscripcionesId = array_map(function ($circunscripcion) {
             return $circunscripcion['id'];;
         }, $circunscripciones);
 
@@ -42,14 +41,13 @@ class VotantesController extends Controller
         $condition = [
             'condition' => 'whereIn',
             'field' => 'circunscripciones_id',
-            'value' => implode(',', $circunscripcionesId)
+            'value' => implode(',', $circunscripcionesId),
         ];
         $request['q'][] = json_encode($condition);
         $data = $this->search($request);
         return response()->json($data);
     }
 
-    
     /**
      * getByMunicipios function
      *
@@ -61,8 +59,8 @@ class VotantesController extends Controller
     {
         $municipios = Municipios::where('name', 'like', "%{$name}%")->select('id')->get();
         $municipios = $municipios->toArray();
-        
-        $municipiosId = array_map(function($municipio){
+
+        $municipiosId = array_map(function ($municipio) {
             return $municipio['id'];;
         }, $municipios);
 
@@ -70,13 +68,13 @@ class VotantesController extends Controller
         $condition = [
             'condition' => 'whereIn',
             'field' => 'municipios_id',
-            'value' => implode(',', $municipiosId)
+            'value' => implode(',', $municipiosId),
         ];
         $request['q'][] = json_encode($condition);
         $data = $this->search($request);
         return response()->json($data);
     }
-    
+
     /**
      * getByDistritos
      *
@@ -88,8 +86,8 @@ class VotantesController extends Controller
     {
         $distritos = Distritos::where('name', 'like', "%{$name}%")->select('id')->get();
         $distritos = $distritos->toArray();
-        
-        $distritosId = array_map(function($distrito){
+
+        $distritosId = array_map(function ($distrito) {
             return $distrito['id'];;
         }, $distritos);
 
@@ -97,7 +95,7 @@ class VotantesController extends Controller
         $condition = [
             'condition' => 'whereIn',
             'field' => 'distritos_id',
-            'value' => implode(',', $distritosId)
+            'value' => implode(',', $distritosId),
         ];
         $request['q'][] = json_encode($condition);
         $data = $this->search($request);
@@ -108,8 +106,8 @@ class VotantesController extends Controller
     {
         $recintos = Recintos::where('name', 'like', "%{$name}%")->select('id')->get();
         $recintos = $recintos->toArray();
-        
-        $recintosId = array_map(function($recinto){
+
+        $recintosId = array_map(function ($recinto) {
             return $recinto['id'];;
         }, $recintos);
 
@@ -117,7 +115,7 @@ class VotantesController extends Controller
         $condition = [
             'condition' => 'whereIn',
             'field' => 'recintos_id',
-            'value' => implode(',', $recintosId)
+            'value' => implode(',', $recintosId),
         ];
         $request['q'][] = json_encode($condition);
         $data = $this->search($request);
@@ -128,8 +126,8 @@ class VotantesController extends Controller
     {
         $recintos = Recintos::where('name', 'like', "%{$name}%")->select('id')->get();
         $recintos = $recintos->toArray();
-        
-        $recintosId = array_map(function($recinto){
+
+        $recintosId = array_map(function ($recinto) {
             return $recinto['id'];;
         }, $recintos);
 
@@ -137,7 +135,7 @@ class VotantesController extends Controller
         $condition = [
             'condition' => 'whereIn',
             'field' => 'recintos_id',
-            'value' => implode(',', $recintosId)
+            'value' => implode(',', $recintosId),
         ];
         $request['q'][] = json_encode($condition);
         $data = $this->search($request);

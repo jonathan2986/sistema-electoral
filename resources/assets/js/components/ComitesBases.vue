@@ -52,6 +52,7 @@
                 <th>Apellido</th>
                 <th>Cedula</th>
                 <th>Numeros de Miembros</th>
+                <th>More</th>
               </tr>
             </thead>
             <tbody>
@@ -74,6 +75,9 @@
                 <td v-text="model.people.last_name"></td>
                 <td v-text="model.people.card_id"></td>
                 <td v-text="model.miembros.length"></td>
+                <td>
+                  <button class="btn btn-primary" @click="abrirModalVotantes(model.id)">Nuevo Miembro</button> 
+                </td>
               </tr>
             </tbody>
           </table>
@@ -266,6 +270,7 @@
       </div>
       <!-- /.modal-dialog -->
     </div>
+    <votantes-cba @listarPadre="listarData()" :show="showModalVotantes" :comites-bases-id="comites_bases_id" @close="showModalVotantes = false" />
     <!-- Fin del modal Eliminar -->
   </main>
 </template>
@@ -288,11 +293,13 @@ export default {
       // circuscripcion: '',
       circunscripciones: [],
       people: [],
+      comites_bases_id: 0,
       miembros: [],
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
       errorDistrito: 0,
+      showModalVotantes: false,
       errorMostrarMsjDistrito: [],
       pagination: {
         total: 0,
@@ -352,6 +359,10 @@ export default {
     },
   },
   methods: {
+    abrirModalVotantes(id){
+      this.showModalVotantes= true;
+      this.comites_bases_id = id;
+    },
     listarData(page = 1) {
       let me = this;
       let conditions = [];

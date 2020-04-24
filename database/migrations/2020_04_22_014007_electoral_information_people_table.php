@@ -15,10 +15,10 @@ class ElectoralInformationPeopleTable extends Migration
     {
         Schema::table('people', function (Blueprint $table) {
             //
-            $table->integer('colegios_electorales_id')->unsigned()->after('id');
-            $table->integer('recintos_id')->unsigned()->after('id');
-            $table->integer('distritos_id')->unsigned()->after('id');
-            $table->integer('circunscripciones_id')->unsigned()->after('id');
+            $table->integer('colegios_electorales_id')->nullable()->after('id');
+            $table->integer('recintos_id')->nullable()->after('id');
+            $table->integer('distritos_id')->nullable()->after('id');
+            $table->integer('circunscripciones_id')->nullable()->after('id');
         });
     }
 

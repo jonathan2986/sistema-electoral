@@ -40,6 +40,7 @@ Vue.component('roles-users', require('./components/RolesUsers'));
 Vue.component('comites-bases', require('./components/ComitesBases'));
 Vue.component('v-select', vSelect)
 Vue.component('sliding-pagination', Paginate)
+Vue.component('votantes-cba', require('./components/VotanteCBA'))
 const app = new Vue({
     el: '#app',
     data: {
