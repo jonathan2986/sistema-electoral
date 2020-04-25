@@ -32,9 +32,10 @@ Route::group([], function () {
     Route::resource('/coordinadores_comites_bases', 'CoordinadnoresComitesBasesController');
     Route::resource('/miembros_comites_bases', 'MiembrosComitesBasesController');
     Route::resource('/comites_bases', 'ComitesBasesController');
+    Route::post('/people_bulk_edit', 'PeopleController@bulkEdit');
 });
 
-Route::group(['prefix' => '/advanced'], function(){
+Route::group(['prefix' => '/advanced'], function () {
     Route::get('/municipios/{name}', 'MunicipiosController@searchByProvincias');
     Route::get('/distritos/{name}', 'DistritosController@getByMunicipios');
     Route::get('/distritos/circunscripciones/{name}', 'DistritosController@getByCircunscripciones');

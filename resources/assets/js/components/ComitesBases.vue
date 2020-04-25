@@ -76,7 +76,12 @@
                 <td v-text="model.people.card_id"></td>
                 <td v-text="model.miembros.length"></td>
                 <td>
-                  <button class="btn btn-primary" @click="abrirModalVotantes(model.id)">Nuevo Miembro</button> 
+                  <button
+                    class="btn btn-primary"
+                    @click="abrirModalVotantes(model.id)"
+                  >
+                    Nuevo Miembro
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -171,7 +176,13 @@
                   >Codigo del Comite de Base</label
                 >
                 <div class="col-md-9">
-                    <input type="text" class="form-control" v-model="entity.name" name="" id="">
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="entity.name"
+                    name=""
+                    id=""
+                  />
                 </div>
               </div>
               <div class="form-group row" v-if="tipoAccion == 1">
@@ -182,11 +193,70 @@
                   <v-select
                     multiple
                     @search="onSearchMiembros"
-                    v-model="entity.miembros"
-                    :options="miembros"
+                    v-model="miemborsNuevosSelect"
+                    :options="miembrosNuevos"
                   ></v-select>
                 </div>
               </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Nombre</label
+                >
+                <div class="col-md-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="miembro.first_name"
+                    name=""
+                    id=""
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Apellido</label
+                >
+                <div class="col-md-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="miembro.last_name"
+                    name=""
+                    id=""
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Cedula</label
+                >
+                <div class="col-md-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="miembro.card_id"
+                    v-mask="'###-#######-#'"
+                    name=""
+                    id=""
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Telefono</label
+                >
+                <div class="col-md-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="miembro.phone"
+                    v-mask="'###-###-####'"
+                    name=""
+                    id=""
+                  />
+                </div>
+              </div>
+
               <div v-show="errorDistrito" class="form-group row div-error">
                 <div class="text-center text-error">
                   <div
@@ -197,6 +267,17 @@
                 </div>
               </div>
             </form>
+            <div class="form-group row">
+              <div class="col-md-3">
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  @click="agregarMiembro"
+                >
+                  Guardar
+                </button>
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
             <button
@@ -270,7 +351,12 @@
       </div>
       <!-- /.modal-dialog -->
     </div>
-    <votantes-cba @listarPadre="listarData()" :show="showModalVotantes" :comites-bases-id="comites_bases_id" @close="showModalVotantes = false" />
+    <votantes-cba
+      @listarPadre="listarData()"
+      :show="showModalVotantes"
+      :comites-bases-id="comites_bases_id"
+      @close="showModalVotantes = false"
+    />
     <!-- Fin del modal Eliminar -->
   </main>
 </template>
@@ -301,6 +387,14 @@ export default {
       errorDistrito: 0,
       showModalVotantes: false,
       errorMostrarMsjDistrito: [],
+      miembrosNuevos: [],
+      miemborsNuevosSelect: [],
+      miembro: {
+        first_name: "",
+        last_name: "",
+        card_id: "",
+        phone: "",
+      },
       pagination: {
         total: 0,
         current_page: 1,
@@ -359,9 +453,20 @@ export default {
     },
   },
   methods: {
-    abrirModalVotantes(id){
-      this.showModalVotantes= true;
+    abrirModalVotantes(id) {
+      this.showModalVotantes = true;
       this.comites_bases_id = id;
+    },
+    agregarMiembro() {
+      this.miembro.label = `${this.miembro.first_name} ${this.miembro.last_name} ${this.miembro.card_id}`
+      this.miembrosNuevos.push(this.miembro);
+      this.miemborsNuevosSelect.push(this.miembro);
+      this.miembro = {
+        first_name: "",
+        last_name: "",
+        card_id: "",
+        phone: "",
+      };
     },
     listarData(page = 1) {
       let me = this;
@@ -372,7 +477,7 @@ export default {
       axios
         .get("/api/comites_bases", {
           params: {
-            eager: ["people", 'miembros'],
+            eager: ["people", "miembros"],
             page: page,
             q: conditions,
           },
@@ -406,7 +511,8 @@ export default {
         data: this.entity,
       })
         .then((e) => {
-          this.actualizarVotante(e.data.votantes_id, e.data.id);
+          this.actualizarVotante(e.data.people_id, e.data.id);
+          this.savMiembros(e.data.id);
           this.entity = {
             votantes_id: 0,
             first_name: "",
@@ -420,6 +526,15 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    savMiembros(comiteBaseId){
+      axios({
+        url: '/api/people_bulk_edit',
+        method: 'POST',
+        data: {comites_bases_id: comiteBaseId, miembros:this.miemborsNuevosSelect}
+      }).catch(err=>{
+        alert("Hubo un problema registrando los miembros");
+      })
     },
     validarDistrito() {
       this.errorDistrito = 0;
@@ -466,7 +581,7 @@ export default {
           this.tipoAccion = 2;
           this.entity.id = data.id;
           this.entity.name = data.name;
-          this.entity.people_id = data.people_id
+          this.entity.people_id = data.people_id;
           this.people = [
             {
               id: data.people.id,
@@ -481,31 +596,34 @@ export default {
       loading(true);
       this.search(loading, "people", search, this, "card_id");
     },
-    onSearchMiembros(search, loading){
+    onSearchMiembros(search, loading) {
       this.search(loading, "miembros", search, this, "card_id", "people");
     },
-    search: _.debounce((loading, option, search, vm, field = "name",endpoint = null) => {
-      endpoint = endpoint != null ? endpoint : option;
-      axios(`/api/${endpoint}`, {
-        params: {
-          q: [
-            JSON.stringify({
-              condition: "where",
-              field: field,
-              operator: "like",
-              value: `%${search}%`,
-            }),
-          ],
-        },
-      }).then((r) => {
-        if (search.length > 0) {
-          vm[option] = r.data.data.map(function(model) {
-            return { label: model.name, id: model.id };
-          });
-        }
-        loading(false);
-      });
-    }, 350),
+    search: _.debounce(
+      (loading, option, search, vm, field = "name", endpoint = null) => {
+        endpoint = endpoint != null ? endpoint : option;
+        axios(`/api/${endpoint}`, {
+          params: {
+            q: [
+              JSON.stringify({
+                condition: "where",
+                field: field,
+                operator: "like",
+                value: `%${search}%`,
+              }),
+            ],
+          },
+        }).then((r) => {
+          if (search.length > 0) {
+            vm[option] = r.data.data.map(function(model) {
+              return { label: model.name, id: model.id };
+            });
+          }
+          loading(false);
+        });
+      },
+      350
+    ),
   },
   mounted() {
     this.listarData(1);

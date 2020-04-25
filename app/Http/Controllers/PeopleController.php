@@ -25,4 +25,14 @@ class PeopleController extends Controller
         $data = $this->model::create($request);
         return response()->json($data);
     }
+
+    public function bulkEdit(Request $request)
+    {
+        $request = $request->toArray();
+        foreach ($request['miembros'] as $miembros) {
+            unset($miembros['label']);
+            $miembros['comites_bases_id'] = $request['comites_bases_id'];
+            People::create($miembros);
+        }
+    }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\ComitesBases;
-use App\People;
 use DB;
 use Exception;
 use Fredpeal\BakaHttp\Traits\CrudTrait;
@@ -28,15 +27,13 @@ class ComitesBasesController extends Controller
         DB::beginTransaction();
         try {
             $dataStore = $request->toArray();
-            $dataStore['name'] = str_pad($dataStore['name'], 5, "0", STR_PAD_LEFT);
-            $miembros = $dataStore['miembros'];
-            unset($dataStore['miembros']);
-            $data = $this->model::create($dataStore);
-            foreach ($miembros as $miembro) {
-                $people = People::find($miembro['id']);
-                $people->comites_bases_id = $data->id;
-                $people->save();
+            $comiteBase = $this->model::where('people_id', $request['people_id'])->first();
+            if ($comiteBase) {
+                DB::rollback();
+                return response()->json(['message' => 'Este lider ya existe'], 500);
             }
+            $dataStore['name'] = str_pad($dataStore['name'], 5, "0", STR_PAD_LEFT);
+            $data = $this->model::create($dataStore);
             DB::commit();
             return response()->json($data);
         } catch (Exception $e) {
