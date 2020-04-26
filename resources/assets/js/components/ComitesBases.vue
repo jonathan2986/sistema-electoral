@@ -132,7 +132,7 @@
             >
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Digite la Cedula del Votante</label
+                  >Cedula del Coordinador</label
                 >
                 <div class="col-md-9">
                   <v-select
