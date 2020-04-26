@@ -511,7 +511,7 @@ export default {
         data: this.entity,
       })
         .then((e) => {
-          this.actualizarVotante(e.data.people_id, e.data.id);
+          // this.actualizarVotante(e.data.people_id, e.data.id);
           this.savMiembros(e.data.id);
           this.entity = {
             votantes_id: 0,
