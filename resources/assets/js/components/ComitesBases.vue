@@ -52,7 +52,7 @@
                 <th>Apellido</th>
                 <th>Cedula</th>
                 <th>Numeros de Miembros</th>
-                <th>More</th>
+                <th>Agregar Miembros</th>
               </tr>
             </thead>
             <tbody>
