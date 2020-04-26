@@ -163,7 +163,6 @@
                     class="form-control"
                     placeholder="Nombre"
                   />
-                  <span class="help-block">(*) Ingrese el nombre</span>
                 </div>
               </div>
               <div class="form-group row">
@@ -177,7 +176,6 @@
                     class="form-control"
                     placeholder="Apellido"
                   />
-                  <span class="help-block">(*) Ingrese el apellido</span>
                 </div>
               </div>
               <div class="form-group row">
@@ -192,7 +190,6 @@
                     class="form-control"
                     placeholder="Cedula"
                   />
-                  <span class="help-block">(*) Ingrese la Cedula</span>
                 </div>
               </div>
               <div class="form-group row">
@@ -207,7 +204,6 @@
                     class="form-control"
                     placeholder="Telefono"
                   />
-                  <span class="help-block">(*) Ingrese el Telefono</span>
                 </div>
               </div>
               <div class="form-group row">
@@ -222,7 +218,6 @@
                     class="form-control"
                     placeholder="Celular"
                   />
-                  <span class="help-block">(*) Ingrese el Celular</span>
                 </div>
               </div>
               <div class="form-group row">
@@ -236,7 +231,6 @@
                     class="form-control"
                     placeholder="Email"
                   />
-                  <span class="help-block">(*) Ingrese el Email</span>
                 </div>
               </div>
               <div class="form-group row">
@@ -250,9 +244,6 @@
                     class="form-control"
                     placeholder="Fecha de Nacimiento"
                   />
-                  <span class="help-block"
-                    >(*) Ingrese la fecha de nacimiento</span
-                  >
                 </div>
               </div>
               <div class="form-group row">
@@ -266,7 +257,6 @@
                     class="form-control"
                     placeholder="Profesion"
                   />
-                  <span class="help-block">(*) Ingrese la profession</span>
                 </div>
               </div>
               <div class="form-group row">
@@ -280,7 +270,6 @@
                     class="form-control"
                     placeholder="Direccion"
                   />
-                  <span class="help-block">(*) Ingrese la direccion</span>
                 </div>
               </div>
               <div class="form-group row">
@@ -294,7 +283,6 @@
                     class="form-control"
                     placeholder="Ingrese el sector"
                   />
-                  <span class="help-block">(*) Ingrese el sector</span>
                 </div>
               </div>
               <div class="form-group row">
@@ -303,6 +291,7 @@
                 >
                 <div class="col-md-9">
                   <select v-model="entity.sexo" class="form-control" id="">
+                    <option value="" disabled selected hidden>Seleccione el sexo</option>
                     <option value="Masculino">M</option>
                     <option value="Femenino">F</option>
                   </select>
@@ -318,6 +307,7 @@
                     @search="onSearchCircunscripciones"
                     :options="circunscripciones"
                     :filterable="false"
+                    placeholder="Seleccione la Circunscripcion"
                     :reduce="(circunscripcion) => circunscripcion.id"
                   ></v-select>
                 </div>
@@ -332,6 +322,7 @@
                     @search="onSearchMunicipios"
                     :options="municipios"
                     :filterable="false"
+                    placeholder="Seleccione el municipio"
                     :reduce="(municipio) => municipio.id"
                   ></v-select>
                 </div>
@@ -346,6 +337,7 @@
                     @search="onSearchDistritos"
                     :options="distritos"
                     :filterable="false"
+                    placeholder="Seleccione el distrito municipal"
                     :reduce="(distrito) => distrito.id"
                   ></v-select>
                 </div>
@@ -360,6 +352,7 @@
                     @search="onSearchRecintos"
                     :options="recintos"
                     :filterable="false"
+                    placeholder="Seleccione el recinto electoral"
                     :reduce="(recinto) => recinto.id"
                   ></v-select>
                 </div>
@@ -374,6 +367,7 @@
                     @search="onSearchColegiosElectorales"
                     :options="colegios_electorales"
                     :filterable="false"
+                    placeholder="Seleccione el colegio"
                     :reduce="(colegio) => colegio.id"
                   ></v-select>
                 </div>
@@ -388,17 +382,18 @@
                     @search="onSearchComitesBases"
                     :options="comites_bases"
                     :filterable="false"
+                    placeholder="Seleccione el comite de base"
                     :reduce="(comite_base) => comite_base.id"
                   ></v-select>
                 </div>
               </div>
-              <!-- <div v-show="errorProvincia" class="form-group row div-error">
-                                <div class="text-center text-error">
-                                    <div v-for="error in errorMostrarMsjProvincia" :key="error" v-text="error">
+               <div v-show="errorPersona" class="form-group row div-error">
+                    <div class="text-center text-error">
+                      <div v-for="error in errorMostrarMsjPersona" :key="error" v-text="error">
 
-                                    </div>
-                                </div>
-                            </div> -->
+                      </div>
+                    </div>
+               </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -498,8 +493,8 @@ export default {
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
-      errorProvincia: 0,
-      errorMostrarMsjProvincia: [],
+      errorPersona: 0,
+      errorMostrarMsjPersona: [],
       comites_bases: [],
       pagination: {
         total: 0,
@@ -615,8 +610,9 @@ export default {
       me.listarData(page, buscar, criterio);
     },
     save(method) {
-      // if(!this.validarForm()){
-      // }
+      if (this.validarPersona()) {
+        return;
+      }
       let url =
         method == "POST" ? `/api/people` : `/api/people/${this.entity.id}`;
       axios({
@@ -651,6 +647,27 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    validarPersona() {
+      this.errorPersona = 0;
+      this.errorMostrarMsjPersona = [];
+
+      if (!this.entity.first_name)
+        this.errorMostrarMsjPersona.push(
+                "El nombre no puede ir vacio."
+        );
+      if (!this.entity.last_name)
+        this.errorMostrarMsjPersona.push(
+                "El apellido no puede ir vacio."
+        );
+      if (!this.entity.card_id)
+        this.errorMostrarMsjPersona.push(
+                "Ingrese una cedula"
+        );
+
+      if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
+
+      return this.errorPersona;
     },
     cerrarModal() {
       this.modal = 0;
