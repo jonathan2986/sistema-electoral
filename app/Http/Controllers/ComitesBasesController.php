@@ -28,6 +28,9 @@ class ComitesBasesController extends Controller
         try {
             $dataStore = $request->toArray();
             $comiteBase = $this->model::where('people_id', $request['people_id'])->first();
+            $comiteBaseNumber = $this->model::max('name');
+            $comiteBaseNumber = $comiteBaseNumber ? intval($comiteBaseNumber) + 1 : 1;
+            $dataStore['name'] = $comiteBaseNumber;
             if ($comiteBase) {
                 DB::rollback();
                 return response()->json(['message' => 'Este lider ya existe'], 500);
@@ -35,6 +38,8 @@ class ComitesBasesController extends Controller
             $dataStore['name'] = str_pad($dataStore['name'], 5, "0", STR_PAD_LEFT);
             $data = $this->model::create($dataStore);
             DB::commit();
+            $data = $this->model::find($data->id);
+            $data->load('people');
             return response()->json($data);
         } catch (Exception $e) {
             DB::rollback();

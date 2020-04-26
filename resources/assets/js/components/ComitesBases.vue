@@ -144,20 +144,6 @@
                   ></v-select>
                 </div>
               </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Codigo del Comite de Base</label
-                >
-                <div class="col-md-9">
-                  <input
-                    type="text"
-                    class="form-control"
-                    v-model="entity.name"
-                    name=""
-                    id=""
-                  />
-                </div>
-              </div>
               <div class="form-group row" v-if="tipoAccion == 1">
                 <label class="col-md-3 form-control-label" for="text-input"
                   >Miembros</label
@@ -379,7 +365,6 @@ export default {
       entity: {
         miembros: [],
         people_id: 0,
-        name: "",
         id: 0,
       },
       offset: 3,
@@ -484,7 +469,9 @@ export default {
         data: this.entity,
       })
         .then((e) => {
-          // this.actualizarVotante(e.data.people_id, e.data.id);
+          if (e.data.people.comites_bases_id == null) {
+            this.actualizarVotante(e.data.people_id, e.data.id);
+          }
           this.savMiembros(e.data.id);
           this.entity = {
             votantes_id: 0,
