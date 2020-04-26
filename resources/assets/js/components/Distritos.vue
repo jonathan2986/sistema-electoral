@@ -67,7 +67,7 @@
                     <i class="icon-pencil"></i>
                   </button>
                   &nbsp;
-                  <button type="button" class="btn btn-danger btn-sm">
+                  <button type="button" @click="borrar(model.id)" class="btn btn-danger btn-sm">
                     <i class="icon-trash"></i>
                   </button>
                 </td>
@@ -404,6 +404,17 @@ export default {
     },
   },
   methods: {
+    borrar(id) {
+      let r = confirm("Esta seguro que quiere borrar este distrito");
+      if (r) {
+        axios({
+          url: `/api/distritos/${id}`,
+          method: "DELETE",
+        }).then(r=>{
+          this.listarData();
+        });
+      }
+    },
     listarData(page = 1) {
       let me = this;
       axios

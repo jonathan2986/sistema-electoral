@@ -72,7 +72,7 @@
                     <i class="icon-pencil"></i>
                   </button>
                   &nbsp;
-                  <button type="button" class="btn btn-danger btn-sm">
+                  <button @click="borrar(model.id)" type="button" class="btn btn-danger btn-sm">
                     <i class="icon-trash"></i>
                   </button>
                 </td>
@@ -367,6 +367,16 @@ export default {
     }
   },
   methods: {
+    borrar(id) {
+      let r = confirm("Esta seguro que quiere borrar este colegio electoral");
+      if (r) {
+        axios({
+          url: `/api/colegios_electorales/${id}`,
+          method: "DELETE",
+        }).then(r => {
+          this.listarData();
+        });
+    }},
     activatedAdvancedSearch() {
       if (this.criterio != "name") {
         this.advancedSearch = 1;
