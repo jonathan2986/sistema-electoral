@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ComitesBases;
+use App\People;
 use DB;
 use Exception;
 use Fredpeal\BakaHttp\Traits\CrudTrait;
@@ -65,6 +66,66 @@ class ComitesBasesController extends Controller
         $this->model::where('id', '=', $id)
             ->update($data);
         $data = $this->model::find($id);
+        return response()->json($data);
+    }
+
+    public function getByFirstName(Request $request, $name)
+    {
+        $people = People::where('first_name', 'like', "%{$name}%")->select('id')->get();
+        $people = $people->toArray();
+
+        $peopleId = array_map(function ($model) {
+            return $model['id'];;
+        }, $people);
+
+        $request = $request->toArray();
+        $condition = [
+            'condition' => 'whereIn',
+            'field' => 'people_id',
+            'value' => implode(',', $peopleId),
+        ];
+        $request['q'][] = json_encode($condition);
+        $data = $this->search($request);
+        return response()->json($data);
+    }
+
+    public function getByLastName(Request $request, $name)
+    {
+        $people = People::where('last_name', 'like', "%{$name}%")->select('id')->get();
+        $people = $people->toArray();
+
+        $peopleId = array_map(function ($model) {
+            return $model['id'];;
+        }, $people);
+
+        $request = $request->toArray();
+        $condition = [
+            'condition' => 'whereIn',
+            'field' => 'people_id',
+            'value' => implode(',', $peopleId),
+        ];
+        $request['q'][] = json_encode($condition);
+        $data = $this->search($request);
+        return response()->json($data);
+    }
+
+    public function getByCardId(Request $request, $name)
+    {
+        $people = People::where('card_id', 'like', "%{$name}%")->select('id')->get();
+        $people = $people->toArray();
+
+        $peopleId = array_map(function ($model) {
+            return $model['id'];;
+        }, $people);
+
+        $request = $request->toArray();
+        $condition = [
+            'condition' => 'whereIn',
+            'field' => 'people_id',
+            'value' => implode(',', $peopleId),
+        ];
+        $request['q'][] = json_encode($condition);
+        $data = $this->search($request);
         return response()->json($data);
     }
 }

@@ -22,7 +22,10 @@
             <div class="col-md-6">
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
-                  <option value="municipio">Comites de Bases</option>
+                  <option value="name">Comites de Bases</option>
+                  <option value="first_name">Nombre del Coordinador</option>
+                  <option value="last_name">Apellido del Coordinador</option>
+                  <option value="card_id">Cedula del Coordinador</option>
                 </select>
                 <input
                   type="text"
@@ -330,12 +333,6 @@
 
 <script>
 export default {
-  props: {
-    permisionCondition: {
-      default: null,
-      type: String,
-    },
-  },
   data() {
     return {
       municipio_id: 0,
@@ -356,6 +353,7 @@ export default {
       errorMostrarMsjComite: [],
       miembrosNuevos: [],
       miemborsNuevosSelect: [],
+      url: "/api/comites_bases",
       miembro: {
         first_name: "",
         last_name: "",
@@ -407,15 +405,33 @@ export default {
       }
       return pagesArray;
     },
-    defaultCondition() {
-      return this.permisionCondition != null
-        ? {
-            condition: "whereIn",
-            operator: "=",
-            field: "municipios_id",
-            value: this.permisionCondition,
-          }
-        : null;
+    conditions: function() {
+      let condition = [];
+      switch (this.criterio) {
+        case "first_name":
+          this.url = `/api/advanced/comites_bases/first_name/${this.buscar}`;
+          condition = [];
+          break;
+        case "last_name":
+          this.url = `/api/advanced/comites_bases/last_name/${this.buscar}`;
+          condition = [];
+          break;
+        case "card_id":
+          this.url = `/api/advanced/comites_bases/card_id/${this.buscar}`;
+          condition = [];
+          break;
+        default:
+          this.url = '/api/comites_bases';
+          condition.push({
+            condition: 'where',
+            field: 'name',
+            operator: 'like',
+            value: `%${this.buscar}%`
+          });
+          break;
+
+      }
+      return condition;
     },
   },
   methods: {
@@ -466,16 +482,12 @@ export default {
     },
     listarData(page = 1) {
       let me = this;
-      let conditions = [];
-      if (this.defaultCondition != null) {
-        conditions.push(this.defaultCondition);
-      }
       axios
-        .get("/api/comites_bases", {
+        .get(this.url, {
           params: {
             eager: ["people", "miembros"],
             page: page,
-            q: conditions,
+            q: this.conditions,
           },
         })
         .then((response) => {

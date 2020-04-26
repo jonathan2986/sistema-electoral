@@ -54,4 +54,7 @@ Route::group(['prefix' => '/advanced'], function () {
     Route::get('/people/recintos/{name}', 'PeopleController@searchByRecintos');
     Route::get('/people/colegios_electorales/{name}', 'PeopleController@searchByColegiosElectorales');
 
+    Route::get('/comites_bases/first_name/{name}', 'ComitesBasesController@getByFirstName');
+    Route::get('/comites_bases/last_name/{name}', 'ComitesBasesController@getByLastName');
+    Route::get('/comites_bases/card_id/{name}', 'ComitesBasesController@getByCardId');
 });
