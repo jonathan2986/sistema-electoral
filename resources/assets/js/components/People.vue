@@ -29,7 +29,9 @@
                   <option value="profession">Profesion</option>
                   <option value="recintos">Recintos</option>
                   <option value="comites_bases">Comite de Base</option>
-                  <option value="colegios_electorales">Colegios Electorales</option>
+                  <option value="colegios_electorales"
+                    >Colegios Electorales</option
+                  >
                 </select>
                 <input
                   type="text"
@@ -80,7 +82,11 @@
                       <i class="icon-pencil"></i>
                     </button>
                     &nbsp;
-                    <button @click="borrar(model.id)" type="button" class="btn btn-danger btn-sm">
+                    <button
+                      @click="borrar(model.id)"
+                      type="button"
+                      class="btn btn-danger btn-sm"
+                    >
                       <i class="icon-trash"></i>
                     </button>
                   </td>
@@ -96,9 +102,7 @@
                   <td
                     v-text="model.municipios ? model.municipios.name : ''"
                   ></td>
-                  <td
-                    v-text="model.distritos ? model.distritos.name : ''"
-                  ></td>
+                  <td v-text="model.distritos ? model.distritos.name : ''"></td>
                   <td v-text="model.recintos ? model.recintos.name : ''"></td>
                   <td
                     v-text="
@@ -506,6 +510,7 @@ export default {
       tipoAccion: 0,
       errorPersona: 0,
       errorMostrarMsjPersona: [],
+      url: "/api/people",
       comites_bases: [],
       pagination: {
         total: 0,
@@ -570,6 +575,36 @@ export default {
       }
       return pagesArray;
     },
+    conditions: function() {
+      let condition = [];
+      switch (this.criterio) {
+        case "recintos":
+          condition = [];
+          this.url = `/api/advanced/people/recintos/${this.buscar}`;
+          break;
+        case "comites_bases":
+          condition = [];
+          this.url = `/api/advanced/people/comites_bases/${this.buscar}`;
+          break;
+        case "colegios_electorales":
+          condition = [];
+          this.url = `/api/advanced/people/colegios_electorales/${this.buscar}`;
+          break;
+        default:
+          if (this.criterio.length > 0) {
+            condition.push({
+              field: this.criterio,
+              value: `%${this.buscar}%`,
+              condition: "where",
+              operator: "like",
+            });
+          }
+
+          this.url = "/api/people";
+          break;
+      }
+      return condition;
+    },
   },
   methods: {
     borrar(id) {
@@ -585,24 +620,13 @@ export default {
     },
     listarData(page = 1) {
       let me = this;
-      let condition = [];
-      if (this.criterio.length > 0) {
-        condition = [
-          {
-            field: this.criterio,
-            value: `%${this.buscar}%`,
-            operator: "like",
-            condition: "where",
-          },
-        ];
-      }
 
       axios
-        .get("/api/people", {
+        .get(this.url, {
           params: {
             page: page,
             perPage: 6,
-            q: condition,
+            q: this.conditions,
             eager: [
               "municipios",
               "circunscripciones",
