@@ -27,6 +27,9 @@
                   <option value="phone_number">Telefono</option>
                   <option value="sexo">Sexo</option>
                   <option value="profession">Profesion</option>
+                  <option value="recintos">Recintos</option>
+                  <option value="comites_bases">Comite de Base</option>
+                  <option value="colegios_electorales">Colegios Electorales</option>
                 </select>
                 <input
                   type="text"
@@ -60,6 +63,7 @@
                   <th>Sexo</th>
                   <th>Profesion</th>
                   <th>Municipio</th>
+                  <th>Distrito</th>
                   <th>Recinto</th>
                   <th>Colegio Electoral</th>
                   <th>Comite de Base</th>
@@ -91,6 +95,9 @@
                   <td v-text="model.profession"></td>
                   <td
                     v-text="model.municipios ? model.municipios.name : ''"
+                  ></td>
+                  <td
+                    v-text="model.distritos ? model.distritos.name : ''"
                   ></td>
                   <td v-text="model.recintos ? model.recintos.name : ''"></td>
                   <td
