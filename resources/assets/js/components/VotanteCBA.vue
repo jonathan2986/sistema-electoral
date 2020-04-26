@@ -8,7 +8,7 @@
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-primary modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">
@@ -20,56 +20,67 @@
             data-dismiss="modal"
             aria-label="Close"
           >
-            <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true" @click="$emit('close')">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="container-fluid">
-              <form action="">
-                <div class="row">
-                  <div class="form-group">
-                    <label for="">Nombre</label>
+              <form
+                      action=""
+                      method="post"
+                      enctype="multipart/form-data"
+                      class="form-horizontal"
+              >
+                <div class="form-group row">
+                  <label class="col-md-3 form-control-label" for="text-input"
+                  >Nombre</label>
+                  <div class="col-md-9">
                     <input
-                      type="text"
-                      class="form-control"
-                      v-model="entity.first_name"
-                      placeholder="Nombre"
+                            type="text"
+                            class="form-control"
+                            v-model="entity.first_name"
+                            placeholder="Nombre"
                     />
                   </div>
                 </div>
-                <div class="row">
-                  <div class="form-group">
-                    <label for="">Apellido</label>
+                <div class="form-group row">
+                  <label class="col-md-3 form-control-label" for="text-input"
+                  >Apellido</label>
+                  <div class="col-md-9">
                     <input
-                      type="text"
-                      class="form-control"
-                      v-model="entity.last_name"
-                      placeholder="Apellido"
+                            type="text"
+                            class="form-control"
+                            v-model="entity.last_name"
+                            placeholder="Apellido"
                     />
                   </div>
                 </div>
-                <div class="row">
-                  <div class="form-group">
-                    <label for="">Cedula</label>
+                <div class="form-group row">
+                  <label class="col-md-3 form-control-label" for="text-input"
+                  >Cedula</label
+                  >
+                  <div class="col-md-9">
                     <input
-                      type="text"
-                      v-model="entity.card_id"
-                      v-mask="'###-#######-#'"
-                      class="form-control"
-                      placeholder="Cedula"
+                            type="text"
+                            v-model="entity.card_id"
+                            v-mask="'###-#######-#'"
+                            class="form-control"
+                            placeholder="Cedula"
                     />
                   </div>
                 </div>
-                <div class="row">
-                  <div class="form-group">
-                    <label for="">Telefono</label>
+                <div class="form-group row">
+                  <label class="col-md-3 form-control-label" for="text-input"
+                  >Telefono</label
+                  >
+                  <div class="col-md-9">
                     <input
-                      type="text"
-                      v-model="entity.phone"
-                      v-mask="'###-###-####'"
-                      class="form-control"
-                      placeholder="Cedula"
+                            type="text"
+                            v-model="entity.phone"
+                            v-mask="'###-###-####'"
+                            class="form-control"
+                            placeholder="Telefono"
                     />
                   </div>
                 </div>
@@ -84,10 +95,10 @@
             data-dismiss="modal"
             @click="$emit('close')"
           >
-            Close
+            Cerrar
           </button>
           <button type="button" @click="save()" class="btn btn-primary">
-            Save changes
+            Guardar Cambios
           </button>
         </div>
       </div>
@@ -133,3 +144,24 @@ export default {
   },
 };
 </script>
+
+<style>
+.modal-content {
+  width: 100% !important;
+  position: absolute !important;
+}
+.mostrar {
+  display: list-item !important;
+  opacity: 1 !important;
+  position: absolute !important;
+  background-color: #3c29297a !important;
+}
+.div-error {
+  display: flex;
+  justify-content: center;
+}
+.text-error {
+  color: red !important;
+  font-weight: bold;
+}
+</style>
