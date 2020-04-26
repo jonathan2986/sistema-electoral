@@ -291,7 +291,7 @@
                 >
                 <div class="col-md-9">
                   <select v-model="entity.sexo" class="form-control" id="">
-                    <option value="" disabled selected hidden>Seleccione el sexo</option>
+                    <option value="" disabled selected >Seleccione el sexo</option>
                     <option value="Masculino">M</option>
                     <option value="Femenino">F</option>
                   </select>

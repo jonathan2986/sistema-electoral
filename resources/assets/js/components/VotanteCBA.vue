@@ -41,6 +41,7 @@
                             class="form-control"
                             v-model="entity.first_name"
                             placeholder="Nombre"
+                            required
                     />
                   </div>
                 </div>
@@ -53,6 +54,7 @@
                             class="form-control"
                             v-model="entity.last_name"
                             placeholder="Apellido"
+                            required
                     />
                   </div>
                 </div>
@@ -67,6 +69,7 @@
                             v-mask="'###-#######-#'"
                             class="form-control"
                             placeholder="Cedula"
+                            required
                     />
                   </div>
                 </div>

@@ -141,7 +141,7 @@
                     :options="people"
                     :filterable="false"
                     :reduce="(people) => people.id"
-                  ></v-select>
+                    required></v-select>
                 </div>
               </div>
               <div class="form-group row" v-if="tipoAccion == 1">
@@ -168,6 +168,7 @@
                     v-model="miembro.first_name"
                     name=""
                     id=""
+                    required
                   />
                 </div>
               </div>
@@ -182,6 +183,7 @@
                     v-model="miembro.last_name"
                     name=""
                     id=""
+                    required
                   />
                 </div>
               </div>
@@ -196,7 +198,7 @@
                     v-model="miembro.card_id"
                     v-mask="'###-#######-#'"
                     name=""
-                    id=""
+                    id="" required
                   />
                 </div>
               </div>
@@ -216,10 +218,10 @@
                 </div>
               </div>
 
-              <div v-show="errorDistrito" class="form-group row div-error">
+              <div v-show="errorComite" class="form-group row div-error">
                 <div class="text-center text-error">
                   <div
-                    v-for="error in errorMostrarMsjDistrito"
+                    v-for="error in errorMostrarMsjComite"
                     :key="error"
                     v-text="error"
                   ></div>
@@ -343,9 +345,9 @@ export default {
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
-      errorDistrito: 0,
+      errorComite: 0,
       showModalVotantes: false,
-      errorMostrarMsjDistrito: [],
+      errorMostrarMsjComite: [],
       miembrosNuevos: [],
       miemborsNuevosSelect: [],
       miembro: {
@@ -459,6 +461,9 @@ export default {
       me.listarData(page, buscar, criterio);
     },
     save(method) {
+      if (this.validarComite()) {
+        return;
+      }
       let url =
         method == "POST"
           ? `/api/comites_bases`
@@ -499,20 +504,20 @@ export default {
         alert("Hubo un problema registrando los miembros");
       });
     },
-    validarDistrito() {
-      this.errorDistrito = 0;
-      this.errorMostrarMsjDistrito = [];
+    validarComite() {
+      this.errorComite = 0;
+      this.errorMostrarMsjComite = [];
 
-      if (!this.entity.name)
-        this.errorMostrarMsjDistrito.push("El distrito no puede ir vacio.");
-      if (this.entity.municipios_id === 0)
-        this.errorMostrarMsjDistrito.push("Seleccione un municipio.");
-      if (this.entity.circunscripciones_id === 0)
-        this.errorMostrarMsjDistrito.push("Seleccione una circunscripcion.");
+      // if (!this.entity.name)
+      //   this.errorMostrarMsjDistrito.push("El distrito no puede ir vacio.");
+      // if (this.entity.municipios_id === 0)
+      //   this.errorMostrarMsjDistrito.push("Seleccione un municipio.");
+      if (this.entity.people_id === 0)
+        this.errorMostrarMsjComite.push("Seleccione un Elector.");
 
-      if (this.errorMostrarMsjDistrito.length) this.errorDistrito = 1;
+      if (this.errorMostrarMsjComite.length) this.errorComite = 1;
 
-      return this.errorDistrito;
+      return this.errorComite;
     },
     cerrarModal() {
       this.modal = 0;
