@@ -66,7 +66,11 @@
                     <i class="icon-pencil"></i>
                   </button>
                   &nbsp;
-                  <button @click="borrar(model.id)" type="button" class="btn btn-danger btn-sm">
+                  <button
+                    @click="borrar(model.id)"
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                  >
                     <i class="icon-trash"></i>
                   </button>
                 </td>
@@ -141,7 +145,8 @@
                     :options="people"
                     :filterable="false"
                     :reduce="(people) => people.id"
-                    required></v-select>
+                    required
+                  ></v-select>
                 </div>
               </div>
               <div class="form-group row" v-if="tipoAccion == 1">
@@ -198,7 +203,8 @@
                     v-model="miembro.card_id"
                     v-mask="'###-#######-#'"
                     name=""
-                    id="" required
+                    id=""
+                    required
                   />
                 </div>
               </div>
@@ -419,24 +425,44 @@ export default {
         axios({
           url: `/api/comites_bases/${id}`,
           method: "DELETE",
-        }).then(r => {
+        }).then((r) => {
           this.listarData();
         });
-    }},
+      }
+    },
     abrirModalVotantes(id) {
       this.showModalVotantes = true;
       this.comites_bases_id = id;
     },
     agregarMiembro() {
-      this.miembro.label = `${this.miembro.first_name} ${this.miembro.last_name} ${this.miembro.card_id}`;
-      this.miembrosNuevos.push(this.miembro);
-      this.miemborsNuevosSelect.push(this.miembro);
-      this.miembro = {
-        first_name: "",
-        last_name: "",
-        card_id: "",
-        phone: "",
-      };
+      axios
+        .get("/api/people", {
+          params: {
+            q: [
+              {
+                condition: "where",
+                operator: "=",
+                field: "card_id",
+                value: this.miembro.card_id,
+              },
+            ],
+          },
+        })
+        .then((r) => {
+          if (r.data.data.length > 0) {
+            alert("El elector ya esta registrado");
+            return;
+          }
+          this.miembro.label = `${this.miembro.first_name} ${this.miembro.last_name} ${this.miembro.card_id}`;
+          this.miembrosNuevos.push(this.miembro);
+          this.miemborsNuevosSelect.push(this.miembro);
+          this.miembro = {
+            first_name: "",
+            last_name: "",
+            card_id: "",
+            phone: "",
+          };
+        });
     },
     listarData(page = 1) {
       let me = this;
