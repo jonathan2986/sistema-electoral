@@ -67,7 +67,11 @@
                     <i class="icon-pencil"></i>
                   </button>
                   &nbsp;
-                  <button type="button" class="btn btn-danger btn-sm">
+                  <button
+                    @click="borrar(model.id)"
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                  >
                     <i class="icon-trash"></i>
                   </button>
                 </td>
@@ -92,8 +96,9 @@
               :prev-text="'Anterior'"
               :next-text="'Siguiente'"
               :containerClass="'pagination'"
-              >
-            ></sliding-pagination>
+            >
+              ></sliding-pagination
+            >
           </nav>
         </div>
       </div>
@@ -359,6 +364,17 @@ export default {
     },
   },
   methods: {
+    borrar(id) {
+      let r = confirm("Esta seguro que quiere borrar este municipio");
+      if (r) {
+        axios({
+          url: `/api/municipios/${id}`,
+          method: "DELETE",
+        }).then(r => {
+          this.listarData();
+        });
+      }
+    },
     buscarAction() {
       switch (this.criterio) {
         case "name":

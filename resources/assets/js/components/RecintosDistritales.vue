@@ -72,31 +72,55 @@
                     <i class="icon-pencil"></i>
                   </button>
                   &nbsp;
-                  <button type="button" class="btn btn-danger btn-sm">
+                  <button
+                    type="button"
+                    @click="borrar(model.id)"
+                    class="btn btn-danger btn-sm"
+                  >
                     <i class="icon-trash"></i>
                   </button>
                 </td>
                 <td v-text="model.name"></td>
                 <td v-text="model.number_colegios"></td>
                 <td v-text="model.address"></td>
-                <td v-text="model.municipios.name"></td>
+                <td v-text="model.municipios ? model.municipios.name : ''"></td>
                 <td v-text="model.distritos ? model.distritos.name : ''"></td>
-                
-                <td v-if="model.coordinadores">{{`${model.coordinadores.first_name} ${model.coordinadores.last_name}`}}</td>
-                <td v-else></td>
-                
-                <td v-if="model.coordinadores_ejecutivos">{{`${model.coordinadores_ejecutivos.first_name} ${model.coordinadores_ejecutivos.last_name}`}}</td>
+
+                <td v-if="model.coordinadores">
+                  {{
+                    `${model.coordinadores.first_name} ${model.coordinadores.last_name}`
+                  }}
+                </td>
                 <td v-else></td>
 
-                <td v-if="model.coordinadores_electorales">{{`${model.coordinadores_electorales.first_name} ${model.coordinadores_electorales.last_name}`}}</td>
+                <td v-if="model.coordinadores_ejecutivos">
+                  {{
+                    `${model.coordinadores_ejecutivos.first_name} ${model.coordinadores_ejecutivos.last_name}`
+                  }}
+                </td>
                 <td v-else></td>
 
-                <td v-if="model.coordinadores_seguridad">{{`${model.coordinadores_seguridad.first_name} ${model.coordinadores_seguridad.last_name}`}}</td>
+                <td v-if="model.coordinadores_electorales">
+                  {{
+                    `${model.coordinadores_electorales.first_name} ${model.coordinadores_electorales.last_name}`
+                  }}
+                </td>
                 <td v-else></td>
 
-                <td v-if="model.coordinadores_finanzas">{{`${model.coordinadores_finanzas.first_name} ${model.coordinadores_finanzas.last_name}`}}</td>
-                <td v-else></td>  
-            </tr>
+                <td v-if="model.coordinadores_seguridad">
+                  {{
+                    `${model.coordinadores_seguridad.first_name} ${model.coordinadores_seguridad.last_name}`
+                  }}
+                </td>
+                <td v-else></td>
+
+                <td v-if="model.coordinadores_finanzas">
+                  {{
+                    `${model.coordinadores_finanzas.first_name} ${model.coordinadores_finanzas.last_name}`
+                  }}
+                </td>
+                <td v-else></td>
+              </tr>
             </tbody>
           </table>
           <nav>
@@ -106,8 +130,9 @@
               :prev-text="'Anterior'"
               :next-text="'Siguiente'"
               :containerClass="'pagination'"
-              >
-            ></sliding-pagination>
+            >
+              ></sliding-pagination
+            >
           </nav>
         </div>
       </div>
@@ -391,7 +416,7 @@ export default {
       tipoAccion: 0,
       errorRecinto: 0,
       errorMostrarMsjRecinto: [],
-      url: '/api/recintos',
+      url: "/api/recintos",
       pagination: {
         total: 0,
         current_page: 1,
@@ -401,10 +426,10 @@ export default {
         to: 0,
       },
       entity: {
-        coordinadores_ejecutivos_id: '',
-        coordinadores_electorales_id: '',
-        coordinadores_seguridad_id: '',
-        coordinadores_finanzas_id: '',
+        coordinadores_ejecutivos_id: "",
+        coordinadores_electorales_id: "",
+        coordinadores_seguridad_id: "",
+        coordinadores_finanzas_id: "",
         coordinadores_id: 0,
         municipios_id: 0,
         distritos_id: 0,
@@ -455,40 +480,51 @@ export default {
           operator: "=",
         });
       }
-      switch(this.criterio){
-         case 'name':
+      switch (this.criterio) {
+        case "name":
           conditions.push({
             condition: "where",
             field: this.criterio,
             operator: "like",
             value: `%${this.buscar}%`,
           });
-          this.url = '/api/recintos';
+          this.url = "/api/recintos";
           break;
-        case 'municipios':
-          this.url = `/api/advanced/recintos/municipios/${this.buscar}`
+        case "municipios":
+          this.url = `/api/advanced/recintos/municipios/${this.buscar}`;
           break;
-        case 'distritos':
-          this.url = `/api/advanced/recintos/distritos/${this.buscar}`
+        case "distritos":
+          this.url = `/api/advanced/recintos/distritos/${this.buscar}`;
           break;
       }
       return conditions;
     },
   },
   methods: {
+    borrar(id) {
+      let r = confirm("Esta seguro que quiere borrar este recinto");
+      if (r) {
+        axios({
+          url: `/api/recintos/${id}`,
+          method: "DELETE",
+        }).then(r => {
+          this.listarData();
+        });
+    }},
     listarData(page = 1) {
       let me = this;
       axios
         .get(this.url, {
           params: {
-            eager: ["municipios", 
-              "distritos", 
-              "coordinadores", 
-              'coordinadores_ejecutivos',
-              'coordinadores_electorales', 
-              'coordinadores_seguridad',
-              'coordinadores_finanzas'
-              ],
+            eager: [
+              "municipios",
+              "distritos",
+              "coordinadores",
+              "coordinadores_ejecutivos",
+              "coordinadores_electorales",
+              "coordinadores_seguridad",
+              "coordinadores_finanzas",
+            ],
             page: page,
             perPage: 10,
             q: this.conditions,
@@ -525,10 +561,10 @@ export default {
       })
         .then((e) => {
           this.entity = {
-            coordinadores_ejecutivos_id: '',
-            coordinadores_electorales_id: '',
-            coordinadores_seguridad_id: '',
-            coordinadores_finanzas_id: '',
+            coordinadores_ejecutivos_id: "",
+            coordinadores_electorales_id: "",
+            coordinadores_seguridad_id: "",
+            coordinadores_finanzas_id: "",
             coordinadores_id: 0,
             municipios_id: 0,
             distritos_id: 0,
@@ -585,10 +621,14 @@ export default {
           this.entity.distritos_id = data.distritos_id;
           this.entity.address = data.address;
           this.entity.coordinadores_id = data.coordinadores_id;
-          this.entity.coordinadores_ejecutivos_id = data.coordinadores_ejecutivos_id;
-          this.entity.coordinadores_electorales_id = data.coordinadores_electorales_id;
-          this.entity.coordinadores_seguridad_id = data.coordinadores_seguridad_id;
-          this.entity.coordinadores_finanzas_id = data.coordinadores_finanzas_id;
+          this.entity.coordinadores_ejecutivos_id =
+            data.coordinadores_ejecutivos_id;
+          this.entity.coordinadores_electorales_id =
+            data.coordinadores_electorales_id;
+          this.entity.coordinadores_seguridad_id =
+            data.coordinadores_seguridad_id;
+          this.entity.coordinadores_finanzas_id =
+            data.coordinadores_finanzas_id;
           this.people = data.coordinadores
             ? [{ id: data.coordinadores_id, label: data.coordinadores.name }]
             : [];
@@ -599,32 +639,48 @@ export default {
             { id: data.municipios.id, label: data.municipios.name },
           ];
 
-          this.coordinadores_ejecutivos = data.coordinadores_ejecutivos ? [{
-            id: data.coordinadores_ejecutivos.id, 
-            label: data.coordinadores_ejecutivos.name
-          }] : [];
+          this.coordinadores_ejecutivos = data.coordinadores_ejecutivos
+            ? [
+                {
+                  id: data.coordinadores_ejecutivos.id,
+                  label: data.coordinadores_ejecutivos.name,
+                },
+              ]
+            : [];
 
-          this.coordinadores_electorales = data.coordinadores_electorales ? [{
-            id: data.coordinadores_electorales.id, 
-            label: data.coordinadores_electorales.name
-          }] : [];
+          this.coordinadores_electorales = data.coordinadores_electorales
+            ? [
+                {
+                  id: data.coordinadores_electorales.id,
+                  label: data.coordinadores_electorales.name,
+                },
+              ]
+            : [];
 
-          this.coordinadores_seguridad = data.coordinadores_seguridad ? [{
-            id: data.coordinadores_seguridad.id, 
-            label: data.coordinadores_seguridad.name
-          }] : [];
+          this.coordinadores_seguridad = data.coordinadores_seguridad
+            ? [
+                {
+                  id: data.coordinadores_seguridad.id,
+                  label: data.coordinadores_seguridad.name,
+                },
+              ]
+            : [];
 
-          this.coordinadores_finanzas = data.coordinadores_finanzas ? [{
-            id: data.coordinadores_finanzas.id, 
-            label: data.coordinadores_finanzas.name
-          }] : [];
+          this.coordinadores_finanzas = data.coordinadores_finanzas
+            ? [
+                {
+                  id: data.coordinadores_finanzas.id,
+                  label: data.coordinadores_finanzas.name,
+                },
+              ]
+            : [];
           break;
         }
       }
     },
     onSearchCoordinadores(search, loading) {
       loading(true);
-      this.search(loading, "people", search, this, 'card_id');
+      this.search(loading, "people", search, this, "card_id");
     },
     onSearchCoordinadoresEjecutivos(search, loading) {
       loading(true);

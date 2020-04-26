@@ -73,14 +73,18 @@
                     <i class="icon-pencil"></i>
                   </button>
                   &nbsp;
-                  <button type="button" class="btn btn-danger btn-sm">
+                  <button
+                    @click="borrar(model.id)"
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                  >
                     <i class="icon-trash"></i>
                   </button>
                 </td>
                 <td v-text="model.name"></td>
                 <td v-text="model.number_colegios"></td>
                 <td v-text="model.address"></td>
-                <td v-text="model.municipios.name"></td>
+                <td v-text="model.municipios ? model.municipios.name : ''"></td>
                 <td v-text="model.distritos ? model.distritos.name : ''"></td>
 
                 <td v-if="model.coordinadores">
@@ -133,8 +137,9 @@
               :prev-text="'Anterior'"
               :next-text="'Siguiente'"
               :containerClass="'pagination'"
-              >
-            ></sliding-pagination>
+            >
+              ></sliding-pagination
+            >
           </nav>
         </div>
       </div>
@@ -519,6 +524,16 @@ export default {
     },
   },
   methods: {
+    borrar(id) {
+      let r = confirm("Esta seguro que quiere borrar este recinto");
+      if (r) {
+        axios({
+          url: `/api/recintos/${id}`,
+          method: "DELETE",
+        }).then(r => {
+          this.listarData();
+        });
+    }},
     listarData(page = 1) {
       let me = this;
       axios
@@ -801,10 +816,12 @@ export default {
 };
 </script>
 <style>
-  .recinto {
-    overflow-y: scroll;
-  }
-  ::-webkit-scrollbar {display: none;}
+.recinto {
+  overflow-y: scroll;
+}
+::-webkit-scrollbar {
+  display: none;
+}
 .modal-content {
   width: 100% !important;
   position: absolute !important;

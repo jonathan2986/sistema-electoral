@@ -66,7 +66,7 @@
                     <i class="icon-pencil"></i>
                   </button>
                   &nbsp;
-                  <button type="button" class="btn btn-danger btn-sm">
+                  <button @click="borrar(model.id)" type="button" class="btn btn-danger btn-sm">
                     <i class="icon-trash"></i>
                   </button>
                 </td>
@@ -413,6 +413,16 @@ export default {
     },
   },
   methods: {
+    borrar(id) {
+      let r = confirm("Esta seguro que quiere borrar este comite de base");
+      if (r) {
+        axios({
+          url: `/api/comites_bases/${id}`,
+          method: "DELETE",
+        }).then(r => {
+          this.listarData();
+        });
+    }},
     abrirModalVotantes(id) {
       this.showModalVotantes = true;
       this.comites_bases_id = id;

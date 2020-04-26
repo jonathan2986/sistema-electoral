@@ -49,4 +49,9 @@ Route::group(['prefix' => '/advanced'], function () {
     Route::get('/votantes/distritos/{name}', 'VotantesController@getByDistritos');
     Route::get('/votantes/recintos/{name}', 'VotantesController@getByRecintos');
     Route::get('/votantes/colegios_electorales/{name}', 'VotantesController@getByColegiosElectorales');
+
+    Route::get('/people/comites_bases/{name}', 'PeopleController@searchByComitesBases');
+    Route::get('/people/recintos/{name}', 'PeopleController@searchByRecintos');
+    Route::get('/people/colegios_electorales/{name}', 'PeopleController@searchByColegiosElectorales');
+
 });
