@@ -101,11 +101,7 @@
                     "
                   ></td>
                   <td
-                    v-text="
-                      model.comites_bases
-                        ? model.comites_bases.name
-                        : ''
-                    "
+                    v-text="model.comites_bases ? model.comites_bases.name : ''"
                   ></td>
                 </tr>
               </tbody>
@@ -208,6 +204,7 @@
                   <input
                     type="text"
                     v-model="entity.phone_number"
+                    v-mask="'###-###-####'"
                     class="form-control"
                     placeholder="Telefono"
                   />
@@ -221,6 +218,7 @@
                 <div class="col-md-9">
                   <input
                     type="text"
+                    v-mask="'###-###-####'"
                     v-model="entity.celphone"
                     class="form-control"
                     placeholder="Celular"
@@ -587,7 +585,7 @@ export default {
         .get("/api/people", {
           params: {
             page: page,
-            perPage: 10,
+            perPage: 6,
             q: condition,
             eager: [
               "municipios",
@@ -595,7 +593,7 @@ export default {
               "distritos",
               "recintos",
               "colegios_electorales",
-              "comites_bases"
+              "comites_bases",
             ],
           },
         })
@@ -693,40 +691,54 @@ export default {
           this.entity.recintos_id = data.recintos_id;
           this.entity.colegios_electorales_id = data.colegios_electorales_id;
           if (this.municipios) {
-            this.municipios = data.municipios ? [
-              {
-                label: data.municipios.name,
-                id: data.municipios_id,
-              },
-            ] : [];
-            this.circunscripciones = data.circunscripciones ? [
-              {
-                label: data.circunscripciones.name,
-                id: data.circunscripciones_id,
-              },
-            ]: [];
-            this.distritos = data.distritos ? [
-              {
-                label: data.distritos.name,
-                id: data.distritos_id,
-              },
-            ] : [];
-            this.recintos = data.recintos ? [
-              {
-                label: data.recintos.name,
-                id: data.recintos_id,
-              },
-            ] : [];
-            this.colegios_electorales = data.colegios_electorales ? [
-              {
-                label: data.colegios_electorales.name,
-                id: data.colegios_electorales_id,
-              },
-            ] : [];
-            this.comites_bases = data.comites_bases ? [{
-              label: data.comites_bases.name,
-              id: data.comites_bases_id
-            }]: [];
+            this.municipios = data.municipios
+              ? [
+                  {
+                    label: data.municipios.name,
+                    id: data.municipios_id,
+                  },
+                ]
+              : [];
+            this.circunscripciones = data.circunscripciones
+              ? [
+                  {
+                    label: data.circunscripciones.name,
+                    id: data.circunscripciones_id,
+                  },
+                ]
+              : [];
+            this.distritos = data.distritos
+              ? [
+                  {
+                    label: data.distritos.name,
+                    id: data.distritos_id,
+                  },
+                ]
+              : [];
+            this.recintos = data.recintos
+              ? [
+                  {
+                    label: data.recintos.name,
+                    id: data.recintos_id,
+                  },
+                ]
+              : [];
+            this.colegios_electorales = data.colegios_electorales
+              ? [
+                  {
+                    label: data.colegios_electorales.name,
+                    id: data.colegios_electorales_id,
+                  },
+                ]
+              : [];
+            this.comites_bases = data.comites_bases
+              ? [
+                  {
+                    label: data.comites_bases.name,
+                    id: data.comites_bases_id,
+                  },
+                ]
+              : [];
           }
           break;
         }
@@ -755,7 +767,7 @@ export default {
     onSearchColegiosElectorales(search, loading) {
       loading(true);
       this.search(loading, "colegios_electorales", search, this);
-    },    
+    },
     onSearchComitesBases(search, loading) {
       loading(true);
       this.search(loading, "comites_bases", search, this);
@@ -813,7 +825,9 @@ export default {
   display: inline-block;
   float: none;
 }
-::-webkit-scrollbar {display: none;}
+::-webkit-scrollbar {
+  display: none;
+}
 .mostrar {
   display: list-item !important;
   opacity: 1 !important;
