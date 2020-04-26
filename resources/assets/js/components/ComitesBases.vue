@@ -87,41 +87,14 @@
             </tbody>
           </table>
           <nav>
-            <ul class="pagination">
-              <li class="page-item" v-if="pagination.current_page > 1">
-                <a
-                  class="page-link"
-                  href="#"
-                  @click.prevent="cambiarPagina(pagination.current_page - 1)"
-                  >Ant</a
-                >
-              </li>
-              <li
-                class="page-item"
-                v-for="page in pagination.last_page"
-                :key="page"
-                :class="[page == isActived ? 'active' : '']"
-                @click="listarData(page)"
-              >
-                <a
-                  class="page-link"
-                  href="#"
-                  @click.prevent="cambiarPagina(page)"
-                  v-text="page"
-                ></a>
-              </li>
-              <li
-                class="page-item"
-                v-if="pagination.current_page < pagination.last_page"
-              >
-                <a
-                  class="page-link"
-                  href="#"
-                  @click.prevent="cambiarPagina(pagination.current_page + 1)"
-                  >Sig</a
-                >
-              </li>
-            </ul>
+            <sliding-pagination
+              :page-count="pagination.last_page"
+              :click-handler="listarData"
+              :prev-text="'Anterior'"
+              :next-text="'Siguiente'"
+              :containerClass="'pagination'"
+            >
+            </sliding-pagination>
           </nav>
         </div>
       </div>
@@ -458,7 +431,7 @@ export default {
       this.comites_bases_id = id;
     },
     agregarMiembro() {
-      this.miembro.label = `${this.miembro.first_name} ${this.miembro.last_name} ${this.miembro.card_id}`
+      this.miembro.label = `${this.miembro.first_name} ${this.miembro.last_name} ${this.miembro.card_id}`;
       this.miembrosNuevos.push(this.miembro);
       this.miemborsNuevosSelect.push(this.miembro);
       this.miembro = {
@@ -527,14 +500,17 @@ export default {
           console.log(err);
         });
     },
-    savMiembros(comiteBaseId){
+    savMiembros(comiteBaseId) {
       axios({
-        url: '/api/people_bulk_edit',
-        method: 'POST',
-        data: {comites_bases_id: comiteBaseId, miembros:this.miemborsNuevosSelect}
-      }).catch(err=>{
+        url: "/api/people_bulk_edit",
+        method: "POST",
+        data: {
+          comites_bases_id: comiteBaseId,
+          miembros: this.miemborsNuevosSelect,
+        },
+      }).catch((err) => {
         alert("Hubo un problema registrando los miembros");
-      })
+      });
     },
     validarDistrito() {
       this.errorDistrito = 0;

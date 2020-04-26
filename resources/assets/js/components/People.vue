@@ -116,8 +116,7 @@
               :next-text="'Siguiente'"
               :containerClass="'pagination'"
             >
-              ></sliding-pagination
-            >
+            </sliding-pagination>
           </nav>
         </div>
       </div>
