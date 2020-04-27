@@ -34,6 +34,21 @@
               >
                 <div class="form-group row">
                   <label class="col-md-3 form-control-label" for="text-input"
+                  >Cedula</label
+                  >
+                  <div class="col-md-9">
+                    <input
+                            type="text"
+                            v-model="entity.card_id"
+                            v-mask="'###-#######-#'"
+                            class="form-control"
+                            placeholder="Cedula"
+                            required
+                    />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 form-control-label" for="text-input"
                   >Nombre</label>
                   <div class="col-md-9">
                     <input
@@ -54,21 +69,6 @@
                             class="form-control"
                             v-model="entity.last_name"
                             placeholder="Apellido"
-                            required
-                    />
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label class="col-md-3 form-control-label" for="text-input"
-                  >Cedula</label
-                  >
-                  <div class="col-md-9">
-                    <input
-                            type="text"
-                            v-model="entity.card_id"
-                            v-mask="'###-#######-#'"
-                            class="form-control"
-                            placeholder="Cedula"
                             required
                     />
                   </div>

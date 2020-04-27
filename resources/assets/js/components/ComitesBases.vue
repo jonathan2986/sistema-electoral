@@ -152,17 +152,20 @@
                   ></v-select>
                 </div>
               </div>
-              <div class="form-group row" v-if="tipoAccion == 1">
+              <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Miembros</label
+                >Cedula</label
                 >
                 <div class="col-md-9">
-                  <v-select
-                    multiple
-                    @search="onSearchMiembros"
-                    v-model="miemborsNuevosSelect"
-                    :options="miembrosNuevos"
-                  ></v-select>
+                  <input
+                          type="text"
+                          class="form-control"
+                          v-model="miembro.card_id"
+                          v-mask="'###-#######-#'"
+                          name=""
+                          id=""
+                          required
+                  />
                 </div>
               </div>
               <div class="form-group row">
@@ -197,22 +200,6 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input"
-                  >Cedula</label
-                >
-                <div class="col-md-9">
-                  <input
-                    type="text"
-                    class="form-control"
-                    v-model="miembro.card_id"
-                    v-mask="'###-#######-#'"
-                    name=""
-                    id=""
-                    required
-                  />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
                   >Telefono</label
                 >
                 <div class="col-md-9">
@@ -224,6 +211,19 @@
                     name=""
                     id=""
                   />
+                </div>
+              </div>
+              <div class="form-group row" v-if="tipoAccion == 1">
+                <label class="col-md-3 form-control-label" for="text-input"
+                >Miembros</label
+                >
+                <div class="col-md-9">
+                  <v-select
+                          multiple
+                          @search="onSearchMiembros"
+                          v-model="miemborsNuevosSelect"
+                          :options="miembrosNuevos"
+                  ></v-select>
                 </div>
               </div>
 
