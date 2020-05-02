@@ -8,10 +8,10 @@
       <!-- Ejemplo de tabla Listado -->
       <div class="card">
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> Personas
+          <i class="fa fa-align-justify"></i> Electores
           <button
             type="button"
-            @click="abrirModal('Persona', 'registrar')"
+            @click="abrirModal('Electores', 'registrar')"
             class="btn btn-secondary"
           >
             <i class="icon-plus"></i>&nbsp;Nuevo
@@ -76,7 +76,7 @@
                   <td>
                     <button
                       type="button"
-                      @click="abrirModal('Persona', 'actualizar', model)"
+                      @click="abrirModal('Electores', 'actualizar', model)"
                       class="btn btn-warning btn-sm"
                     >
                       <i class="icon-pencil"></i>
