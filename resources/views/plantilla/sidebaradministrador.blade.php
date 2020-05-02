@@ -19,16 +19,16 @@
                             <li @click="menu=3" class="nav-item" @if(auth()->user()->canAction('Admin'))>
                                 <a class="nav-link" href="#"><i class="fa fa-map"></i>Municipios</a>
                             </li @endif>
-                            <li @click="menu='distritos'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio') || auth()->user()->canAction('Digitador'))>
+                            <li @click="menu='distritos'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio'))>
                                 <a class="nav-link" href="#"><i class="fa fa-map"></i> Distritos</a>
                             </li @endif>
-                            <li @click="menu='recintos-municipios'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio') || auth()->user()->canAction('Digitador'))>
+                            <li @click="menu='recintos-municipios'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Municipio'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
                             </li @endif>
                             <li @click="menu='recintos-distritos'" class="nav-item"  @if(auth()->user()->hasRol('Coordinador de Distrito'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Recintos</a>
                             </li @endif>
-                            <li @click="menu='colegios-electorales'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Recinto' )|| auth()->user()->canAction('Digitador'))>
+                            <li @click="menu='colegios-electorales'" class="nav-item"  @if(auth()->user()->canAction('Coordinador de Recinto' ))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i> Colegios Electorales</a>
                             </li @endif>
                             <li @click="menu='personas'" class="nav-item" @if(auth()->user()->canAction('Coordinador de Colegio') || auth()->user()->canAction('Digitador'))>
@@ -40,7 +40,7 @@
                             <li @click="menu='roles_users'" class="nav-item"  @if(auth()->user()->canAction('Admin'))>
                                 <a class="nav-link" href="#"><i class="icon-user"></i> Roles</a>
                             </li @endif>
-                            <li @click="menu='comites_bases'" class="nav-item"  @if(auth()->user()->canAction('Admin'))>
+                            <li @click="menu='comites_bases'" class="nav-item"  @if(auth()->user()->canAction('Admin') || auth()->user()->canAction('Digitador'))>
                                 <a class="nav-link" href="#"><i class="icon-user"></i> Comites de Bases</a>
                             </li @endif>
                         </ul>
