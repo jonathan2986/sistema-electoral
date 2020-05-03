@@ -141,7 +141,7 @@ export default {
           this.$emit("close");
         })
         .catch((err) => {
-          alert("Ha ocurrido un error");
+          alert("Error! La cedula ya esta registrada");
         });
     },
   },
