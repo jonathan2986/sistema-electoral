@@ -10,7 +10,7 @@ class Recintos extends Model
     //
     use QueryCacheable;
 
-    protected $cacheFor = 180;
+    protected $cacheFor = 10800;
     protected $table = "recintos";
 
     protected $fillable = [

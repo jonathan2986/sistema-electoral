@@ -2,19 +2,22 @@
 
 namespace App;
 
+use App\Traits\CoordinadorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\CoordinadorTrait;
+use Rennokki\QueryCache\Traits\QueryCacheable;
 
 class Municipios extends Model
 {
 
     use SoftDeletes;
     use CoordinadorTrait;
+    use QueryCacheable;
 
+    protected $cacheFor = 10800;
     //
     protected $table = 'municipios';
-    
+
     /**
      * fillable
      *
@@ -24,9 +27,9 @@ class Municipios extends Model
         'circunscripciones_id',
         'provincias_id',
         'name',
-        'coordinadores_id'
+        'coordinadores_id',
     ];
-    
+
     protected $appends = ['recintos_number', 'coordinador', 'distritos_number'];
 
     protected $foreignKey = 'municipios_id';
@@ -35,12 +38,11 @@ class Municipios extends Model
 
     protected $rolName = 'Coordinador de Municipio';
 
-
     public function coordinadores()
     {
         return $this->belongsTo('App\People', 'coordinadores_id', 'id');
     }
-    
+
     /**
      * provincias
      *
@@ -48,7 +50,7 @@ class Municipios extends Model
      */
     public function provincias()
     {
-       return $this->belongsTo('App\Provincias');
+        return $this->belongsTo('App\Provincias');
     }
 
     public function circunscripciones()
