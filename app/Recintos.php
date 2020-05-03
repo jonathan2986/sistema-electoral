@@ -2,13 +2,15 @@
 
 namespace App;
 
-use App\Traits\CoordinadorTrait;
 use Illuminate\Database\Eloquent\Model;
+use Rennokki\QueryCache\Traits\QueryCacheable;
 
 class Recintos extends Model
 {
     //
+    use QueryCacheable;
 
+    protected $cacheFor = 180;
     protected $table = "recintos";
 
     protected $fillable = [
@@ -21,7 +23,7 @@ class Recintos extends Model
         'coordinadores_electorales_id',
         'coordinadores_seguridad_id',
         'coordinadores_finanzas_id',
-        'activistas_id'
+        'activistas_id',
     ];
 
     protected $entity = 'recintos';
@@ -73,7 +75,6 @@ class Recintos extends Model
     {
         return $this->belongsTo('App\People', 'activistas_id', 'id');
     }
-
 
     /**
      * municipios function
