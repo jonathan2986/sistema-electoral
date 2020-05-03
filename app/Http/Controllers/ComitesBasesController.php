@@ -38,6 +38,8 @@ class ComitesBasesController extends Controller
             }
             $dataStore['name'] = str_pad($dataStore['name'], 5, "0", STR_PAD_LEFT);
             $data = $this->model::create($dataStore);
+            $data->people->comites_bases_id = $data->id;
+            $data->people->save();
             DB::commit();
             $data = $this->model::find($data->id);
             $data->load('people');

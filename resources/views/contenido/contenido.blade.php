@@ -20,28 +20,28 @@
 {{--                <colegios-electorales></colegios-electorales>--}}
             </template>
             <template v-if="menu=='distritos'">
-                @if(auth()->user()->canAction('Admin') || auth()->user()->canAction('Digitador') || auth()->user()->canAction('Digitador'))
+                @if(auth()->user()->canAction('Admin'))
                     <distritos></distritos>
                 @else
                     <distritos permision-condition="{{auth()->user()->votantes->municipios_id}}"></distritos>
                 @endif
             </template>
             <template v-if="menu=='recintos-municipios'">
-                @if(auth()->user()->canAction('Admin') || auth()->user()->canAction('Digitador'))
+                @if(auth()->user()->canAction('Admin'))
                     <component :is="menu"></component>
                 @elseif(auth()->user()->canAction('Coordinador de Distrito')) 
                     <component :is="menu" field="distritos_id" permision-condition="{{implode(',', auth()->user()->getEntitiesId('Coordinador de Distrito'))}}" ></component>
                 @endif
             </template>
             <template v-if="menu =='recintos-distritos'">
-                @if(auth()->user()->canAction('Admin') || auth()->user()->canAction('Digitador'))
+                @if(auth()->user()->canAction('Admin'))
                     <recintos-distritos></recintos-distritos>
                 @elseif(auth()->user()->canAction('Coordinador de Municipio'))
                     <recintos-distritos permision-condition="{{implode(',', auth()->user()->getEntitiesId('Coordinador de Municipio'))}}"></recintos-distritos>
                 @endif
             </template>
             <template v-if="menu=='colegios-electorales'">
-                @if(auth()->user()->canAction('Admin') || auth()->user()->canAction('Digitador'))
+                @if(auth()->user()->canAction('Admin'))
                     <colegios-electorales></colegios-electorales>
                 @elseif(auth()->user()->canAction('Coordinador de Recinto')) 
                     <colegios-electorales permision-condition="{{implode(',', auth()->user()->getEntitiesId('Coordinador de Recinto'))}}" ></colegios-electorales>
