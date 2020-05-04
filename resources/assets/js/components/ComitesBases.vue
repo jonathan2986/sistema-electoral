@@ -206,7 +206,7 @@
                   <input
                     type="text"
                     class="form-control"
-                    v-model="miembro.phone"
+                    v-model="miembro.phone_number"
                     v-mask="'###-###-####'"
                     name=""
                     id=""
@@ -358,7 +358,7 @@ export default {
         first_name: "",
         last_name: "",
         card_id: "",
-        phone: "",
+        phone_number: "",
       },
       pagination: {
         total: 0,
@@ -476,7 +476,7 @@ export default {
             first_name: "",
             last_name: "",
             card_id: "",
-            phone: "",
+            phone_number: "",
           };
         });
     },

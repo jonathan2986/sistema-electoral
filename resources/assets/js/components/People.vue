@@ -691,7 +691,7 @@ export default {
           this.cerrarModal();
         })
         .catch((err) => {
-          console.log(err);
+          alert("Error! La cedula ya esta registrada");
         });
     },
     validarPersona() {
