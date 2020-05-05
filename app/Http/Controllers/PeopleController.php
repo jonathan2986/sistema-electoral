@@ -43,7 +43,9 @@ class PeopleController extends Controller
     {
         $comitesBases = ComitesBases::where('name', 'like', "%{$comiteBase}%")->select('id')->get();
         $comitesBases = $comitesBases->toArray();
-
+        if (!$comitesBases) {
+            return response()->json([]);
+        }
         $comitesBasesId = array_map(function ($comite) {
             return $comite['id'];;
         }, $comitesBases);
@@ -63,7 +65,9 @@ class PeopleController extends Controller
     {
         $recintos = Recintos::where('name', 'like', "%{$recinto}%")->select('id')->get();
         $recintos = $recintos->toArray();
-
+        if (!$recintos) {
+            return response()->json([]);
+        }
         $recintosId = array_map(function ($model) {
             return $model['id'];;
         }, $recintos);
@@ -83,7 +87,9 @@ class PeopleController extends Controller
     {
         $colegiosElectorales = ColegiosElectorales::where('name', 'like', "%{$recinto}%")->select('id')->get();
         $colegiosElectorales = $colegiosElectorales->toArray();
-
+        if (!$colegiosElectorales) {
+            return response()->json([]);
+        }
         $colegiosElectoralesId = array_map(function ($model) {
             return $model['id'];;
         }, $colegiosElectorales);
