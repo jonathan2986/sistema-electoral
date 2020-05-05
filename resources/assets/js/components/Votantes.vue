@@ -2,7 +2,9 @@
   <main class="main">
     <!-- Breadcrumb -->
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
+      <li class="breadcrumb-item">
+        <a href="/">Escritorio</a>
+      </li>
     </ol>
     <div class="container-fluid">
       <!-- Ejemplo de tabla Listado -->
@@ -48,9 +50,7 @@
               </div>
             </div>
           </div>
-          <table
-            class="table table-responsive table-bordered table-striped table-sm"
-          >
+          <table class="table table-responsive table-bordered table-striped table-sm">
             <thead>
               <tr>
                 <th>Opciones</th>
@@ -97,8 +97,7 @@
               :prev-text="'Anterior'"
               :next-text="'Siguiente'"
               :containerClass="'pagination'"
-              >
-            ></sliding-pagination>
+            >></sliding-pagination>
           </nav>
         </div>
       </div>
@@ -118,26 +117,14 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" v-text="tituloModal"></h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true" @click="cerrarModal()">×</span>
             </button>
           </div>
           <div class="modal-body">
-            <form
-              action=""
-              method="post"
-              enctype="multipart/form-data"
-              class="form-horizontal"
-            >
+            <form action method="post" enctype="multipart/form-data" class="form-horizontal">
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Cedula</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Cedula</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="cedula"
@@ -150,47 +137,25 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Nombre</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                 <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="entity.first_name"
-                    disabled
-                    class="form-control"
-                  />
+                  <input type="text" v-model="entity.first_name" disabled class="form-control" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Apellido</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Apellido</label>
                 <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="entity.last_name"
-                    disabled
-                    class="form-control"
-                  />
+                  <input type="text" v-model="entity.last_name" disabled class="form-control" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Comites de Bases</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Comites de Bases</label>
                 <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="entity.comites_bases_id"
-                    class="form-control"
-                  />
+                  <input type="text" v-model="entity.comites_bases_id" class="form-control" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Municipios</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Municipios</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.municipios_id"
@@ -202,9 +167,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Circunscripcion</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Circunscripcion</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.circunscripciones_id"
@@ -216,9 +179,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Distrito</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Distrito</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.distritos_id"
@@ -230,9 +191,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Recintos</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Recintos</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.recintos_id"
@@ -244,9 +203,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Colegios</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Colegios</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.colegios_electorales_id"
@@ -259,39 +216,25 @@
               </div>
               <div v-show="errorMunicipio" class="form-group row div-error">
                 <div class="text-center text-error">
-                  <div
-                    v-for="error in errorMostrarMsjMunicipio"
-                    :key="error"
-                    v-text="error"
-                  ></div>
+                  <div v-for="error in errorMostrarMsjMunicipio" :key="error" v-text="error"></div>
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              @click="cerrarModal()"
-            >
-              Cerrar
-            </button>
+            <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
             <button
               type="button"
               v-if="tipoAccion == 1"
               class="btn btn-primary"
               @click="save('POST')"
-            >
-              Guardar
-            </button>
+            >Guardar</button>
             <button
               type="button"
               v-if="tipoAccion == 2"
               class="btn btn-primary"
               @click="save('PUT')"
-            >
-              Actualizar
-            </button>
+            >Actualizar</button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -313,12 +256,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title">Eliminar Categoría</h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
@@ -326,13 +264,7 @@
             <p>Estas seguro de eliminar la categoría?</p>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Cerrar
-            </button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             <button type="button" class="btn btn-danger">Eliminar</button>
           </div>
         </div>
@@ -345,7 +277,7 @@
 </template>
 
 <script>
-import {mask} from 'vue-the-mask'
+import { mask } from "vue-the-mask";
 export default {
   data() {
     return {
@@ -364,7 +296,7 @@ export default {
       tituloModal: "",
       tipoAccion: 0,
       errorMunicipio: 0,
-      url: '/api/votantes',
+      url: "/api/votantes",
       errorMostrarMsjMunicipio: [],
       pagination: {
         total: 0,
@@ -374,7 +306,7 @@ export default {
         from: 0,
         to: 0
       },
-      cedula: '',
+      cedula: "",
       entity: {
         people_id: "",
         circunscripciones_id: "",
@@ -385,7 +317,7 @@ export default {
         first_name: "",
         last_name: "",
         card_id: "",
-        comites_bases_id:0,
+        comites_bases_id: 0,
         id: 0
       },
 
@@ -397,8 +329,8 @@ export default {
   props: {
     permisionCondition: {
       default: null,
-      type: String,
-    },
+      type: String
+    }
   },
   computed: {
     isActived: function() {
@@ -427,51 +359,51 @@ export default {
       }
       return pagesArray;
     },
-    conditions: function(){
+    conditions: function() {
       let condition = [];
-      if(this.permisionCondition){
+      if (this.permisionCondition) {
         condition.push({
-          field:'colegios_electorales_id',
-          condition:'whereIn',
-          operator:'=',
-          value:this.permisionCondition
+          field: "colegios_electorales_id",
+          condition: "whereIn",
+          operator: "=",
+          value: this.permisionCondition
         });
       }
 
-      switch(this.criterio){
+      switch (this.criterio) {
         case "circunscripciones":
-          this.url = `/api/advanced/votantes/circunscripciones/${this.buscar}`
+          this.url = `/api/advanced/votantes/circunscripciones/${this.buscar}`;
           break;
         case "municipios":
-          this.url = `/api/advanced/votantes/municipios/${this.buscar}`
+          this.url = `/api/advanced/votantes/municipios/${this.buscar}`;
           break;
         case "distritos":
-          this.url = `/api/advanced/votantes/distritos/${this.buscar}`
+          this.url = `/api/advanced/votantes/distritos/${this.buscar}`;
           break;
         case "recintos":
-          this.url = `/api/advanced/votantes/recintos/${this.buscar}`
+          this.url = `/api/advanced/votantes/recintos/${this.buscar}`;
           break;
         case "colegios_electorales":
-          this.url = `/api/advanced/votantes/colegios_electorales/${this.buscar}`
+          this.url = `/api/advanced/votantes/colegios_electorales/${this.buscar}`;
           break;
         case "comite_base":
-          this.url = "/api/votantes"
+          this.url = "/api/votantes";
           let valor = parseInt(this.buscar, 10);
           condition.push({
-              field: 'comites_bases_id',
-              value: valor,
-              condition: 'where',
-              operator: '='
+            field: "comites_bases_id",
+            value: valor,
+            condition: "where",
+            operator: "="
           });
           break;
         default:
-          this.url="/api/votantes"
-          if(this.criterio.length > 0){
+          this.url = "/api/votantes";
+          if (this.criterio.length > 0) {
             condition.push({
               field: this.criterio,
               value: `%${this.buscar}%`,
-              condition: 'where',
-              operator: 'like'
+              condition: "where",
+              operator: "like"
             });
           }
       }
@@ -569,6 +501,18 @@ export default {
       this.modal = 0;
       this.tituloModal = "";
       this.provincia = "";
+      this.entity = {
+        people_id: "",
+        circunscripciones_id: "",
+        municipios_id: "",
+        distritos_id: null,
+        recintos_id: "",
+        colegios_electorales_id: "",
+        first_name: "",
+        last_name: "",
+        card_id: "",
+        id: 0
+      };
     },
     setPeople(value) {
       axios(`/api/people/${value}`).then(res => {
@@ -604,8 +548,12 @@ export default {
               this.entity.municipios_id = data.municipios_id;
               this.entity.distritos_id = data.distritos_id;
               this.entity.recintos_id = data.recintos_id;
-              this.entity.colegios_electorales_id = data.colegios_electorales_id;
-              this.entity.comites_bases_id = data.comites_bases_id != null ? this.pad(data.comites_bases_id,3): '';
+              this.entity.colegios_electorales_id =
+                data.colegios_electorales_id;
+              this.entity.comites_bases_id =
+                data.comites_bases_id != null
+                  ? this.pad(data.comites_bases_id, 3)
+                  : "";
               this.entity.card_id = data.card_id;
               this.cedula = data.people_id;
               this.circunscripciones = [
