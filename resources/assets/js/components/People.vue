@@ -23,7 +23,7 @@
           <div class="form-group row">
             <div class="col-md-6">
               <div class="input-group">
-                <select class="form-control col-md-3" v-model="criterio">
+                <select class="form-control col-md-3" @change="conditions()" v-model="criterio">
                   <option value="first_name">Nombre</option>
                   <option value="card_id">Cedula</option>
                   <option value="phone_number">Telefono</option>
@@ -37,6 +37,7 @@
                   type="text"
                   v-model="buscar"
                   @keyup.enter="listarData(1, buscar, criterio)"
+                  v-on:input="conditions"
                   class="form-control"
                   placeholder="Texto a buscar"
                 />
@@ -408,6 +409,7 @@
       <!-- /.modal-dialog -->
     </div>
     <!-- Fin del modal Eliminar -->
+    <loading :show="loading" />
   </main>
 </template>
 
@@ -421,8 +423,7 @@ export default {
       municipio: "",
       cantidadMunicipio: 0,
       data: [],
-      // distrito_municipal: '',
-      // circuscripcion: '',
+      loading: false,
       circunscripciones: [],
       distritos: [],
       provincias: [],
@@ -498,36 +499,6 @@ export default {
         from++;
       }
       return pagesArray;
-    },
-    conditions: function() {
-      let condition = [];
-      switch (this.criterio) {
-        case "recintos":
-          condition = [];
-          this.url = `/api/advanced/people/recintos/${this.buscar}`;
-          break;
-        case "comites_bases":
-          condition = [];
-          this.url = `/api/advanced/people/comites_bases/${this.buscar}`;
-          break;
-        case "colegios_electorales":
-          condition = [];
-          this.url = `/api/advanced/people/colegios_electorales/${this.buscar}`;
-          break;
-        default:
-          if (this.criterio.length > 0) {
-            condition.push({
-              field: this.criterio,
-              value: `%${this.buscar}%`,
-              condition: "where",
-              operator: "like"
-            });
-          }
-
-          this.url = "/api/people";
-          break;
-      }
-      return condition;
     }
   },
   methods: {
@@ -544,13 +515,14 @@ export default {
     },
     listarData(page = 1) {
       let me = this;
-
+      this.loading = true;
+      this.conditions();
       axios
         .get(this.url, {
           params: {
             page: page,
             perPage: 6,
-            q: this.conditions,
+            q: this.conditions(),
             eager: [
               "municipios:id,name",
               "circunscripciones:id,name",
@@ -567,9 +539,11 @@ export default {
           me.pagination.total = respuesta.total;
           me.pagination.last_page = respuesta.last_page;
           me.pagination.current_page = respuesta.current_page;
+          this.loading = false;
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(err => {
+          // console.log(error);
+          this.loading = false;
         });
     },
     cambiarPagina(page, buscar, criterio) {
@@ -755,6 +729,36 @@ export default {
     onSearchCircunscripciones(search, loading) {
       loading(true);
       this.search(loading, "circunscripciones", search, this);
+    },
+    conditions: function() {
+      let condition = [];
+      switch (this.criterio) {
+        case "recintos":
+          condition = [];
+          this.url = `/api/advanced/people/recintos/${this.buscar}`;
+          break;
+        case "comites_bases":
+          condition = [];
+          this.url = `/api/advanced/people/comites_bases/${this.buscar}`;
+          break;
+        case "colegios_electorales":
+          condition = [];
+          this.url = `/api/advanced/people/colegios_electorales/${this.buscar}`;
+          break;
+        default:
+          if (this.criterio.length > 0) {
+            condition.push({
+              field: this.criterio,
+              value: `%${this.buscar}%`,
+              condition: "where",
+              operator: "like"
+            });
+          }
+
+          this.url = "/api/people";
+          break;
+      }
+      return condition;
     },
     onSearchDistritos(search, loading) {
       loading(true);
