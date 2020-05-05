@@ -2,7 +2,9 @@
   <main class="main">
     <!-- Breadcrumb -->
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
+      <li class="breadcrumb-item">
+        <a href="/">Escritorio</a>
+      </li>
     </ol>
     <div class="container-fluid">
       <!-- Ejemplo de tabla Listado -->
@@ -33,11 +35,7 @@
                   class="form-control"
                   placeholder="Texto a buscar"
                 />
-                <button
-                  type="submit"
-                  @click="listarData()"
-                  class="btn btn-primary"
-                >
+                <button type="submit" @click="listarData()" class="btn btn-primary">
                   <i class="fa fa-search"></i> Buscar
                 </button>
               </div>
@@ -89,41 +87,41 @@
 
                 <td v-if="model.coordinadores">
                   {{
-                    `${model.coordinadores.first_name} ${model.coordinadores.last_name}`
+                  `${model.coordinadores.first_name} ${model.coordinadores.last_name}`
                   }}
                 </td>
                 <td v-else></td>
 
                 <td v-if="model.coordinadores_ejecutivos">
                   {{
-                    `${model.coordinadores_ejecutivos.first_name} ${model.coordinadores_ejecutivos.last_name}`
+                  `${model.coordinadores_ejecutivos.first_name} ${model.coordinadores_ejecutivos.last_name}`
                   }}
                 </td>
                 <td v-else></td>
 
                 <td v-if="model.coordinadores_electorales">
                   {{
-                    `${model.coordinadores_electorales.first_name} ${model.coordinadores_electorales.last_name}`
+                  `${model.coordinadores_electorales.first_name} ${model.coordinadores_electorales.last_name}`
                   }}
                 </td>
                 <td v-else></td>
 
                 <td v-if="model.coordinadores_seguridad">
                   {{
-                    `${model.coordinadores_seguridad.first_name} ${model.coordinadores_seguridad.last_name}`
+                  `${model.coordinadores_seguridad.first_name} ${model.coordinadores_seguridad.last_name}`
                   }}
                 </td>
                 <td v-else></td>
 
                 <td v-if="model.coordinadores_finanzas">
                   {{
-                    `${model.coordinadores_finanzas.first_name} ${model.coordinadores_finanzas.last_name}`
+                  `${model.coordinadores_finanzas.first_name} ${model.coordinadores_finanzas.last_name}`
                   }}
                 </td>
                 <td v-else></td>
                 <td v-if="model.activistas">
                   {{
-                    `${model.activistas.first_name} ${model.activistas.last_name}`
+                  `${model.activistas.first_name} ${model.activistas.last_name}`
                   }}
                 </td>
                 <td v-else></td>
@@ -137,9 +135,7 @@
               :prev-text="'Anterior'"
               :next-text="'Siguiente'"
               :containerClass="'pagination'"
-            >
-              ></sliding-pagination
-            >
+            >></sliding-pagination>
           </nav>
         </div>
       </div>
@@ -159,26 +155,14 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" v-text="tituloModal"></h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true" @click="cerrarModal()">×</span>
             </button>
           </div>
           <div class="modal-body">
-            <form
-              action=""
-              method="post"
-              enctype="multipart/form-data"
-              class="form-horizontal"
-            >
+            <form action method="post" enctype="multipart/form-data" class="form-horizontal">
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Recinto</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Recinto</label>
                 <div class="col-md-9">
                   <input
                     type="text"
@@ -186,15 +170,11 @@
                     class="form-control"
                     placeholder="Recinto"
                   />
-                  <span class="help-block"
-                    >(*) Ingrese el nombre del Recinto</span
-                  >
+                  <span class="help-block">(*) Ingrese el nombre del Recinto</span>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Coordinador</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Coordinador</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.coordinadores_id"
@@ -206,9 +186,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Coordinador Ejecutivo</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Coordinador Ejecutivo</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.coordinadores_ejecutivos_id"
@@ -220,9 +198,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Coordinador Electoral</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Coordinador Electoral</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.coordinadores_electorales_id"
@@ -234,9 +210,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Coordinador de Seguridad</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Coordinador de Seguridad</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.coordinadores_seguridad_id"
@@ -248,9 +222,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Coordinador de Finanzas</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Coordinador de Finanzas</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.coordinadores_finanzas_id"
@@ -262,9 +234,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Activistas</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Activistas</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.activistas_id"
@@ -276,9 +246,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Municipios</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Municipios</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.municipios_id"
@@ -290,9 +258,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Distritos</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Distritos</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.distritos_id"
@@ -304,15 +270,13 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for=""
-                  >Direccion</label
-                >
+                <label class="col-md-3 form-control-label" for>Direccion</label>
                 <div class="col-md-9">
                   <textarea
                     v-model="entity.address"
-                    name=""
+                    name
                     class="form-control"
-                    id=""
+                    id
                     cols="10"
                     rows="5"
                   ></textarea>
@@ -320,39 +284,25 @@
               </div>
               <div v-show="errorRecinto" class="form-group row div-error">
                 <div class="text-center text-error">
-                  <div
-                    v-for="error in errorMostrarMsjRecinto"
-                    :key="error"
-                    v-text="error"
-                  ></div>
+                  <div v-for="error in errorMostrarMsjRecinto" :key="error" v-text="error"></div>
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              @click="cerrarModal()"
-            >
-              Cerrar
-            </button>
+            <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
             <button
               type="button"
               v-if="tipoAccion == 1"
               class="btn btn-primary"
               @click="save('POST')"
-            >
-              Guardar
-            </button>
+            >Guardar</button>
             <button
               type="button"
               v-if="tipoAccion == 2"
               class="btn btn-primary"
               @click="save('PUT')"
-            >
-              Actualizar
-            </button>
+            >Actualizar</button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -374,12 +324,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title">Eliminar Categoría</h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
@@ -387,13 +332,7 @@
             <p>Estas seguro de eliminar la categoría?</p>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Cerrar
-            </button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             <button type="button" class="btn btn-danger">Eliminar</button>
           </div>
         </div>
@@ -410,12 +349,12 @@ export default {
   props: {
     field: {
       type: String,
-      default: "municipios_id",
+      default: "municipios_id"
     },
     permisionCondition: {
       type: String,
-      default: null,
-    },
+      default: null
+    }
   },
   data: () => {
     return {
@@ -445,7 +384,7 @@ export default {
         per_page: 0,
         last_page: 0,
         from: 0,
-        to: 0,
+        to: 0
       },
       entity: {
         coordinadores_ejecutivos_id: "",
@@ -458,12 +397,12 @@ export default {
         name: "",
         address: "",
         activistas_id: 0,
-        id: 0,
+        id: 0
       },
 
       offset: 3,
       criterio: "recintos",
-      buscar: "",
+      buscar: ""
     };
   },
   computed: {
@@ -500,7 +439,7 @@ export default {
           field: this.field,
           value: this.permisionCondition,
           condition: "whereIn",
-          operator: "=",
+          operator: "="
         });
       }
       switch (this.criterio) {
@@ -509,7 +448,7 @@ export default {
             condition: "where",
             field: this.criterio,
             operator: "like",
-            value: `%${this.buscar}%`,
+            value: `%${this.buscar}%`
           });
           this.url = "/api/recintos";
           break;
@@ -521,7 +460,7 @@ export default {
           break;
       }
       return conditions;
-    },
+    }
   },
   methods: {
     borrar(id) {
@@ -529,11 +468,12 @@ export default {
       if (r) {
         axios({
           url: `/api/recintos/${id}`,
-          method: "DELETE",
+          method: "DELETE"
         }).then(r => {
           this.listarData();
         });
-    }},
+      }
+    },
     listarData(page = 1) {
       let me = this;
       axios
@@ -547,14 +487,17 @@ export default {
               "coordinadores_ejecutivos",
               "coordinadores_electorales",
               "coordinadores_seguridad",
-              "coordinadores_finanzas",
+              "coordinadores_finanzas"
             ],
             page: page,
             q: this.conditions,
-            perPage: 10,
+            perPage: 10
           },
+          headers: {
+            "Content-Encoding": "gzip"
+          }
         })
-        .then((response) => {
+        .then(response => {
           var respuesta = response.data;
           me.data = respuesta.data;
           me.pagination.total = respuesta.total;
@@ -581,9 +524,9 @@ export default {
       axios({
         url: url,
         method: method,
-        data: this.entity,
+        data: this.entity
       })
-        .then((e) => {
+        .then(e => {
           this.entity = {
             coordinadores_ejecutivos_id: "",
             coordinadores_electorales_id: "",
@@ -595,12 +538,12 @@ export default {
             name: "",
             activistas_id: 0,
             address: "",
-            id: 0,
+            id: 0
           };
           this.listarData(1);
           this.cerrarModal();
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     },
@@ -662,15 +605,15 @@ export default {
             ? [{ id: data.distritos.id, label: data.distritos.name }]
             : [];
           this.municipios = [
-            { id: data.municipios.id, label: data.municipios.name },
+            { id: data.municipios.id, label: data.municipios.name }
           ];
 
           this.coordinadores_ejecutivos = data.coordinadores_ejecutivos
             ? [
                 {
                   id: data.coordinadores_ejecutivos.id,
-                  label: data.coordinadores_ejecutivos.name,
-                },
+                  label: data.coordinadores_ejecutivos.name
+                }
               ]
             : [];
 
@@ -678,8 +621,8 @@ export default {
             ? [
                 {
                   id: data.coordinadores_electorales.id,
-                  label: data.coordinadores_electorales.name,
-                },
+                  label: data.coordinadores_electorales.name
+                }
               ]
             : [];
 
@@ -687,8 +630,8 @@ export default {
             ? [
                 {
                   id: data.coordinadores_seguridad.id,
-                  label: data.coordinadores_seguridad.name,
-                },
+                  label: data.coordinadores_seguridad.name
+                }
               ]
             : [];
 
@@ -696,8 +639,8 @@ export default {
             ? [
                 {
                   id: data.coordinadores_finanzas.id,
-                  label: data.coordinadores_finanzas.name,
-                },
+                  label: data.coordinadores_finanzas.name
+                }
               ]
             : [];
 
@@ -705,8 +648,8 @@ export default {
             ? [
                 {
                   label: data.activistas.name,
-                  id: data.activistas.id,
-                },
+                  id: data.activistas.id
+                }
               ]
             : [];
           break;
@@ -794,11 +737,11 @@ export default {
                 condition: "where",
                 field: field,
                 operator: "like",
-                value: `%${search}%`,
-              }),
-            ],
-          },
-        }).then((r) => {
+                value: `%${search}%`
+              })
+            ]
+          }
+        }).then(r => {
           if (search.length > 0) {
             vm[option] = r.data.data.map(function(model) {
               return { label: model.name, id: model.id };
@@ -808,11 +751,11 @@ export default {
         });
       },
       350
-    ),
+    )
   },
   mounted() {
     this.listarData(1);
-  },
+  }
 };
 </script>
 <style>

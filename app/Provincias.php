@@ -4,10 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Rennokki\QueryCache\Traits\QueryCacheable;
 
 class Provincias extends Model
 {
     use SoftDeletes;
+    use QueryCacheable;
+
+    protected $cacheFor = 10800;
     //
     protected $table = 'provincias';
 
@@ -16,7 +20,6 @@ class Provincias extends Model
     ];
 
     protected $appends = ['number_municipios'];
-
 
     /**
      * municipios
@@ -27,7 +30,7 @@ class Provincias extends Model
     {
         return $this->hasMany('App\Municipios', 'provincias_id');
     }
-    
+
     /**
      * getNumberMunicipiosAttribute function
      *

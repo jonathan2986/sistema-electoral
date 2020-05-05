@@ -80,7 +80,7 @@
                   <div class="col-md-9">
                     <input
                             type="text"
-                            v-model="entity.phone"
+                            v-model="entity.phone_number"
                             v-mask="'###-###-####'"
                             class="form-control"
                             placeholder="Telefono"
@@ -125,6 +125,7 @@ export default {
         first_name: "",
         last_name: "",
         card_id: "",
+        phone_number: ""
       },
     };
   },
