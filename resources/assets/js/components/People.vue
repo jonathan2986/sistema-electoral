@@ -521,7 +521,7 @@ export default {
         .get(this.url, {
           params: {
             page: page,
-            perPage: 6,
+            perPage: 10,
             q: this.conditions(),
             eager: [
               "municipios:id,name",
@@ -585,7 +585,7 @@ export default {
             comites_bases_id: 0,
             id: 0
           };
-          this.listarData(1);
+          this.listarData(this.pagination.current_page);
           this.cerrarModal();
         })
         .catch(err => {
