@@ -515,7 +515,7 @@ export default {
     },
     listarData(page = 1) {
       let me = this;
-      this.loading = true;
+      // this.loading = true;
       this.conditions();
       axios
         .get(this.url, {

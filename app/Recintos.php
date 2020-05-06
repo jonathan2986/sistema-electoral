@@ -12,6 +12,7 @@ class Recintos extends Model
 
     protected $cacheFor = 10800;
     protected $table = "recintos";
+    protected static $flushCacheOnUpdate = true;
 
     protected $fillable = [
         'municipios_id',
