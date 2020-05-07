@@ -156,6 +156,8 @@ class PeopleController extends Controller
                 'address' => $model->address,
                 'sector' => $model->sector,
                 'sexo' => $model->sexo,
+                'age' => $model->age,
+                'name' => $model->name,
                 'municipios' => $model->municipios ? [
                     'id' => $model->municipios->id,
                     'name' => $model->municipios->name,

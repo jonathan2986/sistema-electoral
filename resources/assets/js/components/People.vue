@@ -664,6 +664,7 @@ export default {
           this.entity.distritos_id = data.distritos_id;
           this.entity.recintos_id = data.recintos_id;
           this.entity.colegios_electorales_id = data.colegios_electorales_id;
+          this.entity.comites_bases_id = data.comites_bases_id;
           if (this.municipios) {
             this.municipios = data.municipios
               ? [
