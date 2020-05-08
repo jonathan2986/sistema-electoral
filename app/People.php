@@ -52,7 +52,7 @@ class People extends Model
 
     public function municipios()
     {
-        return $this->belongsTo('App\Municipios', 'id');
+        return $this->belongsTo('App\Municipios');
     }
 
     public function provincias()
