@@ -114,12 +114,11 @@
                   <td v-text="model.comites_bases ? model.comites_bases.name : ''"></td>
                   <td>
                     <button
-                      v-if="!model.confirmado"
                       @click="confirmarElector(model)"
                       type="button"
-                      class="btn btn-primary"
-                    >Confirmar</button>
-                    <span v-else>Contactado</span>
+                      class="btn"
+                      :class="!model.confirmado ? 'btn-primary': 'btn-success'"
+                    >{{model.confirmado ? 'Contactado': 'Sin contactar'}}</button>
                   </td>
                 </tr>
               </tbody>
@@ -564,10 +563,11 @@ export default {
       me.listarData(page, buscar, criterio);
     },
     confirmarElector(model) {
+      let confirmado = model.confirmado ? 0 : 1;
       axios.put(`/api/people/${model.id}`, {
-        confirmado: 1
+        confirmado: confirmado
       }).then(res =>{
-        model.confirmado = 1;
+        model.confirmado = confirmado;
       });
     },
     save(method) {
