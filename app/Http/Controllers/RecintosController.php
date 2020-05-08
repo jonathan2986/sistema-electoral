@@ -107,6 +107,7 @@ class RecintosController extends Controller
                     'id' => $model->coordinadores->id,
                     'first_name' => $model->coordinadores->first_name,
                     'last_name' => $model->coordinadores->last_name,
+                    'name' => $model->coordinadores->name,
                 ] : false,
                 'distritos' => $model->distritos ? [
                     'id' => $model->distritos->id,
@@ -116,26 +117,31 @@ class RecintosController extends Controller
                     'id' => $model->coordinadores_ejecutivos->id,
                     'first_name' => $model->coordinadores_ejecutivos->first_name,
                     'last_name' => $model->coordinadores_ejecutivos->last_name,
+                    'name' => $model->coordinadores_ejecutivos->name,
                 ] : false,
                 'coordinadores_electorales' => $model->coordinadores_electorales ? [
                     'id' => $model->coordinadores_electorales->id,
                     'first_name' => $model->coordinadores_electorales->first_name,
                     'last_name' => $model->coordinadores_electorales->last_name,
+                    'name' => $model->coordinadores_electorales->name,
                 ] : false,
                 'coordinadores_seguridad' => $model->coordinadores_seguridad ? [
                     'id' => $model->coordinadores_seguridad->id,
                     'first_name' => $model->coordinadores_seguridad->first_name,
                     'last_name' => $model->coordinadores_seguridad->last_name,
+                    'name' => $model->coordinadores_seguridad->name,
                 ] : false,
                 'coordinadores_finanzas' => $model->coordinadores_finanzas ? [
                     'id' => $model->coordinadores_finanzas->id,
                     'first_name' => $model->coordinadores_finanzas->first_name,
                     'last_name' => $model->coordinadores_finanzas->last_name,
+                    'name' => $model->coordinadores_finanzas->name,
                 ] : false,
                 'activistas' => $model->activistas ? [
                     'id' => $model->activistas->id,
                     'first_name' => $model->activistas->first_name,
                     'last_name' => $model->activistas->last_name,
+                    'name' => $model->activistas->name,
                 ] : false,
                 'municipios' => $model->municipios ? [
                     'id' => $model->municipios->id,
