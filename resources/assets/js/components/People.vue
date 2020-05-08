@@ -2,7 +2,9 @@
   <main class="main">
     <!-- Breadcrumb -->
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
+      <li class="breadcrumb-item">
+        <a href="/">Escritorio</a>
+      </li>
     </ol>
     <div class="container-fluid">
       <!-- Ejemplo de tabla Listado -->
@@ -21,7 +23,7 @@
           <div class="form-group row">
             <div class="col-md-6">
               <div class="input-group">
-                <select class="form-control col-md-3" v-model="criterio">
+                <select class="form-control col-md-3" @change="conditions()" v-model="criterio">
                   <option value="first_name">Nombre</option>
                   <option value="card_id">Cedula</option>
                   <option value="phone_number">Telefono</option>
@@ -29,14 +31,13 @@
                   <option value="profession">Profesion</option>
                   <option value="recintos">Recintos</option>
                   <option value="comites_bases">Comite de Base</option>
-                  <option value="colegios_electorales"
-                    >Colegios Electorales</option
-                  >
+                  <option value="colegios_electorales">Colegios Electorales</option>
                 </select>
                 <input
                   type="text"
                   v-model="buscar"
                   @keyup.enter="listarData(1, buscar, criterio)"
+                  v-on:input="conditions"
                   class="form-control"
                   placeholder="Texto a buscar"
                 />
@@ -69,6 +70,7 @@
                   <th>Recinto</th>
                   <th>Colegio Electoral</th>
                   <th>Comite de Base</th>
+                  <th>Contactado</th>
                 </tr>
               </thead>
               <tbody>
@@ -99,9 +101,7 @@
                   <td v-text="model.age"></td>
                   <td v-text="model.sexo"></td>
                   <td v-text="model.profession"></td>
-                  <td
-                    v-text="model.municipios ? model.municipios.name : ''"
-                  ></td>
+                  <td v-text="model.municipios ? model.municipios.name : ''"></td>
                   <td v-text="model.distritos ? model.distritos.name : ''"></td>
                   <td v-text="model.recintos ? model.recintos.name : ''"></td>
                   <td
@@ -111,9 +111,15 @@
                         : ''
                     "
                   ></td>
-                  <td
-                    v-text="model.comites_bases ? model.comites_bases.name : ''"
-                  ></td>
+                  <td v-text="model.comites_bases ? model.comites_bases.name : ''"></td>
+                  <td>
+                    <button
+                      @click="confirmarElector(model)"
+                      type="button"
+                      class="btn"
+                      :class="!model.confirmado ? 'btn-primary': 'btn-success'"
+                    >{{model.confirmado ? 'Contactado': 'Sin contactar'}}</button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -126,8 +132,7 @@
               :prev-text="'Anterior'"
               :next-text="'Siguiente'"
               :containerClass="'pagination'"
-            >
-            </sliding-pagination>
+            ></sliding-pagination>
           </nav>
         </div>
       </div>
@@ -147,54 +152,17 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" v-text="tituloModal"></h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true" @click="cerrarModal()">×</span>
             </button>
           </div>
           <div class="modal-body">
-            <form
-              action=""
-              method="post"
-              enctype="multipart/form-data"
-              class="form-horizontal"
-            >
+            <form action method="post" enctype="multipart/form-data" class="form-horizontal">
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Nombre</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Cedula</label>
                 <div class="col-md-9">
                   <input
-                    type="text"
-                    v-model="entity.first_name"
-                    class="form-control"
-                    placeholder="Nombre"
-                  />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Apellido</label
-                >
-                <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="entity.last_name"
-                    class="form-control"
-                    placeholder="Apellido"
-                  />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Cedula</label
-                >
-                <div class="col-md-9">
-                  <input
+                    @blur="validarCardId"
                     type="text"
                     v-model="entity.card_id"
                     v-mask="'###-#######-#'"
@@ -204,9 +172,31 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Telefono</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
+                <div class="col-md-9">
+                  <input
+                    :disabled="validateCardId == false"
+                    type="text"
+                    v-model="entity.first_name"
+                    class="form-control"
+                    placeholder="Nombre"
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Apellido</label>
+                <div class="col-md-9">
+                  <input
+                    type="text"
+                    v-model="entity.last_name"
+                    class="form-control"
+                    placeholder="Apellido"
+                    :disabled="validateCardId == false"
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Telefono</label>
                 <div class="col-md-9">
                   <input
                     type="text"
@@ -214,13 +204,12 @@
                     v-mask="'###-###-####'"
                     class="form-control"
                     placeholder="Telefono"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Celular</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Celular</label>
                 <div class="col-md-9">
                   <input
                     type="text"
@@ -228,94 +217,90 @@
                     v-model="entity.celphone"
                     class="form-control"
                     placeholder="Celular"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Email</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Email</label>
                 <div class="col-md-9">
                   <input
                     type="text"
                     v-model="entity.email"
                     class="form-control"
                     placeholder="Email"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Fecha de Nacimiento</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Fecha de Nacimiento</label>
                 <div class="col-md-9">
                   <input
                     type="date"
                     v-model="entity.date_birthdate"
                     class="form-control"
                     placeholder="Fecha de Nacimiento"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Profesion</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Profesion</label>
                 <div class="col-md-9">
                   <input
                     type="text"
                     v-model="entity.profession"
                     class="form-control"
                     placeholder="Profesion"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Direccion</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Direccion</label>
                 <div class="col-md-9">
                   <input
                     type="text"
                     v-model="entity.address"
                     class="form-control"
                     placeholder="Direccion"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Sector</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Sector</label>
                 <div class="col-md-9">
                   <input
                     type="text"
                     v-model="entity.sector"
                     class="form-control"
                     placeholder="Ingrese el sector"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Sexo</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Sexo</label>
                 <div class="col-md-9">
-                  <select v-model="entity.sexo" class="form-control" id="">
-                    <option value="" disabled selected
-                      >Seleccione el sexo</option
-                    >
+                  <select
+                    v-model="entity.sexo"
+                    :disabled="validateCardId == false"
+                    class="form-control"
+                    id
+                  >
+                    <option value disabled selected>Seleccione el sexo</option>
                     <option value="Masculino">M</option>
                     <option value="Femenino">F</option>
                   </select>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Circunscripcion</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Circunscripcion</label>
                 <div class="col-md-9">
                   <v-select
+                    :disabled="validateCardId == false"
                     v-model="entity.circunscripciones_id"
                     @search="onSearchCircunscripciones"
                     :options="circunscripciones"
@@ -326,9 +311,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Municipios</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Municipios</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.municipios_id"
@@ -341,9 +324,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Distrito</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Distrito</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.distritos_id"
@@ -356,9 +337,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Recintos</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Recintos</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.recintos_id"
@@ -371,9 +350,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Colegios Electorales</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Colegios Electorales</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.colegios_electorales_id"
@@ -386,9 +363,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Comites de Bases</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Comites de Bases</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.comites_bases_id"
@@ -402,39 +377,25 @@
               </div>
               <div v-show="errorPersona" class="form-group row div-error">
                 <div class="text-center text-error">
-                  <div
-                    v-for="error in errorMostrarMsjPersona"
-                    :key="error"
-                    v-text="error"
-                  ></div>
+                  <div v-for="error in errorMostrarMsjPersona" :key="error" v-text="error"></div>
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              @click="cerrarModal()"
-            >
-              Cerrar
-            </button>
+            <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
             <button
               type="button"
               v-if="tipoAccion == 1"
               class="btn btn-primary"
               @click="save('POST')"
-            >
-              Guardar
-            </button>
+            >Guardar</button>
             <button
               type="button"
               v-if="tipoAccion == 2"
               class="btn btn-primary"
               @click="save('PUT')"
-            >
-              Actualizar
-            </button>
+            >Actualizar</button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -456,12 +417,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title">Eliminar Categoría</h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
@@ -469,13 +425,7 @@
             <p>Estas seguro de eliminar la categoría?</p>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Cerrar
-            </button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             <button type="button" class="btn btn-danger">Eliminar</button>
           </div>
         </div>
@@ -484,6 +434,7 @@
       <!-- /.modal-dialog -->
     </div>
     <!-- Fin del modal Eliminar -->
+    <loading :show="loading" />
   </main>
 </template>
 
@@ -497,14 +448,14 @@ export default {
       municipio: "",
       cantidadMunicipio: 0,
       data: [],
-      // distrito_municipal: '',
-      // circuscripcion: '',
+      loading: false,
       circunscripciones: [],
       distritos: [],
       provincias: [],
       municipios: [],
       recintos: [],
       colegios_electorales: [],
+      validateCardId: false,
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
@@ -518,7 +469,7 @@ export default {
         per_page: 0,
         last_page: 0,
         from: 0,
-        to: 0,
+        to: 0
       },
       entity: {
         first_name: "",
@@ -537,12 +488,12 @@ export default {
         circunscripciones_id: 0,
         distritos_id: 0,
         recintos_id: 0,
-        colegios_electorales_id: 0,
+        colegios_electorales_id: 0
       },
 
       offset: 3,
       criterio: "",
-      buscar: "",
+      buscar: ""
     };
   },
   created() {
@@ -574,37 +525,7 @@ export default {
         from++;
       }
       return pagesArray;
-    },
-    conditions: function() {
-      let condition = [];
-      switch (this.criterio) {
-        case "recintos":
-          condition = [];
-          this.url = `/api/advanced/people/recintos/${this.buscar}`;
-          break;
-        case "comites_bases":
-          condition = [];
-          this.url = `/api/advanced/people/comites_bases/${this.buscar}`;
-          break;
-        case "colegios_electorales":
-          condition = [];
-          this.url = `/api/advanced/people/colegios_electorales/${this.buscar}`;
-          break;
-        default:
-          if (this.criterio.length > 0) {
-            condition.push({
-              field: this.criterio,
-              value: `%${this.buscar}%`,
-              condition: "where",
-              operator: "like",
-            });
-          }
-
-          this.url = "/api/people";
-          break;
-      }
-      return condition;
-    },
+    }
   },
   methods: {
     borrar(id) {
@@ -612,40 +533,43 @@ export default {
       if (r) {
         axios({
           url: `/api/people/${id}`,
-          method: "DELETE",
-        }).then((r) => {
+          method: "DELETE"
+        }).then(r => {
           this.listarData();
         });
       }
     },
     listarData(page = 1) {
       let me = this;
-
+      // this.loading = true;
+      this.conditions();
       axios
         .get(this.url, {
           params: {
             page: page,
-            perPage: 6,
-            q: this.conditions,
+            perPage: 10,
+            q: this.conditions(),
             eager: [
-              "municipios",
-              "circunscripciones",
-              "distritos",
-              "recintos",
-              "colegios_electorales",
-              "comites_bases",
-            ],
-          },
+              "municipios:id,name",
+              "circunscripciones:id,name",
+              "distritos:id,name",
+              "recintos:id,name",
+              "colegios_electorales:id,name",
+              "comites_bases:id,name"
+            ]
+          }
         })
-        .then((response) => {
+        .then(response => {
           var respuesta = response.data;
           me.data = respuesta.data;
           me.pagination.total = respuesta.total;
           me.pagination.last_page = respuesta.last_page;
           me.pagination.current_page = respuesta.current_page;
+          this.loading = false;
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(err => {
+          // console.log(error);
+          this.loading = false;
         });
     },
     cambiarPagina(page, buscar, criterio) {
@@ -654,6 +578,36 @@ export default {
       me.pagination.current_page = page;
       //Envia la petición para visualizar la data de esa página
       me.listarData(page, buscar, criterio);
+    },
+    confirmarElector(model) {
+      let confirmado = model.confirmado ? 0 : 1;
+      axios
+        .put(`/api/people/${model.id}`, {
+          confirmado: confirmado
+        })
+        .then(res => {
+          model.confirmado = confirmado;
+        });
+    },
+    validarCardId() {
+      axios
+        .get("/api/people", {
+          params: {
+            q: [{
+              field: "card_id",
+              condition: "where",
+              operator: "=",
+              value: `%${this.entity.card_id}%`
+            }]
+          }
+        })
+        .then(res => {
+          if (res.data.data.length > 0) {
+            alert("Ya existe esta cedula");
+          } else {
+            this.validateCardId = true;
+          }
+        });
     },
     save(method) {
       if (this.validarPersona()) {
@@ -664,9 +618,9 @@ export default {
       axios({
         url: url,
         method: method,
-        data: this.entity,
+        data: this.entity
       })
-        .then((e) => {
+        .then(e => {
           this.entity = {
             first_name: "",
             last_name: "",
@@ -685,12 +639,12 @@ export default {
             recintos_id: 0,
             colegios_electorales_id: 0,
             comites_bases_id: 0,
-            id: 0,
+            id: 0
           };
-          this.listarData(1);
+          this.listarData(this.pagination.current_page);
           this.cerrarModal();
         })
-        .catch((err) => {
+        .catch(err => {
           alert("Error! La cedula ya esta registrada");
         });
     },
@@ -713,6 +667,26 @@ export default {
       this.modal = 0;
       this.tituloModal = "";
       this.provincia = "";
+      this.entity = {
+        first_name: "",
+        last_name: "",
+        card_id: "",
+        phone_number: "",
+        celphone: "",
+        email: "",
+        date_birthdate: "",
+        profession: "",
+        address: "",
+        sector: "",
+        sexo: "",
+        municipios_id: 0,
+        circunscripciones_id: 0,
+        distritos_id: 0,
+        recintos_id: 0,
+        colegios_electorales_id: 0,
+        comites_bases_id: 0,
+        id: 0
+      };
     },
     abrirModal(modelo, accion, data = []) {
       switch (accion) {
@@ -746,53 +720,54 @@ export default {
           this.entity.distritos_id = data.distritos_id;
           this.entity.recintos_id = data.recintos_id;
           this.entity.colegios_electorales_id = data.colegios_electorales_id;
+          this.entity.comites_bases_id = data.comites_bases_id;
           if (this.municipios) {
             this.municipios = data.municipios
               ? [
                   {
                     label: data.municipios.name,
-                    id: data.municipios_id,
-                  },
+                    id: data.municipios_id
+                  }
                 ]
               : [];
             this.circunscripciones = data.circunscripciones
               ? [
                   {
                     label: data.circunscripciones.name,
-                    id: data.circunscripciones_id,
-                  },
+                    id: data.circunscripciones_id
+                  }
                 ]
               : [];
             this.distritos = data.distritos
               ? [
                   {
                     label: data.distritos.name,
-                    id: data.distritos_id,
-                  },
+                    id: data.distritos_id
+                  }
                 ]
               : [];
             this.recintos = data.recintos
               ? [
                   {
                     label: data.recintos.name,
-                    id: data.recintos_id,
-                  },
+                    id: data.recintos_id
+                  }
                 ]
               : [];
             this.colegios_electorales = data.colegios_electorales
               ? [
                   {
                     label: data.colegios_electorales.name,
-                    id: data.colegios_electorales_id,
-                  },
+                    id: data.colegios_electorales_id
+                  }
                 ]
               : [];
             this.comites_bases = data.comites_bases
               ? [
                   {
                     label: data.comites_bases.name,
-                    id: data.comites_bases_id,
-                  },
+                    id: data.comites_bases_id
+                  }
                 ]
               : [];
           }
@@ -811,6 +786,36 @@ export default {
     onSearchCircunscripciones(search, loading) {
       loading(true);
       this.search(loading, "circunscripciones", search, this);
+    },
+    conditions: function() {
+      let condition = [];
+      switch (this.criterio) {
+        case "recintos":
+          condition = [];
+          this.url = `/api/advanced/people/recintos/${this.buscar}`;
+          break;
+        case "comites_bases":
+          condition = [];
+          this.url = `/api/advanced/people/comites_bases/${this.buscar}`;
+          break;
+        case "colegios_electorales":
+          condition = [];
+          this.url = `/api/advanced/people/colegios_electorales/${this.buscar}`;
+          break;
+        default:
+          if (this.criterio.length > 0) {
+            condition.push({
+              field: this.criterio,
+              value: `%${this.buscar}%`,
+              condition: "where",
+              operator: "like"
+            });
+          }
+
+          this.url = "/api/people";
+          break;
+      }
+      return condition;
     },
     onSearchDistritos(search, loading) {
       loading(true);
@@ -836,11 +841,11 @@ export default {
               condition: "where",
               field: field,
               operator: "like",
-              value: `%${search}%`,
-            }),
-          ],
-        },
-      }).then((r) => {
+              value: `%${search}%`
+            })
+          ]
+        }
+      }).then(r => {
         if (search.length > 0) {
           vm[option] = r.data.data.map(function(model) {
             return { label: model.name, id: model.id };
@@ -849,11 +854,11 @@ export default {
         loading(false);
       });
     }, 350),
-    searchDependeciesTables() {},
+    searchDependeciesTables() {}
   },
   mounted() {
     this.listarData(1);
-  },
+  }
 };
 </script>
 <style>

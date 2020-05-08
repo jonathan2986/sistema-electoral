@@ -11,79 +11,61 @@
     <div class="modal-dialog modal-primary modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">
-            Crear Nuevo Miembro
-          </h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
+          <h5 class="modal-title" id="exampleModalLabel">Crear Nuevo Miembro</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true" @click="$emit('close')">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="container-fluid">
-              <form
-                      action=""
-                      method="post"
-                      enctype="multipart/form-data"
-                      class="form-horizontal"
-              >
+              <form action method="post" enctype="multipart/form-data" class="form-horizontal">
                 <div class="form-group row">
-                  <label class="col-md-3 form-control-label" for="text-input"
-                  >Cedula</label
-                  >
+                  <label class="col-md-3 form-control-label" for="text-input">Cedula</label>
                   <div class="col-md-9">
                     <input
-                            type="text"
-                            v-model="entity.card_id"
-                            v-mask="'###-#######-#'"
-                            class="form-control"
-                            placeholder="Cedula"
-                            required
+                      type="text"
+                      v-model="entity.card_id"
+                      v-mask="'###-#######-#'"
+                      class="form-control"
+                      placeholder="Cedula"
+                      required
                     />
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-md-3 form-control-label" for="text-input"
-                  >Nombre</label>
+                  <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                   <div class="col-md-9">
                     <input
-                            type="text"
-                            class="form-control"
-                            v-model="entity.first_name"
-                            placeholder="Nombre"
-                            required
+                      type="text"
+                      class="form-control"
+                      v-model="entity.first_name"
+                      placeholder="Nombre"
+                      required
                     />
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-md-3 form-control-label" for="text-input"
-                  >Apellido</label>
+                  <label class="col-md-3 form-control-label" for="text-input">Apellido</label>
                   <div class="col-md-9">
                     <input
-                            type="text"
-                            class="form-control"
-                            v-model="entity.last_name"
-                            placeholder="Apellido"
-                            required
+                      type="text"
+                      class="form-control"
+                      v-model="entity.last_name"
+                      placeholder="Apellido"
+                      required
                     />
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label class="col-md-3 form-control-label" for="text-input"
-                  >Telefono</label
-                  >
+                  <label class="col-md-3 form-control-label" for="text-input">Telefono</label>
                   <div class="col-md-9">
                     <input
-                            type="text"
-                            v-model="entity.phone_number"
-                            v-mask="'###-###-####'"
-                            class="form-control"
-                            placeholder="Telefono"
+                      type="text"
+                      v-model="entity.phone_number"
+                      v-mask="'###-###-####'"
+                      class="form-control"
+                      placeholder="Telefono"
                     />
                   </div>
                 </div>
@@ -97,12 +79,8 @@
             class="btn btn-secondary"
             data-dismiss="modal"
             @click="$emit('close')"
-          >
-            Cerrar
-          </button>
-          <button type="button" @click="save()" class="btn btn-primary">
-            Guardar Cambios
-          </button>
+          >Cerrar</button>
+          <button type="button" @click="save()" class="btn btn-primary">Guardar Cambios</button>
         </div>
       </div>
     </div>
@@ -112,12 +90,12 @@
 export default {
   props: {
     comitesBasesId: {
-      default: null,
+      default: null
     },
     show: {
       default: false,
-      type: Boolean,
-    },
+      type: Boolean
+    }
   },
   data() {
     return {
@@ -126,7 +104,7 @@ export default {
         last_name: "",
         card_id: "",
         phone_number: ""
-      },
+      }
     };
   },
   methods: {
@@ -135,17 +113,23 @@ export default {
       axios({
         url: "/api/people",
         method: "POST",
-        data: this.entity,
+        data: this.entity
       })
-        .then((e) => {
+        .then(e => {
+          this.entity = {
+            first_name: "",
+            last_name: "",
+            card_id: "",
+            phone_number: ""
+          };
           this.$emit("listarPadre");
           this.$emit("close");
         })
-        .catch((err) => {
+        .catch(err => {
           alert("Error! La cedula ya esta registrada");
         });
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -2,7 +2,9 @@
   <main class="main">
     <!-- Breadcrumb -->
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
+      <li class="breadcrumb-item">
+        <a href="/">Escritorio</a>
+      </li>
     </ol>
     <div class="container-fluid">
       <!-- Ejemplo de tabla Listado -->
@@ -44,9 +46,7 @@
               </div>
             </div>
           </div>
-          <table
-            class="table table-responsive table-bordered table-striped table-sm"
-          >
+          <table class="table table-responsive table-bordered table-striped table-sm">
             <thead>
               <tr>
                 <th>Opciones</th>
@@ -86,9 +86,7 @@
                   <button
                     class="btn btn-primary"
                     @click="abrirModalVotantes(model.id)"
-                  >
-                    Nuevo Miembro
-                  </button>
+                  >Nuevo Miembro</button>
                 </td>
               </tr>
             </tbody>
@@ -100,8 +98,7 @@
               :prev-text="'Anterior'"
               :next-text="'Siguiente'"
               :containerClass="'pagination'"
-            >
-            </sliding-pagination>
+            ></sliding-pagination>
           </nav>
         </div>
       </div>
@@ -121,26 +118,14 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" v-text="tituloModal"></h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true" @click="cerrarModal()">×</span>
             </button>
           </div>
           <div class="modal-body">
-            <form
-              action=""
-              method="post"
-              enctype="multipart/form-data"
-              class="form-horizontal"
-            >
+            <form action method="post" enctype="multipart/form-data" class="form-horizontal">
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Cedula del Coordinador</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Cedula del Coordinador</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.people_id"
@@ -153,126 +138,96 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                >Cedula</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Cedula</label>
                 <div class="col-md-9">
                   <input
-                          type="text"
-                          class="form-control"
-                          v-model="miembro.card_id"
-                          v-mask="'###-#######-#'"
-                          name=""
-                          id=""
-                          required
+                    type="text"
+                    class="form-control"
+                    v-model="miembro.card_id"
+                    v-mask="'###-#######-#'"
+                    name
+                    id
+                    required
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Nombre</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                 <div class="col-md-9">
                   <input
                     type="text"
                     class="form-control"
                     v-model="miembro.first_name"
-                    name=""
-                    id=""
+                    name
+                    id
                     required
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Apellido</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Apellido</label>
                 <div class="col-md-9">
                   <input
                     type="text"
                     class="form-control"
                     v-model="miembro.last_name"
-                    name=""
-                    id=""
+                    name
+                    id
                     required
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Telefono</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Telefono</label>
                 <div class="col-md-9">
                   <input
                     type="text"
                     class="form-control"
                     v-model="miembro.phone_number"
                     v-mask="'###-###-####'"
-                    name=""
-                    id=""
+                    name
+                    id
                   />
                 </div>
               </div>
               <div class="form-group row" v-if="tipoAccion == 1">
-                <label class="col-md-3 form-control-label" for="text-input"
-                >Miembros</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Miembros</label>
                 <div class="col-md-9">
                   <v-select
-                          multiple
-                          @search="onSearchMiembros"
-                          v-model="miemborsNuevosSelect"
-                          :options="miembrosNuevos"
+                    multiple
+                    @search="onSearchMiembros"
+                    v-model="miemborsNuevosSelect"
+                    :options="miembrosNuevos"
                   ></v-select>
                 </div>
               </div>
 
               <div v-show="errorComite" class="form-group row div-error">
                 <div class="text-center text-error">
-                  <div
-                    v-for="error in errorMostrarMsjComite"
-                    :key="error"
-                    v-text="error"
-                  ></div>
+                  <div v-for="error in errorMostrarMsjComite" :key="error" v-text="error"></div>
                 </div>
               </div>
             </form>
             <div class="form-group row">
               <div class="col-md-3">
-                <button
-                  class="btn btn-primary"
-                  type="button"
-                  @click="agregarMiembro"
-                >
-                  Guardar
-                </button>
+                <button class="btn btn-primary" type="button" @click="agregarMiembro">Guardar</button>
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              @click="cerrarModal()"
-            >
-              Cerrar
-            </button>
+            <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
             <button
               type="button"
               v-if="tipoAccion == 1"
               class="btn btn-primary"
               @click="save('POST')"
-            >
-              Guardar
-            </button>
+            >Guardar</button>
             <button
               type="button"
               v-if="tipoAccion == 2"
               class="btn btn-primary"
               @click="save('PUT')"
-            >
-              Actualizar
-            </button>
+            >Actualizar</button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -294,12 +249,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title">Eliminar Categoría</h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
@@ -307,13 +257,7 @@
             <p>Estas seguro de eliminar la categoría?</p>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Cerrar
-            </button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             <button type="button" class="btn btn-danger">Eliminar</button>
           </div>
         </div>
@@ -358,7 +302,7 @@ export default {
         first_name: "",
         last_name: "",
         card_id: "",
-        phone_number: "",
+        phone_number: ""
       },
       pagination: {
         total: 0,
@@ -366,16 +310,16 @@ export default {
         per_page: 0,
         last_page: 0,
         from: 0,
-        to: 0,
+        to: 0
       },
       entity: {
         miembros: [],
         people_id: 0,
-        id: 0,
+        id: 0
       },
       offset: 3,
       criterio: "",
-      buscar: "",
+      buscar: ""
     };
   },
   computed: {
@@ -421,18 +365,17 @@ export default {
           condition = [];
           break;
         default:
-          this.url = '/api/comites_bases';
+          this.url = "/api/comites_bases";
           condition.push({
-            condition: 'where',
-            field: 'name',
-            operator: 'like',
+            condition: "where",
+            field: "name",
+            operator: "like",
             value: `%${this.buscar}%`
           });
           break;
-
       }
       return condition;
-    },
+    }
   },
   methods: {
     borrar(id) {
@@ -440,8 +383,8 @@ export default {
       if (r) {
         axios({
           url: `/api/comites_bases/${id}`,
-          method: "DELETE",
-        }).then((r) => {
+          method: "DELETE"
+        }).then(r => {
           this.listarData();
         });
       }
@@ -459,12 +402,12 @@ export default {
                 condition: "where",
                 operator: "=",
                 field: "card_id",
-                value: this.miembro.card_id,
-              },
-            ],
-          },
+                value: this.miembro.card_id
+              }
+            ]
+          }
         })
-        .then((r) => {
+        .then(r => {
           if (r.data.data.length > 0) {
             alert("El elector ya esta registrado");
             return;
@@ -476,7 +419,7 @@ export default {
             first_name: "",
             last_name: "",
             card_id: "",
-            phone_number: "",
+            phone_number: ""
           };
         });
     },
@@ -487,10 +430,10 @@ export default {
           params: {
             eager: ["people", "miembros"],
             page: page,
-            q: this.conditions,
-          },
+            q: this.conditions
+          }
         })
-        .then((response) => {
+        .then(response => {
           var respuesta = response.data;
           me.data = respuesta.data;
           me.pagination.total = respuesta.total;
@@ -519,9 +462,9 @@ export default {
       axios({
         url: url,
         method: method,
-        data: this.entity,
+        data: this.entity
       })
-        .then((e) => {
+        .then(e => {
           if (e.data.people.comites_bases_id == null) {
             this.actualizarVotante(e.data.people_id, e.data.id);
           }
@@ -531,12 +474,12 @@ export default {
             first_name: "",
             last_name: "",
             card_id: "",
-            id: 0,
+            id: 0
           };
           this.listarData(1);
           this.cerrarModal();
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     },
@@ -546,11 +489,17 @@ export default {
         method: "POST",
         data: {
           comites_bases_id: comiteBaseId,
-          miembros: this.miemborsNuevosSelect,
-        },
-      }).catch((err) => {
+          miembros: this.miemborsNuevosSelect
+        }
+      }).catch(err => {
         alert("Hubo un problema registrando los miembros");
       });
+      this.miembro = {
+        first_name: "",
+        last_name: "",
+        card_id: "",
+        phone_number: ""
+      };
     },
     validarComite() {
       this.errorComite = 0;
@@ -571,14 +520,19 @@ export default {
       this.modal = 0;
       this.tituloModal = "";
       this.provincia = "";
+      this.entity = {
+        miembros: [],
+        people_id: 0,
+        id: 0
+      };
     },
     actualizarVotante(votantes_id, id) {
       axios({
         method: "PUT",
         url: `/api/people/${votantes_id}`,
         data: {
-          comites_bases_id: id,
-        },
+          comites_bases_id: id
+        }
       });
     },
     abrirModal(modelo, accion, data = []) {
@@ -601,8 +555,8 @@ export default {
           this.people = [
             {
               id: data.people.id,
-              label: data.people.name,
-            },
+              label: data.people.name
+            }
           ];
           break;
         }
@@ -625,11 +579,11 @@ export default {
                 condition: "where",
                 field: field,
                 operator: "like",
-                value: `%${search}%`,
-              }),
-            ],
-          },
-        }).then((r) => {
+                value: `%${search}%`
+              })
+            ]
+          }
+        }).then(r => {
           if (search.length > 0) {
             vm[option] = r.data.data.map(function(model) {
               return { label: model.name, id: model.id };
@@ -639,11 +593,11 @@ export default {
         });
       },
       350
-    ),
+    )
   },
   mounted() {
     this.listarData(1);
-  },
+  }
 };
 </script>
 <style>

@@ -11,6 +11,6 @@ class Rol extends Model
     public $timestamps = false;
 
     public function users(){
-        return $this->hasMany('App\User');//un rol tiene muchos usuarios
+        return $this->belongsTo('App\User');//un rol tiene muchos usuarios
     }
 }

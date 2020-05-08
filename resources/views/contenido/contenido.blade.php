@@ -22,7 +22,7 @@
             <template v-if="menu=='distritos'">
                 @if(auth()->user()->canAction('Admin'))
                     <distritos></distritos>
-                @else
+                @elseif(auth()->user()->canAction('Coordinador de Municipio'))
                     <distritos permision-condition="{{auth()->user()->votantes->municipios_id}}"></distritos>
                 @endif
             </template>

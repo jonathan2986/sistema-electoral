@@ -4,11 +4,15 @@ namespace App;
 
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
+use Rennokki\QueryCache\Traits\QueryCacheable;
 
 class People extends Model
 {
     //
     protected $table = 'people';
+    use QueryCacheable;
+
+    protected static $flushCacheOnUpdate = true;
 
     protected $fillable = [
         'circunscripciones_id',
@@ -28,6 +32,7 @@ class People extends Model
         'sector',
         'sexo',
         'comites_bases_id',
+        'confirmado',
     ];
 
     protected $appends = ['age', 'name'];
@@ -77,6 +82,6 @@ class People extends Model
 
     public function comites_bases()
     {
-       return $this->belongsTo('App\ComitesBases');
+        return $this->belongsTo('App\ComitesBases');
     }
 }
