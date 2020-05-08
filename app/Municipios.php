@@ -31,7 +31,7 @@ class Municipios extends Model
     ];
     protected $without = ['distritos', 'recintos'];
 
-    protected $appends = ['recintos_number', 'coordinador', 'distritos_number'];
+    protected $appends = ['recintos_number', 'distritos_number'];
 
     protected $foreignKey = 'municipios_id';
 

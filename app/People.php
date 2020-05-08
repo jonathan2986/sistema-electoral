@@ -32,6 +32,7 @@ class People extends Model
         'sector',
         'sexo',
         'comites_bases_id',
+        'confirmado',
     ];
 
     protected $appends = ['age', 'name'];

@@ -145,6 +145,7 @@ class PeopleController extends Controller
                 'recintos_id' => $model->recintos_id,
                 'colegios_electorales_id' => $model->colegios_electorales_id,
                 'comites_bases_id' => $model->comites_bases_id,
+                'confirmado' => $model->confirmado,
                 'first_name' => $model->first_name,
                 'last_name' => $model->last_name,
                 'card_id' => $model->card_id,

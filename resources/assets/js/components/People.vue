@@ -70,6 +70,7 @@
                   <th>Recinto</th>
                   <th>Colegio Electoral</th>
                   <th>Comite de Base</th>
+                  <th>Contactado</th>
                 </tr>
               </thead>
               <tbody>
@@ -111,6 +112,15 @@
                     "
                   ></td>
                   <td v-text="model.comites_bases ? model.comites_bases.name : ''"></td>
+                  <td>
+                    <button
+                      v-if="!model.confirmado"
+                      @click="confirmarElector(model)"
+                      type="button"
+                      class="btn btn-primary"
+                    >Confirmar</button>
+                    <span v-else>Contactado</span>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -552,6 +562,13 @@ export default {
       me.pagination.current_page = page;
       //Envia la petición para visualizar la data de esa página
       me.listarData(page, buscar, criterio);
+    },
+    confirmarElector(model) {
+      axios.put(`/api/people/${model.id}`, {
+        confirmado: 1
+      }).then(res =>{
+        model.confirmado = 1;
+      });
     },
     save(method) {
       if (this.validarPersona()) {
