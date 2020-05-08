@@ -159,9 +159,23 @@
           <div class="modal-body">
             <form action method="post" enctype="multipart/form-data" class="form-horizontal">
               <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Cedula</label>
+                <div class="col-md-9">
+                  <input
+                    @blur="validarCardId"
+                    type="text"
+                    v-model="entity.card_id"
+                    v-mask="'###-#######-#'"
+                    class="form-control"
+                    placeholder="Cedula"
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                 <div class="col-md-9">
                   <input
+                    :disabled="validateCardId == false"
                     type="text"
                     v-model="entity.first_name"
                     class="form-control"
@@ -177,18 +191,7 @@
                     v-model="entity.last_name"
                     class="form-control"
                     placeholder="Apellido"
-                  />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">Cedula</label>
-                <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="entity.card_id"
-                    v-mask="'###-#######-#'"
-                    class="form-control"
-                    placeholder="Cedula"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
@@ -201,6 +204,7 @@
                     v-mask="'###-###-####'"
                     class="form-control"
                     placeholder="Telefono"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
@@ -213,6 +217,7 @@
                     v-model="entity.celphone"
                     class="form-control"
                     placeholder="Celular"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
@@ -224,6 +229,7 @@
                     v-model="entity.email"
                     class="form-control"
                     placeholder="Email"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
@@ -235,6 +241,7 @@
                     v-model="entity.date_birthdate"
                     class="form-control"
                     placeholder="Fecha de Nacimiento"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
@@ -246,6 +253,7 @@
                     v-model="entity.profession"
                     class="form-control"
                     placeholder="Profesion"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
@@ -257,6 +265,7 @@
                     v-model="entity.address"
                     class="form-control"
                     placeholder="Direccion"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
@@ -268,13 +277,19 @@
                     v-model="entity.sector"
                     class="form-control"
                     placeholder="Ingrese el sector"
+                    :disabled="validateCardId == false"
                   />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input">Sexo</label>
                 <div class="col-md-9">
-                  <select v-model="entity.sexo" class="form-control" id>
+                  <select
+                    v-model="entity.sexo"
+                    :disabled="validateCardId == false"
+                    class="form-control"
+                    id
+                  >
                     <option value disabled selected>Seleccione el sexo</option>
                     <option value="Masculino">M</option>
                     <option value="Femenino">F</option>
@@ -285,6 +300,7 @@
                 <label class="col-md-3 form-control-label" for="text-input">Circunscripcion</label>
                 <div class="col-md-9">
                   <v-select
+                    :disabled="validateCardId == false"
                     v-model="entity.circunscripciones_id"
                     @search="onSearchCircunscripciones"
                     :options="circunscripciones"
@@ -439,6 +455,7 @@ export default {
       municipios: [],
       recintos: [],
       colegios_electorales: [],
+      validateCardId: false,
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
@@ -564,11 +581,33 @@ export default {
     },
     confirmarElector(model) {
       let confirmado = model.confirmado ? 0 : 1;
-      axios.put(`/api/people/${model.id}`, {
-        confirmado: confirmado
-      }).then(res =>{
-        model.confirmado = confirmado;
-      });
+      axios
+        .put(`/api/people/${model.id}`, {
+          confirmado: confirmado
+        })
+        .then(res => {
+          model.confirmado = confirmado;
+        });
+    },
+    validarCardId() {
+      axios
+        .get("/api/people", {
+          params: {
+            q: [{
+              field: "card_id",
+              condition: "where",
+              operator: "=",
+              value: `%${this.entity.card_id}%`
+            }]
+          }
+        })
+        .then(res => {
+          if (res.data.data.length > 0) {
+            alert("Ya existe esta cedula");
+          } else {
+            this.validateCardId = true;
+          }
+        });
     },
     save(method) {
       if (this.validarPersona()) {
