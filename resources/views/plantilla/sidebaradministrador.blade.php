@@ -13,6 +13,9 @@
                             <li @if(auth()->user()->canAction('Admin'))  @click="menu=1" class="nav-item">
                                 <a class="nav-link" href="#"><i class="fa fa-location-arrow"></i> Provincias</a>
                             </li @endif>
+                            <li @if(auth()->user()->canAction('Admin'))  @click="menu='sectores'" class="nav-item">
+                                <a class="nav-link" href="#"><i class="fa fa-location-arrow"></i> Sectores</a>
+                            </li @endif>
                             <li @click="menu=2" class="nav-item" @if(auth()->user()->canAction('Admin'))>
                                 <a class="nav-link" href="#"><i class="icon-bag"></i>Circunscripcion</a>
                             </li @endif>

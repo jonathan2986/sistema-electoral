@@ -153,6 +153,7 @@ class PeopleController extends Controller
                 'celphone' => $model->celphone,
                 'email' => $model->email,
                 'date_birthdate' => $model->date_birthdate,
+                'sectores_id' => $model->sectores_id,
                 'profession' => $model->profession,
                 'address' => $model->address,
                 'sector' => $model->sector,
@@ -178,6 +179,10 @@ class PeopleController extends Controller
                 'comites_bases' => $model->comites_bases ? [
                     'id' => $model->comites_bases->id,
                     'name' => $model->comites_bases->name,
+                ] : [],
+                'sectores' => $model->sectores ? [
+                    'id' => $model->sectores->id,
+                    'name' => $model->sectores->name,
                 ] : [],
             ];
         }

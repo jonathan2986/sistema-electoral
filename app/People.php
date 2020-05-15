@@ -33,6 +33,7 @@ class People extends Model
         'sexo',
         'comites_bases_id',
         'confirmado',
+        'sectores_id',
     ];
 
     protected $appends = ['age', 'name'];
@@ -83,5 +84,10 @@ class People extends Model
     public function comites_bases()
     {
         return $this->belongsTo('App\ComitesBases');
+    }
+
+    public function sectores()
+    {
+        return $this->belongsTo('App\Sectores');
     }
 }

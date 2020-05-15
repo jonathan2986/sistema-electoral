@@ -13,7 +13,9 @@
             <template v-if="menu==2">
                 <circunscripcion></circunscripcion>
             </template>
-
+            <template v-if="menu=='sectores'">
+                <sectores></sectores>
+            </template>
             <template v-if="menu==3">
                 <municipio></municipio>
 {{--                <recintos></recintos>--}}

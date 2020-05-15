@@ -42,6 +42,7 @@ Vue.component('v-select', vSelect)
 Vue.component('sliding-pagination', Paginate)
 Vue.component('votantes-cba', require('./components/VotanteCBA'))
 Vue.component('loading', require('./components/Loading'))
+Vue.component('sectores', require('./components/Sectores'))
 const app = new Vue({
     el: '#app',
     data: {
