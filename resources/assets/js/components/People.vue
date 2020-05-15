@@ -95,7 +95,7 @@
                   <td v-text="`${model.first_name} ${model.last_name}`"></td>
                   <td v-text="model.card_id"></td>
                   <td v-text="model.address"></td>
-                  <td v-text="model.sector"></td>
+                  <td v-text="model.sectores? model.sectores.name : ''"></td>
                   <td v-text="model.phone_number"></td>
                   <td v-text="model.celphone"></td>
                   <td v-text="model.age"></td>
@@ -270,18 +270,6 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">Sector</label>
-                <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="entity.sector"
-                    class="form-control"
-                    placeholder="Ingrese el sector"
-                    :disabled="validateCardId == false"
-                  />
-                </div>
-              </div>
-              <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input">Sexo</label>
                 <div class="col-md-9">
                   <select
@@ -320,6 +308,19 @@
                     :filterable="false"
                     placeholder="Seleccione el municipio"
                     :reduce="(municipio) => municipio.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Sectores</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.sectores_id"
+                    @search="onSearchSectores"
+                    :options="sectores"
+                    :filterable="false"
+                    placeholder="Seleccione el sector"
+                    :reduce="(sectores) => sectores.id"
                   ></v-select>
                 </div>
               </div>
@@ -452,7 +453,12 @@ export default {
       circunscripciones: [],
       distritos: [],
       provincias: [],
-      municipios: [],
+      municipios: [
+        {
+          id: 2,
+          label: 'Santiago de los Caballeros'
+        }
+      ],
       recintos: [],
       colegios_electorales: [],
       validateCardId: false,
@@ -462,6 +468,7 @@ export default {
       errorPersona: 0,
       errorMostrarMsjPersona: [],
       url: "/api/people",
+      sectores: [],
       comites_bases: [],
       pagination: {
         total: 0,
@@ -484,11 +491,12 @@ export default {
         sector: "",
         sexo: "",
         id: 0,
-        municipios_id: 0,
+        municipios_id: 2,
         circunscripciones_id: 0,
         distritos_id: 0,
         recintos_id: 0,
-        colegios_electorales_id: 0
+        colegios_electorales_id: 0,
+        sectores_id: 0
       },
 
       offset: 3,
@@ -593,12 +601,14 @@ export default {
       axios
         .get("/api/people", {
           params: {
-            q: [{
-              field: "card_id",
-              condition: "where",
-              operator: "=",
-              value: `%${this.entity.card_id}%`
-            }]
+            q: [
+              {
+                field: "card_id",
+                condition: "where",
+                operator: "like",
+                value: `%${this.entity.card_id}%`
+              }
+            ]
           }
         })
         .then(res => {
@@ -633,7 +643,7 @@ export default {
             address: "",
             sector: "",
             sexo: "",
-            municipios_id: 0,
+            municipios_id: 2,
             circunscripciones_id: 0,
             distritos_id: 0,
             recintos_id: 0,
@@ -666,6 +676,7 @@ export default {
     cerrarModal() {
       this.modal = 0;
       this.tituloModal = "";
+      this.validateCardId = false;
       this.provincia = "";
       this.entity = {
         first_name: "",
@@ -679,7 +690,7 @@ export default {
         address: "",
         sector: "",
         sexo: "",
-        municipios_id: 0,
+        municipios_id: 2,
         circunscripciones_id: 0,
         distritos_id: 0,
         recintos_id: 0,
@@ -699,6 +710,7 @@ export default {
         }
         case "actualizar": {
           //console.log(data);
+          this.validateCardId = true;
           this.modal = 1;
           this.tituloModal = `Actualizar ${modelo}`;
           this.tipoAccion = 2;
@@ -710,6 +722,7 @@ export default {
           this.entity.phone_number = data.phone_number;
           this.entity.email = data.email;
           this.entity.date_birthdate = data.date_birthdate;
+          this.entity.sectores_id = data.sectores_id;
           this.entity.profession = data.profession;
           this.entity.address = data.address;
           this.entity.sector = data.sector;
@@ -770,6 +783,14 @@ export default {
                   }
                 ]
               : [];
+            this.sectores = data.sectores
+              ? [
+                  {
+                    label: data.sectores.name,
+                    id: data.sectores.id
+                  }
+                ]
+              : [];
           }
           break;
         }
@@ -786,6 +807,9 @@ export default {
     onSearchCircunscripciones(search, loading) {
       loading(true);
       this.search(loading, "circunscripciones", search, this);
+    },
+    onSearchSectores(search, loading) {
+      loading(true), this.search(loading, "sectores", search, this);
     },
     conditions: function() {
       let condition = [];
