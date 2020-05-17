@@ -145,6 +145,7 @@
                     class="form-control"
                     v-model="miembro.card_id"
                     v-mask="'###-#######-#'"
+                    @blur="validarCardId"
                     name
                     id
                     required
@@ -158,6 +159,7 @@
                     type="text"
                     class="form-control"
                     v-model="miembro.first_name"
+                    :disabled="validateCardId == false"
                     name
                     id
                     required
@@ -170,6 +172,7 @@
                   <input
                     type="text"
                     class="form-control"
+                    :disabled="validateCardId == false"
                     v-model="miembro.last_name"
                     name
                     id
@@ -185,6 +188,7 @@
                     class="form-control"
                     v-model="miembro.phone_number"
                     v-mask="'###-###-####'"
+                    :disabled="validateCardId == false"                    
                     name
                     id
                   />
@@ -199,6 +203,7 @@
                     :options="circunscripciones"
                     :filterable="false"
                     placeholder="Seleccione la Circunscripcion"
+                    :disabled="validateCardId == false"
                     :reduce="(circunscripcion) => circunscripcion.id"
                   ></v-select>
                 </div>
@@ -212,6 +217,7 @@
                     :options="municipios"
                     :filterable="false"
                     placeholder="Seleccione el municipio"
+                    :disabled="validateCardId == false"
                     :reduce="(municipio) => municipio.id"
                   ></v-select>
                 </div>
@@ -226,6 +232,7 @@
                     :filterable="false"
                     placeholder="Seleccione el distrito municipal"
                     :reduce="(distrito) => distrito.id"
+                    :disabled="validateCardId == false"
                   ></v-select>
                 </div>
               </div>
@@ -354,6 +361,7 @@ export default {
       distritos: [],
       provincias: [],
       recintos: [],
+      validateCardId: false,
       municipios: [
         {
           id: 2,
@@ -373,6 +381,7 @@ export default {
       miembrosNuevos: [],
       miemborsNuevosSelect: [],
       url: "/api/comites_bases",
+      validateCardId: false,
       miembro: {
         first_name: "",
         last_name: "",
@@ -459,6 +468,28 @@ export default {
     }
   },
   methods: {
+    validarCardId() {
+      axios
+        .get("/api/people", {
+          params: {
+            q: [
+              {
+                field: "card_id",
+                condition: "where",
+                operator: "like",
+                value: `%${this.miembro.card_id}%`
+              }
+            ]
+          }
+        })
+        .then(res => {
+          if (res.data.data.length > 0) {
+            alert("Ya existe esta cedula");
+          } else {
+            this.validateCardId = true;
+          }
+        });
+    },
     borrar(id) {
       let r = confirm("Esta seguro que quiere borrar este comite de base");
       if (r) {
@@ -600,6 +631,7 @@ export default {
     cerrarModal() {
       this.modal = 0;
       this.tituloModal = "";
+      this.validateCardId = false;
       this.provincia = "";
       this.entity = {
         miembros: [],
@@ -706,10 +738,9 @@ export default {
 };
 </script>
 <style>
-
-  .persona {
-    overflow-y: scroll;
-  }
+.persona {
+  overflow-y: scroll;
+}
 .modal-content {
   width: 100% !important;
   position: absolute !important;

@@ -26,6 +26,7 @@
                     <input
                       type="text"
                       v-model="entity.card_id"
+                      @blur="validarCardId"
                       v-mask="'###-#######-#'"
                       class="form-control"
                       placeholder="Cedula"
@@ -37,6 +38,7 @@
                   <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                   <div class="col-md-9">
                     <input
+                      :disabled="validateCardId == false"
                       type="text"
                       class="form-control"
                       v-model="entity.first_name"
@@ -52,6 +54,7 @@
                       type="text"
                       class="form-control"
                       v-model="entity.last_name"
+                      :disabled="validateCardId == false"
                       placeholder="Apellido"
                       required
                     />
@@ -61,6 +64,7 @@
                   <label class="col-md-3 form-control-label" for="text-input">Telefono</label>
                   <div class="col-md-9">
                     <input
+                      :disabled="validateCardId == false"
                       type="text"
                       v-model="entity.phone_number"
                       v-mask="'###-###-####'"
@@ -186,10 +190,33 @@ export default {
           label: "Santiago de los Caballeros"
         }
       ],
-      colegios_electorales: []
+      colegios_electorales: [],
+      validateCardId: false
     };
   },
   methods: {
+    validarCardId() {
+      axios
+        .get("/api/people", {
+          params: {
+            q: [
+              {
+                field: "card_id",
+                condition: "where",
+                operator: "like",
+                value: `%${this.entity.card_id}%`
+              }
+            ]
+          }
+        })
+        .then(res => {
+          if (res.data.data.length > 0) {
+            alert("Ya existe esta cedula");
+          } else {
+            this.validateCardId = true;
+          }
+        });
+    },
     save() {
       this.entity.comites_bases_id = this.comitesBasesId;
       axios({

@@ -456,7 +456,7 @@ export default {
       municipios: [
         {
           id: 2,
-          label: 'Santiago de los Caballeros'
+          label: "Santiago de los Caballeros"
         }
       ],
       recintos: [],
@@ -536,6 +536,28 @@ export default {
     }
   },
   methods: {
+    validarCardId() {
+      axios
+        .get("/api/people", {
+          params: {
+            q: [
+              {
+                field: "card_id",
+                condition: "where",
+                operator: "like",
+                value: `%${this.entity.card_id}%`
+              }
+            ]
+          }
+        })
+        .then(res => {
+          if (res.data.data.length > 0) {
+            alert("Ya existe esta cedula");
+          } else {
+            this.validateCardId = true;
+          }
+        });
+    },
     borrar(id) {
       let r = confirm("Esta seguro que quiere borrar este votante");
       if (r) {
