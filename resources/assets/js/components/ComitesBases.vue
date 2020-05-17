@@ -190,6 +190,71 @@
                   />
                 </div>
               </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Circunscripcion</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="miembro.circunscripciones_id"
+                    @search="onSearchCircunscripciones"
+                    :options="circunscripciones"
+                    :filterable="false"
+                    placeholder="Seleccione la Circunscripcion"
+                    :reduce="(circunscripcion) => circunscripcion.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Municipios</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="miembro.municipios_id"
+                    @search="onSearchMunicipios"
+                    :options="municipios"
+                    :filterable="false"
+                    placeholder="Seleccione el municipio"
+                    :reduce="(municipio) => municipio.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Distrito</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="miembro.distritos_id"
+                    @search="onSearchDistritos"
+                    :options="distritos"
+                    :filterable="false"
+                    placeholder="Seleccione el distrito municipal"
+                    :reduce="(distrito) => distrito.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Recintos</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="miembro.recintos_id"
+                    @search="onSearchRecintos"
+                    :options="recintos"
+                    :filterable="false"
+                    placeholder="Seleccione el recinto electoral"
+                    :reduce="(recinto) => recinto.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Colegios Electorales</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="miembro.colegios_electorales_id"
+                    @search="onSearchColegiosElectorales"
+                    :options="colegios_electorales"
+                    :filterable="false"
+                    placeholder="Seleccione el colegio"
+                    :reduce="(colegio) => colegio.id"
+                  ></v-select>
+                </div>
+              </div>
               <div class="form-group row" v-if="tipoAccion == 1">
                 <label class="col-md-3 form-control-label" for="text-input">Miembros</label>
                 <div class="col-md-9">
@@ -286,6 +351,16 @@ export default {
       // distrito_municipal: '',
       // circuscripcion: '',
       circunscripciones: [],
+      distritos: [],
+      provincias: [],
+      recintos: [],
+      municipios: [
+        {
+          id: 2,
+          label: "Santiago de los Caballeros"
+        }
+      ],
+      colegios_electorales: [],
       people: [],
       comites_bases_id: 0,
       miembros: [],
@@ -302,7 +377,13 @@ export default {
         first_name: "",
         last_name: "",
         card_id: "",
-        phone_number: ""
+        phone_number: "",
+        municipios_id: 2,
+        circunscripciones_id: 0,
+        distritos_id: 0,
+        recintos_id: 0,
+        colegios_electorales_id: 0,
+        comites_bases_id: 0
       },
       pagination: {
         total: 0,
@@ -568,6 +649,30 @@ export default {
     },
     onSearchMiembros(search, loading) {
       this.search(loading, "miembros", search, this, "card_id", "people");
+    },
+    onSearchMunicipios(search, loading) {
+      loading(true);
+      this.search(loading, "municipios", search, this);
+    },
+    onSearchProvincias(search, loading) {
+      loading(true);
+      this.search(loading, "provincias", search, this);
+    },
+    onSearchCircunscripciones(search, loading) {
+      loading(true);
+      this.search(loading, "circunscripciones", search, this);
+    },
+    onSearchDistritos(search, loading) {
+      loading(true);
+      this.search(loading, "distritos", search, this);
+    },
+    onSearchRecintos(search, loading) {
+      loading(true);
+      this.search(loading, "recintos", search, this);
+    },
+    onSearchColegiosElectorales(search, loading) {
+      loading(true);
+      this.search(loading, "colegios_electorales", search, this);
     },
     search: _.debounce(
       (loading, option, search, vm, field = "name", endpoint = null) => {

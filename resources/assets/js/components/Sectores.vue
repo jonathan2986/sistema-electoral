@@ -2,7 +2,9 @@
   <main class="main">
     <!-- Breadcrumb -->
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
+      <li class="breadcrumb-item">
+        <a href="/">Escritorio</a>
+      </li>
     </ol>
     <div class="container-fluid">
       <!-- Ejemplo de tabla Listado -->
@@ -11,7 +13,7 @@
           <i class="fa fa-align-justify"></i> Sectores
           <button
             type="button"
-            @click="abrirModal('provincia', 'registrar')"
+            @click="abrirModal('Sectores', 'registrar')"
             class="btn btn-secondary"
           >
             <i class="icon-plus"></i>&nbsp;Nuevo
@@ -21,19 +23,23 @@
           <div class="form-group row">
             <div class="col-md-6">
               <div class="input-group">
-                <select class="form-control col-md-3" v-model="criterio">
-                  <option value="name">Sector</option>
+                <select
+                  @change="activatedAdvancedSearch"
+                  class="form-control col-md-3"
+                  v-model="criterio"
+                >
+                  <option value="name">Sectores</option>
                 </select>
                 <input
                   type="text"
                   v-model="buscar"
-                  @keyup.enter="listarProvincias()"
+                  @keyup.enter="listarData(1, buscar, criterio)"
                   class="form-control"
                   placeholder="Texto a buscar"
                 />
                 <button
                   type="submit"
-                  @click="listarProvincias()"
+                  @click="listarData(1, buscar, criterio)"
                   class="btn btn-primary"
                 >
                   <i class="fa fa-search"></i> Buscar
@@ -41,43 +47,50 @@
               </div>
             </div>
           </div>
-          <table
-            class="table table-responsive table-bordered table-striped table-sm"
-          >
+          <table class="table table-responsive table-bordered table-striped table-sm">
             <thead>
               <tr>
                 <th>Opciones</th>
                 <th>Sector</th>
+                <th>Municipio</th>
+                <th>Distritos</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="provincia in arrayProvincias" :key="provincia.id">
+              <tr v-for="model in data" :key="model.id">
                 <td>
                   <button
                     type="button"
-                    @click="abrirModal('provincia', 'actualizar', provincia)"
+                    @click="
+                      abrirModal('Sectores', 'actualizar', model)
+                    "
                     class="btn btn-warning btn-sm"
                   >
                     <i class="icon-pencil"></i>
                   </button>
                   &nbsp;
-                  <button type="button" class="btn btn-danger btn-sm">
+                  <button
+                    @click="borrar(model.id)"
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                  >
                     <i class="icon-trash"></i>
                   </button>
                 </td>
-                <td v-text="provincia.name"></td>
+                <td v-text="model.name"></td>
+                <td v-text="model.municipios ? model.municipios.name : ''"></td>
+                <td v-text="model.distritos? model.distritos.name : ''"></td>
               </tr>
             </tbody>
           </table>
           <nav>
             <sliding-pagination
               :page-count="pagination.last_page"
-              :click-handler="listarProvincias"
+              :click-handler="listarData"
               :prev-text="'Anterior'"
               :next-text="'Siguiente'"
               :containerClass="'pagination'"
-              >
-            ></sliding-pagination>
+            >></sliding-pagination>
           </nav>
         </div>
       </div>
@@ -97,73 +110,69 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" v-text="tituloModal"></h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true" @click="cerrarModal()">×</span>
             </button>
           </div>
           <div class="modal-body">
-            <form
-              action=""
-              method="post"
-              enctype="multipart/form-data"
-              class="form-horizontal"
-            >
+            <form action method="post" enctype="multipart/form-data" class="form-horizontal">
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Sector</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Sector</label>
                 <div class="col-md-9">
                   <input
                     type="text"
-                    v-model="sectores"
+                    v-model="entity.name"
                     class="form-control"
                     placeholder="Sector"
                   />
-                  <span class="help-block"
-                    >(*) Ingrese el nombre del sector</span
-                  >
+                  <span class="help-block">(*) Ingrese el nombre del Sector</span>
                 </div>
               </div>
-              <div v-show="errorProvincia" class="form-group row div-error">
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Municipios</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.municipios_id"
+                    @search="onSearchMunicipios"
+                    :options="municipios"
+                    :filterable="false"
+                    :reduce="(municipio) => municipio.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Distritos</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.distritos_id"
+                    @search="onSearchDistritos"
+                    :options="distritos"
+                    :filterable="false"
+                    :reduce="(distrito) => distrito.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div v-show="errorColegio" class="form-group row div-error">
                 <div class="text-center text-error">
-                  <div
-                    v-for="error in errorMostrarMsjProvincia"
-                    :key="error"
-                    v-text="error"
-                  ></div>
+                  <div v-for="error in errorMostrarMsjColegio" :key="error" v-text="error"></div>
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              @click="cerrarModal()"
-            >
-              Cerrar
-            </button>
+            <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
             <button
               type="button"
               v-if="tipoAccion == 1"
               class="btn btn-primary"
-              @click="registrarProvincia()"
-            >
-              Guardar
-            </button>
+              @click="save('POST')"
+            >Guardar</button>
             <button
               type="button"
               v-if="tipoAccion == 2"
               class="btn btn-primary"
-              @click="actualizarProvincia()"
-            >
-              Actualizar
-            </button>
+              @click="save('PUT')"
+            >Actualizar</button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -185,12 +194,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title">Eliminar Categoría</h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
@@ -198,13 +202,7 @@
             <p>Estas seguro de eliminar la categoría?</p>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Cerrar
-            </button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             <button type="button" class="btn btn-danger">Eliminar</button>
           </div>
         </div>
@@ -220,30 +218,45 @@
 export default {
   data() {
     return {
-      provincia_id: 0,
-      provincia: "",
+      municipio_id: 0,
+      municipio: "",
       cantidadMunicipio: 0,
-      // distrito_municipal: '',
-      // circuscripcion: '',
-      arrayProvincias: [],
+      data: [],
+      advancedSearch: 0,
+      municipios: [],
+      distritos: [],
+      people: [],
+      url: "/api/sectores",
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
-      errorProvincia: 0,
-      errorMostrarMsjProvincia: [],
+      errorColegio: 0,
+      errorMostrarMsjColegio: [],
       pagination: {
         total: 0,
         current_page: 1,
         per_page: 0,
         last_page: 0,
         from: 0,
-        to: 0,
+        to: 0
       },
-      sectores: '',
+      entity: {
+        municipios_id: 0,
+        distritos_id: 0,
+        name: "",
+        id: 0
+      },
+
       offset: 3,
-      criterio: "provincia",
-      buscar: "",
+      criterio: "sectores",
+      buscar: ""
     };
+  },
+  props: {
+    permisionCondition: {
+      default: null,
+      type: String
+    }
   },
   computed: {
     isActived: function() {
@@ -272,35 +285,73 @@ export default {
       }
       return pagesArray;
     },
-  },
-  methods: {
-    listarProvincias(page = 1) {
-      let me = this;
-      let conditions = [];
-      if (this.buscar.length > 0 && this.criterio.length > 0) {
-        conditions.push({
-          condition: "where",
-          field: this.criterio,
-          operator: "like",
-          value: `%${this.buscar}%`,
+    conditions: function() {
+      let condition = [];
+
+      if (this.permisionCondition) {
+        condition.push({
+          field: "recintos_id",
+          condition: "whereIn",
+          operator: "=",
+          value: this.permisionCondition
         });
       }
+
+      switch (this.criterio) {
+        case "name":
+          this.url = "/api/sectores";
+          condition.push({
+            field: "name",
+            condition: "where",
+            operator: "like",
+            value: `%${this.buscar}%`
+          });
+          break;
+      }
+
+      return condition;
+    }
+  },
+  methods: {
+    borrar(id) {
+      let r = confirm("Esta seguro que quiere borrar este colegio electoral");
+      if (r) {
+        axios({
+          url: `/api/colegios_electorales/${id}`,
+          method: "DELETE"
+        }).then(r => {
+          this.listarData();
+        });
+      }
+    },
+    activatedAdvancedSearch() {
+      if (this.criterio != "name") {
+        this.advancedSearch = 1;
+      } else {
+        this.advancedSearch = 0;
+      }
+    },
+    listarData(page = 1) {
       axios
-        .get("/api/sectores/?page=" + page,{
+        .get(this.url, {
           params: {
-            q: conditions,
+            eager: ["distritos", "municipios"],
+            page: page,
+            q: this.conditions,
+            perPage: 10
           }
         })
-        .then((response) => {
+        .then(response => {
           var respuesta = response.data;
-          me.arrayProvincias = respuesta.data;
-          me.pagination.total = respuesta.total;
-          me.pagination.last_page = respuesta.last_page;
-          me.pagination.current_page = respuesta.current_page;
-          console.log(this.arrayProvincias);
+          this.data = respuesta.data;
+          this.pagination.total = respuesta.total;
+          this.pagination.last_page = respuesta.last_page;
+          this.pagination.current_page = respuesta.current_page;
         })
         .catch(function(error) {
-          console.log(error);
+          if (error.response.status === 404) {
+            alert("Error, esta intentando crear un colegio duplicado");
+          }
         });
     },
     cambiarPagina(page, buscar, criterio) {
@@ -308,58 +359,47 @@ export default {
       //Actualiza la página actual
       me.pagination.current_page = page;
       //Envia la petición para visualizar la data de esa página
-      me.listarProvincias(page, buscar, criterio);
+      me.listarData(page, buscar, criterio);
     },
-    registrarProvincia() {
-      // if (this.validarProvincia()) {
-      //   return;
-      // }
-
-      let me = this;
-
-      axios
-        .post("/api/sectores", {
-          name: this.sectores,
+    save(method) {
+      if (this.validarColegio()) {
+        return;
+      }
+      let url =
+        method == "POST"
+          ? `/api/sectores`
+          : `/api/sectores/${this.entity.id}`;
+      axios({
+        url: url,
+        method: method,
+        data: this.entity
+      })
+        .then(e => {
+          this.entity = {
+            coordinadores_id: 0,
+            recintos_id: 0,
+            name: "",
+            id: 0
+          };
+          this.listarData(1);
+          this.cerrarModal();
         })
-        .then(function(response) {
-          me.cerrarModal();
-          me.listarProvincias(1);
-        })
-        .catch(function(error) {
-          console.log(error);
+        .catch(err => {
+          console.log(err);
         });
     },
-    actualizarProvincia() {
-      // if (this.validarProvincia()) {
-      //   return;
-      // }
+    validarColegio() {
+      this.errorColegio = 0;
+      this.errorMostrarMsjColegio = [];
 
-      let me = this;
+      if (!this.entity.name)
+        this.errorMostrarMsjColegio.push("El colegio no puede ir vacio.");
+      if (this.entity.recintos_id === 0)
+        this.errorMostrarMsjColegio.push("Seleccione un recinto.");
 
-      axios
-        .put(`/api/sectores/${this.sectores_id}`, {
-          name: this.sectores,
-        })
-        .then(function(response) {
-          me.cerrarModal();
-          me.listarProvincias(1);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    },
-    validarProvincia() {
-      this.errorProvincia = 0;
-      this.errorMostrarMsjProvincia = [];
+      if (this.errorMostrarMsjColegio.length) this.errorColegio = 1;
 
-      if (!this.provincia)
-        this.errorMostrarMsjProvincia.push(
-          "La provincia no puede estar vacía."
-        );
-
-      if (this.errorMostrarMsjProvincia.length) this.errorProvincia = 1;
-
-      return this.errorProvincia;
+      return this.errorColegio;
     },
     cerrarModal() {
       this.modal = 0;
@@ -367,33 +407,69 @@ export default {
       this.provincia = "";
     },
     abrirModal(modelo, accion, data = []) {
-      switch (modelo) {
-        case "provincia": {
-          switch (accion) {
-            case "registrar": {
-              this.modal = 1;
-              this.tituloModal = "Registrar Sector";
-              this.provincia = "";
-              this.tipoAccion = 1;
-              break;
-            }
-            case "actualizar": {
-              //console.log(data);
-              this.modal = 1;
-              this.tituloModal = "Actualizar Sector";
-              this.tipoAccion = 2;
-              this.sectores_id = data["id"];
-              this.sectores = data["name"];
-              break;
-            }
-          }
+      switch (accion) {
+        case "registrar": {
+          this.modal = 1;
+          this.tituloModal = `Registrar ${modelo}`;
+          this.provincia = "";
+          this.tipoAccion = 1;
+          break;
+        }
+        case "actualizar": {
+          //console.log(data);
+          this.modal = 1;
+          this.tituloModal = `Actualizar ${modelo}`;
+          this.tipoAccion = 2;
+          this.entity.id = data.id;
+          this.entity.name = data.name;
+          this.entity.municipios_id = data.municipios_id;
+          this.entity.distritos_id = data.distritos_id;
+          this.distritos = data.distritos
+            ? [
+                {
+                  id: data.distritos,
+                  label: data.distritos.name
+                }
+              ]
+            : [];
+          this.municipios = [{ id: data.municipios.id, label: data.municipios.name }];
+          break;
         }
       }
     },
+    onSearchMunicipios(search, loading) {
+      loading(true);
+      this.search(loading, "municipios", search, this);
+    },
+    onSearchDistritos(search, loading) {
+      loading(true);
+      this.search(loading, "distritos", search, this);
+    },
+    search: _.debounce((loading, option, search, vm, field = "name") => {
+      axios(`/api/${option}`, {
+        params: {
+          q: [
+            JSON.stringify({
+              condition: "where",
+              field: field,
+              operator: "like",
+              value: `%${search}%`
+            })
+          ]
+        }
+      }).then(r => {
+        if (search.length > 0) {
+          vm[option] = r.data.data.map(function(model) {
+            return { label: model.name, id: model.id };
+          });
+        }
+        loading(false);
+      });
+    }, 350)
   },
   mounted() {
-    this.listarProvincias(1);
-  },
+    this.listarData(1);
+  }
 };
 </script>
 <style>
