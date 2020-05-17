@@ -106,7 +106,7 @@
     </div>
     <!--Inicio del modal agregar/actualizar-->
     <div
-      class="modal fade"
+      class="modal fade persona"
       tabindex="-1"
       :class="{ mostrar: modal }"
       role="dialog"
@@ -706,6 +706,10 @@ export default {
 };
 </script>
 <style>
+
+  .persona {
+    overflow-y: scroll;
+  }
 .modal-content {
   width: 100% !important;
   position: absolute !important;
