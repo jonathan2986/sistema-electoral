@@ -69,7 +69,7 @@
                 </td>
                 <td>
                   {{
-                    `${model.votantes.first_name} ${model.votantes.last_name}`
+                    model.votantes ? `${model.votantes.first_name} ${model.votantes.last_name}` : ''
                   }}
                 </td>
                 <td v-text="model.name"></td>

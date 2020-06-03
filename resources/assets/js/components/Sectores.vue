@@ -427,7 +427,7 @@ export default {
           this.distritos = data.distritos
             ? [
                 {
-                  id: data.distritos,
+                  id: data.distritos_id,
                   label: data.distritos.name
                 }
               ]

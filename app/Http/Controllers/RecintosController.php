@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Distritos;
 use App\Municipios;
+use App\People;
 use App\Recintos;
 use Fredpeal\BakaHttp\Traits\CrudTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpWord\Settings;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class RecintosController extends Controller
 {
@@ -18,6 +22,72 @@ class RecintosController extends Controller
         $this->model = new Recintos;
     }
 
+    public function report($id)
+    {
+        Settings::setPdfRendererPath('/vendor/dompdf/dompdf');
+        Settings::setPdfRendererName('DOMPDF');
+        $recinto = $this->model::find($id);
+        $template = Storage::disk('local')->path('reportes/recintos.docx');
+        $templateProcessor = new TemplateProcessor($template);
+        $templateProcessor->setValue('NombreRecinto', $recinto->name);
+        $templateProcessor->setValue('CantidadDeColegios', $recinto->number_colegios);
+        $templateProcessor->setValue('DireccionRecinto', $recinto->address);
+        $templateProcessor->setValue('NombreMunicipio', $recinto->municipios->name);
+        $templateProcessor->setValue('Distrito', $recinto->distritos ? $recinto->distritos->name : '');
+        $coordinadores = [
+            [
+                'NombreCordinador' => $recinto->coordinadores ? $recinto->coordinadores->name : '',
+                'RolCordinador' => 'Coordinador',
+            ],
+            [
+                'NombreCordinador' => $recinto->coordinadores_ejecutivos ? $recinto->coordinadores_ejecutivos->name : '',
+                'RolCordinador' => 'Coordinador Ejecutivo',
+            ],
+            [
+                'NombreCordinador' => $recinto->coordinadores_electorales ? $recinto->coordinadores_electorales->name : '',
+                'RolCordinador' => 'Coordinador Electoral',
+            ],
+            [
+                'NombreCordinador' => $recinto->coordinadores_seguridad ? $recinto->coordinadores_seguridad->name : '',
+                'RolCordinador' => 'Coordinador de Seguridad',
+            ],
+            [
+                'NombreCordinador' => $recinto->coordinadores_finanzas ? $recinto->coordinadores_finanzas->name : '',
+                'RolCordinador' => 'Coordinador de Finanzas',
+            ],
+            [
+                'NombreCordinador' => $recinto->activistas ? $recinto->activistas->name : '',
+                'RolCordinador' => 'Activista',
+            ],
+        ];
+
+        $electores = [];
+        $people = People::where('recintos_id', $id)->get();
+        foreach ($people as $model) {
+            $electores[] = [
+                'NombreElector' => $model->first_name . ' ' . $model->last_name,
+                'cedulaElector' => $model->card_id,
+                'celularElector' => $model->celphone,
+                'ColegioElectoralElector' => $model->colegios_electorales ? $model->colegios_electorales->name : '',
+                'comiteBaseElector' => $model->comites_bases ? $model->comites_bases->name : '',
+            ];
+        }
+        $templateProcessor->cloneRowAndSetValues('NombreCordinador', $coordinadores);
+        if ($electores) {
+            $templateProcessor->cloneRowAndSetValues('NombreElector', $electores);
+        }
+
+        $fileName = uniqid();
+        $templateProcessor->saveAs("/app/storage/app/reportes/{$fileName}.docx");
+    }
+
+    /**
+     * getByDistritos
+     *
+     * @param  Request $request
+     * @param  mixed $name
+     * @return void
+     */
     public function getByDistritos(Request $request, $name)
     {
         $distritos = Distritos::where('name', 'like', "%{$name}%")->select('id')->get();
@@ -38,6 +108,13 @@ class RecintosController extends Controller
         return response()->json($data);
     }
 
+    /**
+     * getByMunicipios
+     *
+     * @param  Request $request
+     * @param  mixed $name
+     * @return void
+     */
     public function getByMunicipios(Request $request, $name)
     {
         $municipios = Municipios::where('name', 'like', "%{$name}%")->select('id')->get();

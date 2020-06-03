@@ -34,6 +34,7 @@ Route::group([], function () {
     Route::resource('/miembros_comites_bases', 'MiembrosComitesBasesController');
     Route::resource('/comites_bases', 'ComitesBasesController');
     Route::post('/people_bulk_edit', 'PeopleController@bulkEdit');
+    Route::get('/reportes/recintos/{id}', 'RecintosController@report');
 });
 
 Route::group(['prefix' => '/advanced'], function () {
