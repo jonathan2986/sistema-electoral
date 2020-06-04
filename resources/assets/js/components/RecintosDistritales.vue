@@ -2,7 +2,9 @@
   <main class="main">
     <!-- Breadcrumb -->
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
+      <li class="breadcrumb-item">
+        <a href="/">Escritorio</a>
+      </li>
     </ol>
     <div class="container-fluid">
       <!-- Ejemplo de tabla Listado -->
@@ -33,18 +35,14 @@
                   class="form-control"
                   placeholder="Texto a buscar"
                 />
-                <button
-                  type="submit"
-                  @click="listarData()"
-                  class="btn btn-primary"
-                >
+                <button type="submit" @click="listarData()" class="btn btn-primary">
                   <i class="fa fa-search"></i> Buscar
                 </button>
               </div>
             </div>
           </div>
           <table
-            class="table table-responsive table-bordered table-striped table-sm"
+            class="table table-responsive table-bordered table-striped table-sm horizontal-scrollable"
           >
             <thead>
               <tr>
@@ -59,6 +57,7 @@
                 <th>Coordinador Electoral</th>
                 <th>Coordinador Seguridad</th>
                 <th>Coordinador Finanza</th>
+                <th>SubCoordinador</th>
               </tr>
             </thead>
             <tbody>
@@ -73,12 +72,15 @@
                   </button>
                   &nbsp;
                   <button
-                    type="button"
                     @click="borrar(model.id)"
+                    type="button"
                     class="btn btn-danger btn-sm"
                   >
                     <i class="icon-trash"></i>
                   </button>
+                  <a :download="`${model.name}.docx`" :href="`/api/reportes/recintos/${model.id}`" class="btn btn-success btn-sm">
+                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                  </a>
                 </td>
                 <td v-text="model.name"></td>
                 <td v-text="model.number_colegios"></td>
@@ -88,35 +90,41 @@
 
                 <td v-if="model.coordinadores">
                   {{
-                    `${model.coordinadores.first_name} ${model.coordinadores.last_name}`
+                  `${model.coordinadores.first_name} ${model.coordinadores.last_name}`
                   }}
                 </td>
                 <td v-else></td>
 
                 <td v-if="model.coordinadores_ejecutivos">
                   {{
-                    `${model.coordinadores_ejecutivos.first_name} ${model.coordinadores_ejecutivos.last_name}`
+                  `${model.coordinadores_ejecutivos.first_name} ${model.coordinadores_ejecutivos.last_name}`
                   }}
                 </td>
                 <td v-else></td>
 
                 <td v-if="model.coordinadores_electorales">
                   {{
-                    `${model.coordinadores_electorales.first_name} ${model.coordinadores_electorales.last_name}`
+                  `${model.coordinadores_electorales.first_name} ${model.coordinadores_electorales.last_name}`
                   }}
                 </td>
                 <td v-else></td>
 
                 <td v-if="model.coordinadores_seguridad">
                   {{
-                    `${model.coordinadores_seguridad.first_name} ${model.coordinadores_seguridad.last_name}`
+                  `${model.coordinadores_seguridad.first_name} ${model.coordinadores_seguridad.last_name}`
                   }}
                 </td>
                 <td v-else></td>
 
                 <td v-if="model.coordinadores_finanzas">
                   {{
-                    `${model.coordinadores_finanzas.first_name} ${model.coordinadores_finanzas.last_name}`
+                  `${model.coordinadores_finanzas.first_name} ${model.coordinadores_finanzas.last_name}`
+                  }}
+                </td>
+                <td v-else></td>
+                <td v-if="model.activistas">
+                  {{
+                  `${model.activistas.first_name} ${model.activistas.last_name}`
                   }}
                 </td>
                 <td v-else></td>
@@ -130,9 +138,7 @@
               :prev-text="'Anterior'"
               :next-text="'Siguiente'"
               :containerClass="'pagination'"
-            >
-              ></sliding-pagination
-            >
+            >></sliding-pagination>
           </nav>
         </div>
       </div>
@@ -140,7 +146,7 @@
     </div>
     <!--Inicio del modal agregar/actualizar-->
     <div
-      class="modal fade"
+      class="modal fade recinto"
       tabindex="-1"
       :class="{ mostrar: modal }"
       role="dialog"
@@ -152,26 +158,14 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" v-text="tituloModal"></h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true" @click="cerrarModal()">×</span>
             </button>
           </div>
           <div class="modal-body">
-            <form
-              action=""
-              method="post"
-              enctype="multipart/form-data"
-              class="form-horizontal"
-            >
+            <form action method="post" enctype="multipart/form-data" class="form-horizontal">
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Recinto</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Recinto</label>
                 <div class="col-md-9">
                   <input
                     type="text"
@@ -179,15 +173,11 @@
                     class="form-control"
                     placeholder="Recinto"
                   />
-                  <span class="help-block"
-                    >(*) Ingrese el nombre del Recinto</span
-                  >
+                  <span class="help-block">(*) Ingrese el nombre del Recinto</span>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Coordinador</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Coordinador</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.coordinadores_id"
@@ -199,9 +189,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Coordinador Ejecutivo</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Coordinador Ejecutivo</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.coordinadores_ejecutivos_id"
@@ -213,9 +201,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Coordinador Electoral</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Coordinador Electoral</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.coordinadores_electorales_id"
@@ -227,9 +213,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Coordinador de Seguridad</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Coordinador de Seguridad</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.coordinadores_seguridad_id"
@@ -241,9 +225,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Coordinador de Finanzas</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Coordinador de Finanzas</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.coordinadores_finanzas_id"
@@ -255,9 +237,79 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Municipios</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Sub-cordinador</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.activistas_id"
+                    @search="onSearchActivistas"
+                    :options="activistas"
+                    :filterable="false"
+                    :reduce="(activista) => activista.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Sub-cordinador 1</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.activistas1_id"
+                    @search="onSearchActivistas1"
+                    :options="activistas1"
+                    :filterable="false"
+                    :reduce="(activista) => activista.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Sub-cordinador 2</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.activistas2_id"
+                    @search="onSearchActivistas2"
+                    :options="activistas2"
+                    :filterable="false"
+                    :reduce="(activista) => activista.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Sub-cordinador 3</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.activistas3_id"
+                    @search="onSearchActivistas3"
+                    :options="activistas3"
+                    :filterable="false"
+                    :reduce="(activista) => activista.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Sub-cordinador 4</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.activistas4_id"
+                    @search="onSearchActivistas4"
+                    :options="activistas4"
+                    :filterable="false"
+                    :reduce="(activista) => activista.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Sub-cordinador 5</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.activistas5_id"
+                    @search="onSearchActivistas5"
+                    :options="activistas5"
+                    :filterable="false"
+                    :reduce="(activista) => activista.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Municipios</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.municipios_id"
@@ -269,9 +321,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Distritos</label
-                >
+                <label class="col-md-3 form-control-label" for="text-input">Distritos</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.distritos_id"
@@ -283,15 +333,13 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for=""
-                  >Direccion</label
-                >
+                <label class="col-md-3 form-control-label" for>Direccion</label>
                 <div class="col-md-9">
                   <textarea
                     v-model="entity.address"
-                    name=""
+                    name
                     class="form-control"
-                    id=""
+                    id
                     cols="10"
                     rows="5"
                   ></textarea>
@@ -299,39 +347,25 @@
               </div>
               <div v-show="errorRecinto" class="form-group row div-error">
                 <div class="text-center text-error">
-                  <div
-                    v-for="error in errorMostrarMsjRecinto"
-                    :key="error"
-                    v-text="error"
-                  ></div>
+                  <div v-for="error in errorMostrarMsjRecinto" :key="error" v-text="error"></div>
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              @click="cerrarModal()"
-            >
-              Cerrar
-            </button>
+            <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
             <button
               type="button"
               v-if="tipoAccion == 1"
               class="btn btn-primary"
               @click="save('POST')"
-            >
-              Guardar
-            </button>
+            >Guardar</button>
             <button
               type="button"
               v-if="tipoAccion == 2"
               class="btn btn-primary"
               @click="save('PUT')"
-            >
-              Actualizar
-            </button>
+            >Actualizar</button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -353,12 +387,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title">Eliminar Categoría</h4>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
@@ -366,13 +395,7 @@
             <p>Estas seguro de eliminar la categoría?</p>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Cerrar
-            </button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             <button type="button" class="btn btn-danger">Eliminar</button>
           </div>
         </div>
@@ -389,12 +412,12 @@ export default {
   props: {
     field: {
       type: String,
-      default: "municipios_id",
+      default: "municipios_id"
     },
     permisionCondition: {
       type: String,
-      default: null,
-    },
+      default: null
+    }
   },
   data: () => {
     return {
@@ -411,6 +434,12 @@ export default {
       coordinadores_electorales: [],
       coordinadores_seguridad: [],
       coordinadores_finanzas: [],
+      activistas: [],
+      activistas1: [],
+      activistas2: [],
+      activistas3: [],
+      activistas4: [],
+      activistas5: [],
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
@@ -423,7 +452,7 @@ export default {
         per_page: 0,
         last_page: 0,
         from: 0,
-        to: 0,
+        to: 0
       },
       entity: {
         coordinadores_ejecutivos_id: "",
@@ -435,12 +464,18 @@ export default {
         distritos_id: 0,
         name: "",
         address: "",
-        id: 0,
+        activistas_id: 0,
+        activistas1_id: 0,
+        activistas2_id: 0,
+        activistas3_id: 0,
+        activistas4_id: 0,
+        activistas5_id: 0,
+        id: 0
       },
 
       offset: 3,
       criterio: "recintos",
-      buscar: "",
+      buscar: ""
     };
   },
   computed: {
@@ -477,7 +512,7 @@ export default {
           field: this.field,
           value: this.permisionCondition,
           condition: "whereIn",
-          operator: "=",
+          operator: "="
         });
       }
       switch (this.criterio) {
@@ -486,7 +521,7 @@ export default {
             condition: "where",
             field: this.criterio,
             operator: "like",
-            value: `%${this.buscar}%`,
+            value: `%${this.buscar}%`
           });
           this.url = "/api/recintos";
           break;
@@ -498,7 +533,7 @@ export default {
           break;
       }
       return conditions;
-    },
+    }
   },
   methods: {
     borrar(id) {
@@ -506,11 +541,12 @@ export default {
       if (r) {
         axios({
           url: `/api/recintos/${id}`,
-          method: "DELETE",
+          method: "DELETE"
         }).then(r => {
           this.listarData();
         });
-    }},
+      }
+    },
     listarData(page = 1) {
       let me = this;
       axios
@@ -519,18 +555,22 @@ export default {
             eager: [
               "municipios",
               "distritos",
+              "activistas",
               "coordinadores",
               "coordinadores_ejecutivos",
               "coordinadores_electorales",
               "coordinadores_seguridad",
-              "coordinadores_finanzas",
+              "coordinadores_finanzas"
             ],
             page: page,
-            perPage: 10,
             q: this.conditions,
+            perPage: 10
           },
+          headers: {
+            "Content-Encoding": "gzip"
+          }
         })
-        .then((response) => {
+        .then(response => {
           var respuesta = response.data;
           me.data = respuesta.data;
           me.pagination.total = respuesta.total;
@@ -557,9 +597,9 @@ export default {
       axios({
         url: url,
         method: method,
-        data: this.entity,
+        data: this.entity
       })
-        .then((e) => {
+        .then(e => {
           this.entity = {
             coordinadores_ejecutivos_id: "",
             coordinadores_electorales_id: "",
@@ -569,13 +609,14 @@ export default {
             municipios_id: 0,
             distritos_id: 0,
             name: "",
+            activistas_id: 0,
             address: "",
-            id: 0,
+            id: 0
           };
           this.listarData(1);
           this.cerrarModal();
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     },
@@ -621,6 +662,12 @@ export default {
           this.entity.distritos_id = data.distritos_id;
           this.entity.address = data.address;
           this.entity.coordinadores_id = data.coordinadores_id;
+          this.entity.activistas_id = data.activistas_id;
+          this.entity.activistas1_id = data.activistas1_id;
+          this.entity.activistas2_id = data.activistas2_id;
+          this.entity.activistas3_id = data.activistas3_id;
+          this.entity.activistas4_id = data.activistas4_id;
+          this.entity.activistas5_id = data.activistas5_id;
           this.entity.coordinadores_ejecutivos_id =
             data.coordinadores_ejecutivos_id;
           this.entity.coordinadores_electorales_id =
@@ -636,15 +683,15 @@ export default {
             ? [{ id: data.distritos.id, label: data.distritos.name }]
             : [];
           this.municipios = [
-            { id: data.municipios.id, label: data.municipios.name },
+            { id: data.municipios.id, label: data.municipios.name }
           ];
 
           this.coordinadores_ejecutivos = data.coordinadores_ejecutivos
             ? [
                 {
                   id: data.coordinadores_ejecutivos.id,
-                  label: data.coordinadores_ejecutivos.name,
-                },
+                  label: data.coordinadores_ejecutivos.name
+                }
               ]
             : [];
 
@@ -652,8 +699,8 @@ export default {
             ? [
                 {
                   id: data.coordinadores_electorales.id,
-                  label: data.coordinadores_electorales.name,
-                },
+                  label: data.coordinadores_electorales.name
+                }
               ]
             : [];
 
@@ -661,8 +708,8 @@ export default {
             ? [
                 {
                   id: data.coordinadores_seguridad.id,
-                  label: data.coordinadores_seguridad.name,
-                },
+                  label: data.coordinadores_seguridad.name
+                }
               ]
             : [];
 
@@ -670,8 +717,62 @@ export default {
             ? [
                 {
                   id: data.coordinadores_finanzas.id,
-                  label: data.coordinadores_finanzas.name,
-                },
+                  label: data.coordinadores_finanzas.name
+                }
+              ]
+            : [];
+
+          this.activistas = data.activistas
+            ? [
+                {
+                  label: data.activistas.name,
+                  id: data.activistas.id
+                }
+              ]
+            : [];
+
+          this.activistas1 = data.activistas1
+            ? [
+                {
+                  label: data.activistas1.name,
+                  id: data.activistas1.id
+                }
+              ]
+            : [];
+
+          this.activistas2 = data.activistas2
+            ? [
+                {
+                  label: data.activistas2.name,
+                  id: data.activistas2.id
+                }
+              ]
+            : [];
+
+          this.activistas3 = data.activistas3
+            ? [
+                {
+                  label: data.activistas3.name,
+                  id: data.activistas3.id
+                }
+              ]
+            : [];
+
+          this.activistas4 = data.activistas4
+            ? [
+                {
+                  label: data.activistas4.name,
+                  id: data.activistas4.id
+                }
+              ]
+            : [];
+
+          this.activistas5 = data.activistas5
+            ? [
+                {
+                  label: data.activistas5.name,
+                  id: data.activistas5.id
+                }
               ]
             : [];
           break;
@@ -737,6 +838,30 @@ export default {
         "people"
       );
     },
+    onSearchActivistas(search, loading) {
+      loading(true);
+      this.search(loading, "activistas", search, this, "card_id", "people");
+    },
+    onSearchActivistas1(search, loading) {
+      loading(true);
+      this.search(loading, "activistas1", search, this, "card_id", "people");
+    },
+    onSearchActivistas2(search, loading) {
+      loading(true);
+      this.search(loading, "activistas2", search, this, "card_id", "people");
+    },
+    onSearchActivistas3(search, loading) {
+      loading(true);
+      this.search(loading, "activistas3", search, this, "card_id", "people");
+    },
+    onSearchActivistas4(search, loading) {
+      loading(true);
+      this.search(loading, "activistas4", search, this, "card_id", "people");
+    },
+    onSearchActivistas5(search, loading) {
+      loading(true);
+      this.search(loading, "activistas5", search, this, "card_id", "people");
+    },
     onSearchMunicipios(search, loading) {
       loading(true);
       this.search(loading, "municipios", search, this);
@@ -755,11 +880,11 @@ export default {
                 condition: "where",
                 field: field,
                 operator: "like",
-                value: `%${search}%`,
-              }),
-            ],
-          },
-        }).then((r) => {
+                value: `%${search}%`
+              })
+            ]
+          }
+        }).then(r => {
           if (search.length > 0) {
             vm[option] = r.data.data.map(function(model) {
               return { label: model.name, id: model.id };
@@ -769,14 +894,20 @@ export default {
         });
       },
       350
-    ),
+    )
   },
   mounted() {
     this.listarData(1);
-  },
+  }
 };
 </script>
 <style>
+.recinto {
+  overflow-y: scroll;
+}
+::-webkit-scrollbar {
+  display: none;
+}
 .modal-content {
   width: 100% !important;
   position: absolute !important;

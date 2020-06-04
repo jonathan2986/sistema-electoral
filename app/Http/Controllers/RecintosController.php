@@ -57,12 +57,39 @@ class RecintosController extends Controller
             ],
             [
                 'NombreCordinador' => $recinto->activistas ? $recinto->activistas->name : '',
-                'RolCordinador' => 'Activista',
+                'RolCordinador' => 'Sub-cordinador',
+            ],
+            [
+                'NombreCordinador' => $recinto->activistas1 ? $recinto->activistas1->name : '',
+                'RolCordinador' => 'Sub-cordinador 1',
+            ],
+            [
+                'NombreCordinador' => $recinto->activistas2 ? $recinto->activistas2->name : '',
+                'RolCordinador' => 'Sub-cordinador 2',
+            ],
+            [
+                'NombreCordinador' => $recinto->activistas2 ? $recinto->activistas2->name : '',
+                'RolCordinador' => 'Sub-cordinador 2',
+            ],
+            [
+                'NombreCordinador' => $recinto->activistas3 ? $recinto->activistas3->name : '',
+                'RolCordinador' => 'Sub-cordinador 3',
+            ],
+            [
+                'NombreCordinador' => $recinto->activistas4 ? $recinto->activistas4->name : '',
+                'RolCordinador' => 'Sub-cordinador 4',
+            ],
+            [
+                'NombreCordinador' => $recinto->activistas5 ? $recinto->activistas5->name : '',
+                'RolCordinador' => 'Sub-cordinador 5',
             ],
         ];
 
         $electores = [];
-        $people = People::where('recintos_id', $id)->get();
+        $people = People::where('recintos_id', $id)
+            ->orderBy('colegios_electorales_id')
+            ->get();
+        $templateProcessor->setValue('numeroElectoresRecinto', $people->count());
         foreach ($people as $model) {
             $electores[] = [
                 'NombreElector' => $model->first_name . ' ' . $model->last_name,
@@ -79,6 +106,7 @@ class RecintosController extends Controller
 
         $fileName = uniqid();
         $templateProcessor->saveAs("/app/storage/app/reportes/{$fileName}.docx");
+        return response()->download("/app/storage/app/reportes/{$fileName}.docx", "{$recinto->name}.docx");
     }
 
     /**
@@ -179,6 +207,11 @@ class RecintosController extends Controller
                 'coordinadores_seguridad_id' => $model->coordinadores_seguridad_id,
                 'coordinadores_finanzas_id' => $model->coordinadores_finanzas_id,
                 'activistas_id' => $model->activistas_id,
+                'activistas1_id' => $model->activistas1_id,
+                'activistas2_id' => $model->activistas2_id,
+                'activistas3_id' => $model->activistas3_id,
+                'activistas4_id' => $model->activistas4_id,
+                'activistas5_id' => $model->activistas5_id,
                 'number_colegios' => $model->number_colegios,
                 'coordinadores' => $model->coordinadores ? [
                     'id' => $model->coordinadores->id,
@@ -219,6 +252,36 @@ class RecintosController extends Controller
                     'first_name' => $model->activistas->first_name,
                     'last_name' => $model->activistas->last_name,
                     'name' => $model->activistas->name,
+                ] : false,
+                'activistas1' => $model->activistas1 ? [
+                    'id' => $model->activistas1->id,
+                    'first_name' => $model->activistas1->first_name,
+                    'last_name' => $model->activistas1->last_name,
+                    'name' => $model->activistas1->name,
+                ] : false,
+                'activistas2' => $model->activistas2 ? [
+                    'id' => $model->activistas2->id,
+                    'first_name' => $model->activistas2->first_name,
+                    'last_name' => $model->activistas2->last_name,
+                    'name' => $model->activistas2->name,
+                ] : false,
+                'activistas3' => $model->activistas3 ? [
+                    'id' => $model->activistas3->id,
+                    'first_name' => $model->activistas3->first_name,
+                    'last_name' => $model->activistas3->last_name,
+                    'name' => $model->activistas3->name,
+                ] : false,
+                'activistas4' => $model->activistas4 ? [
+                    'id' => $model->activistas4->id,
+                    'first_name' => $model->activistas4->first_name,
+                    'last_name' => $model->activistas4->last_name,
+                    'name' => $model->activistas4->name,
+                ] : false,
+                'activistas5' => $model->activistas5 ? [
+                    'id' => $model->activistas5->id,
+                    'first_name' => $model->activistas5->first_name,
+                    'last_name' => $model->activistas5->last_name,
+                    'name' => $model->activistas5->name,
                 ] : false,
                 'municipios' => $model->municipios ? [
                     'id' => $model->municipios->id,

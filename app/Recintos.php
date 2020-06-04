@@ -25,6 +25,11 @@ class Recintos extends Model
         'coordinadores_seguridad_id',
         'coordinadores_finanzas_id',
         'activistas_id',
+        'activistas1_id',
+        'activistas2_id',
+        'activistas3_id',
+        'activistas4_id',
+        'activistas5_id',
     ];
 
     protected $entity = 'recintos';
@@ -75,6 +80,31 @@ class Recintos extends Model
     public function activistas()
     {
         return $this->belongsTo('App\People', 'activistas_id', 'id');
+    }
+
+    public function activistas1()
+    {
+        return $this->belongsTo('App\People', 'activistas1_id', 'id');
+    }
+
+    public function activistas2()
+    {
+        return $this->belongsTo('App\People', 'activistas2_id', 'id');
+    }
+
+    public function activistas3()
+    {
+        return $this->belongsTo('App\People', 'activistas3_id', 'id');
+    }
+
+    public function activistas4()
+    {
+        return $this->belongsTo('App\People', 'activistas4_id', 'id');
+    }
+
+    public function activistas5()
+    {
+        return $this->belongsTo('App\People', 'activistas5_id', 'id');
     }
 
     /**

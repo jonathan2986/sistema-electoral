@@ -57,7 +57,7 @@
                 <th>Coordinador Electoral</th>
                 <th>Coordinador Seguridad</th>
                 <th>Coordinador Finanza</th>
-                <th>Activistas</th>
+                <th>SubCoordinador</th>
               </tr>
             </thead>
             <tbody>
@@ -78,6 +78,9 @@
                   >
                     <i class="icon-trash"></i>
                   </button>
+                  <a :download="`${model.name}.docx`" :href="`/api/reportes/recintos/${model.id}`" class="btn btn-success btn-sm">
+                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                  </a>
                 </td>
                 <td v-text="model.name"></td>
                 <td v-text="model.number_colegios"></td>
@@ -234,12 +237,72 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">Activistas</label>
+                <label class="col-md-3 form-control-label" for="text-input">Sub-cordinador</label>
                 <div class="col-md-9">
                   <v-select
                     v-model="entity.activistas_id"
                     @search="onSearchActivistas"
                     :options="activistas"
+                    :filterable="false"
+                    :reduce="(activista) => activista.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Sub-cordinador 1</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.activistas1_id"
+                    @search="onSearchActivistas1"
+                    :options="activistas1"
+                    :filterable="false"
+                    :reduce="(activista) => activista.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Sub-cordinador 2</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.activistas2_id"
+                    @search="onSearchActivistas2"
+                    :options="activistas2"
+                    :filterable="false"
+                    :reduce="(activista) => activista.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Sub-cordinador 3</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.activistas3_id"
+                    @search="onSearchActivistas3"
+                    :options="activistas3"
+                    :filterable="false"
+                    :reduce="(activista) => activista.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Sub-cordinador 4</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.activistas4_id"
+                    @search="onSearchActivistas4"
+                    :options="activistas4"
+                    :filterable="false"
+                    :reduce="(activista) => activista.id"
+                  ></v-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Sub-cordinador 5</label>
+                <div class="col-md-9">
+                  <v-select
+                    v-model="entity.activistas5_id"
+                    @search="onSearchActivistas5"
+                    :options="activistas5"
                     :filterable="false"
                     :reduce="(activista) => activista.id"
                   ></v-select>
@@ -372,6 +435,11 @@ export default {
       coordinadores_seguridad: [],
       coordinadores_finanzas: [],
       activistas: [],
+      activistas1: [],
+      activistas2: [],
+      activistas3: [],
+      activistas4: [],
+      activistas5: [],
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
@@ -397,6 +465,11 @@ export default {
         name: "",
         address: "",
         activistas_id: 0,
+        activistas1_id: 0,
+        activistas2_id: 0,
+        activistas3_id: 0,
+        activistas4_id: 0,
+        activistas5_id: 0,
         id: 0
       },
 
@@ -590,6 +663,11 @@ export default {
           this.entity.address = data.address;
           this.entity.coordinadores_id = data.coordinadores_id;
           this.entity.activistas_id = data.activistas_id;
+          this.entity.activistas1_id = data.activistas1_id;
+          this.entity.activistas2_id = data.activistas2_id;
+          this.entity.activistas3_id = data.activistas3_id;
+          this.entity.activistas4_id = data.activistas4_id;
+          this.entity.activistas5_id = data.activistas5_id;
           this.entity.coordinadores_ejecutivos_id =
             data.coordinadores_ejecutivos_id;
           this.entity.coordinadores_electorales_id =
@@ -649,6 +727,51 @@ export default {
                 {
                   label: data.activistas.name,
                   id: data.activistas.id
+                }
+              ]
+            : [];
+
+          this.activistas1 = data.activistas1
+            ? [
+                {
+                  label: data.activistas1.name,
+                  id: data.activistas1.id
+                }
+              ]
+            : [];
+
+          this.activistas2 = data.activistas2
+            ? [
+                {
+                  label: data.activistas2.name,
+                  id: data.activistas2.id
+                }
+              ]
+            : [];
+
+          this.activistas3 = data.activistas3
+            ? [
+                {
+                  label: data.activistas3.name,
+                  id: data.activistas3.id
+                }
+              ]
+            : [];
+
+          this.activistas4 = data.activistas4
+            ? [
+                {
+                  label: data.activistas4.name,
+                  id: data.activistas4.id
+                }
+              ]
+            : [];
+
+          this.activistas5 = data.activistas5
+            ? [
+                {
+                  label: data.activistas5.name,
+                  id: data.activistas5.id
                 }
               ]
             : [];
@@ -718,6 +841,26 @@ export default {
     onSearchActivistas(search, loading) {
       loading(true);
       this.search(loading, "activistas", search, this, "card_id", "people");
+    },
+    onSearchActivistas1(search, loading) {
+      loading(true);
+      this.search(loading, "activistas1", search, this, "card_id", "people");
+    },
+    onSearchActivistas2(search, loading) {
+      loading(true);
+      this.search(loading, "activistas2", search, this, "card_id", "people");
+    },
+    onSearchActivistas3(search, loading) {
+      loading(true);
+      this.search(loading, "activistas3", search, this, "card_id", "people");
+    },
+    onSearchActivistas4(search, loading) {
+      loading(true);
+      this.search(loading, "activistas4", search, this, "card_id", "people");
+    },
+    onSearchActivistas5(search, loading) {
+      loading(true);
+      this.search(loading, "activistas5", search, this, "card_id", "people");
     },
     onSearchMunicipios(search, loading) {
       loading(true);
